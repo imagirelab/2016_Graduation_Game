@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiny_Breaker.CSharp.Plugins", "Tiny_Breaker.CSharp.Plugins.csproj", "{26D30F01-58AF-AEAA-6921-8E2BC33D3EA5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiny_Breaker.CSharp", "Tiny_Breaker.CSharp.csproj", "{D52AC6F4-A28E-BC45-46BE-5370E1CEC119}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tiny_Breaker.CSharp.Editor", "Tiny_Breaker.CSharp.Editor.csproj", "{10C782B3-9AE2-9CFD-3865-FB81F29813F0}"
 EndProject
 Global
@@ -15,6 +17,10 @@ Global
 		{26D30F01-58AF-AEAA-6921-8E2BC33D3EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26D30F01-58AF-AEAA-6921-8E2BC33D3EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26D30F01-58AF-AEAA-6921-8E2BC33D3EA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D52AC6F4-A28E-BC45-46BE-5370E1CEC119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D52AC6F4-A28E-BC45-46BE-5370E1CEC119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D52AC6F4-A28E-BC45-46BE-5370E1CEC119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D52AC6F4-A28E-BC45-46BE-5370E1CEC119}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10C782B3-9AE2-9CFD-3865-FB81F29813F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10C782B3-9AE2-9CFD-3865-FB81F29813F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10C782B3-9AE2-9CFD-3865-FB81F29813F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
