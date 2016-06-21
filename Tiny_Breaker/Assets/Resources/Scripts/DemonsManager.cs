@@ -75,8 +75,8 @@ public class DemonsManager : MonoBehaviour
     {
         //目的地までの座標を手に入れるためフィールドに指示された地点の情報を取っている
         GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-
-        foreach (var e in units)
+        
+        foreach (GameObject e in units)
             e.GetComponent<Demons>().MoveOrder(fieldCommand.GetComponent<Mousecontrol>().ClickPosition);
     }
 
