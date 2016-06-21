@@ -8,10 +8,13 @@ public class Demons : MonoBehaviour
     //プレイヤーの仮ステータス
     public int HP = 1000;
     public int ATK = 100;
-    public int DEF = 100;
+    public int ATKpro { get { return ATK; } }
     public int SPEED = 100;
+    public float AtackTime = 1.0f;
+    public float ATKTimepro { get { return AtackTime; } }
 
     private Vector3 moveDirection;      //移動する方向の角度
+    private float time;                 //時間
     //private bool moveFlag;              //オブジェクトごとの移動フラグ
 
     // 接触しているゲームオブジェクト
@@ -98,8 +101,16 @@ public class Demons : MonoBehaviour
             //速度を０に
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-            //とりあえず攻撃判定の代わりにログに出す
-            Debug.Log("Attack");
+            //アタックタイムを満たしたら
+            if (time > AtackTime)
+            {
+                time = 0;
+
+                target.GetComponent<Castle>().HPpro -= ATK;
+            }
+
+            time += Time.deltaTime;
+
         }
     }
 
@@ -136,6 +147,5 @@ public class Demons : MonoBehaviour
     {
         //離れたら戻す
         hitCollisionObject = null;
-    }
-    
+    }    
 }
