@@ -1,22 +1,29 @@
-﻿using UnityEngine;
+﻿//兵士の攻撃判定に関するクラス
+
+using UnityEngine;
 using System.Collections;
 
 public class SoldierAttack : MonoBehaviour {
 
-    public int ATK = 100;               //攻撃力
-    public float AtackTime = 1.0f;      //攻撃間隔
-    private float time;                 //時間
+    //兵士のステータス
+    [SerializeField, TooltipAttribute("攻撃力")]
+    int ATK = 100;               //攻撃力
+    [SerializeField, TooltipAttribute("攻撃間隔")]
+    float AtackTime = 1.0f;      //攻撃間隔
 
+    //このクラス内で使う変数
+    float time;                 //時間
     bool IsAttack;                      //攻撃中フラグ
     GameObject AttackTarget;            //攻撃対象
+    
 
-    // Use this for initialization
     void Start () {
+
+        time = 0.0f;
         IsAttack = false;
 
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         //アタックタイムを満たしていて攻撃フラグが立っていたら攻撃
@@ -24,6 +31,7 @@ public class SoldierAttack : MonoBehaviour {
         {
             time = 0;
 
+            //攻撃対象がいることを確認してから攻撃
             if (AttackTarget != null)
             {
                 AttackTarget.GetComponent<Demons>().HPpro -= ATK;
@@ -39,6 +47,7 @@ public class SoldierAttack : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
+        //悪魔が範囲内に入ってきたとき攻撃対象が登録されていなければ登録する
         if (collider.gameObject.tag == "Unit" &&
             collider.gameObject.GetComponent<Demons>() != null &&
             AttackTarget == null)
@@ -59,6 +68,7 @@ public class SoldierAttack : MonoBehaviour {
             if (AttackTarget == null && collider.gameObject != null)
             {
                 AttackTarget = collider.gameObject;
+                IsAttack = true;
                 Debug.Log(collider.gameObject.name);
             }
         }
@@ -72,7 +82,11 @@ public class SoldierAttack : MonoBehaviour {
 
     void OnTriggerExit(Collider collider)
     {
-        AttackTarget = null;
-        IsAttack = false;
+        //範囲内から出たら攻撃対象から外す
+        if (AttackTarget == collider.gameObject)
+        {
+            AttackTarget = null;
+            IsAttack = false;
+        }
     }
 }

@@ -1,30 +1,39 @@
-﻿using UnityEngine;
+﻿//お城のステータスなどを管理するクラス
+
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class Castle : MonoBehaviour
 {
-    //お城のの仮ステータス
-    public int HP = 1000;
-    public int HPpro { get { return HP; } set { HP = value; } }
-    public int ATK = 100;
-    public float AttackTime = 1.0f;
+    //お城のステータス
+    [SerializeField, TooltipAttribute("体力")]
+    int HP = 1000;
+    [SerializeField, TooltipAttribute("攻撃力")]
+    int ATK = 100;
+    [SerializeField, TooltipAttribute("攻撃間隔")]
+    float AttackTime = 1.0f;
 
-    private GameObject HPUI;
+    [SerializeField, TooltipAttribute("大砲の発射位置(調整数値)")]
+    Vector3 cannonPosition = Vector3.zero;
+
+    //外から見れる変数
+    public int HPpro { get { return HP; } set { HP = value; } }
+
+    //このクラス内で使う変数
+    private GameObject HP_UI;           //HPのUI
     private float time;                 //時間
     
-    [SerializeField, TooltipAttribute("大砲の発射位置(調整数値)")]
-    public Vector3 cannonPosition = Vector3.zero;
     public float shotRange = 1.0f;
 
     void Start()
     {
-        HPUI = GameObject.Find("CastleUI");
+        HP_UI = transform.FindChild("HP").gameObject;
     }
 
     void Update()
     {
-        HPUI.GetComponent<TextMesh>().text = "HP: " + HP.ToString();
+        HP_UI.GetComponent<TextMesh>().text = "HP: " + HP.ToString();
 
         if (HP <= 0)
         {
