@@ -40,26 +40,30 @@ public class Mousecontrol : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-
-        // マウス位置座標をスクリーン座標からワールド座標に変換する
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        //レイキャストをしてあたり判定の座標を調べる(hitのオブジェクトは取得できてるのでタグを与えられたら目標物へ向かうなどの変更も可)
-        if (Physics.Raycast(ray, out hit))
-        {
-            screenToWorldPointPosition = hit.point + hit.normal * 0.5f;
-
-            // オブジェクトのタグを取得
-            hitGameObjectTag = hit.collider.gameObject.tag;
-
-            // オブジェクトの取得
-            hitGameObject = hit.collider.gameObject;
-        }
-
-
         //左クリック: 0 右クリック: 1 中ボタン:2
         if (Input.GetMouseButtonDown(0))
         {
+            // マウス位置座標をスクリーン座標からワールド座標に変換する
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            //レイキャストをしてあたり判定の座標を調べる(hitのオブジェクトは取得できてるのでタグを与えられたら目標物へ向かうなどの変更も可)
+            if (Physics.Raycast(ray, out hit))
+            {
+                screenToWorldPointPosition = hit.point + hit.normal * 0.5f;
+
+                // オブジェクトのタグを取得
+                hitGameObjectTag = hit.collider.gameObject.tag;
+
+                // オブジェクトの取得
+                hitGameObject = hit.collider.gameObject;
+
+                if(hit.collider.gameObject.name == "Catcher")
+                {
+                    StaticVariables.catcherFlag = true;
+                }
+
+            }
+
             // ワールド座標に変換されたマウス座標を代入
             gameObject.transform.position = new Vector3(screenToWorldPointPosition.x, screenToWorldPointPosition.y + 2.5f, screenToWorldPointPosition.z);
 

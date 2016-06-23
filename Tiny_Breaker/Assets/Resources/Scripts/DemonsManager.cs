@@ -36,6 +36,10 @@ public class DemonsManager : MonoBehaviour
     {
         for (int i = 0; i < demonData.num; i++)
         {
+            demonData.gameObuject.GetComponent<Demons>().HPpro = demonData.gameObuject.GetComponent<Demons>().defaultHPpro;
+            demonData.gameObuject.GetComponent<Demons>().ATKpro = demonData.gameObuject.GetComponent<Demons>().defaultATKpro;
+            demonData.gameObuject.GetComponent<Demons>().SPEEDpro = demonData.gameObuject.GetComponent<Demons>().defaultSPEEDpro;
+
             // プレハブのインスタンス化
             // xyはそのままにz軸方向にだけ少しずつずらしている
             Instantiate(demonData.gameObuject,
