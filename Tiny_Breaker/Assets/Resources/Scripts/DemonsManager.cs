@@ -81,7 +81,9 @@ public class DemonsManager : MonoBehaviour
         GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
         
         foreach (GameObject e in units)
-            e.GetComponent<Demons>().MoveOrder(fieldCommand.GetComponent<Mousecontrol>().ClickPosition);
+            //悪魔クラスを持っていたら処理
+            if (e.GetComponent<Demons>() != null)
+                e.GetComponent<Demons>().MoveOrder(fieldCommand.GetComponent<Mousecontrol>().ClickPosition);
     }
 
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
@@ -91,20 +93,26 @@ public class DemonsManager : MonoBehaviour
         GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
 
         foreach (var e in units)
-            e.GetComponent<Demons>().BuildingOrder(fieldCommand.GetComponent<Mousecontrol>().ClickGameObject);
+            //悪魔クラスを持っていたら処理
+            if(e.GetComponent<Demons>() != null)
+                e.GetComponent<Demons>().BuildingOrder(fieldCommand.GetComponent<Mousecontrol>().ClickGameObject);
     }
 
     // 悪魔達全体の敵に攻撃する命令の処理
     void EnemyOrder(GameObject[] units)
     {
         foreach (var e in units)
-            e.GetComponent<Demons>().EnemyOrder();
+            //悪魔クラスを持っていたら処理
+            if (e.GetComponent<Demons>() != null)
+                e.GetComponent<Demons>().EnemyOrder();
     }
 
     // 悪魔達全体の待機命令の処理(いらないかもしれないが)
     void WaitOrder(GameObject[] units)
     {
         foreach (var e in units)
-            e.GetComponent<Demons>().WaitOrder();
+            //悪魔クラスを持っていたら処理
+            if (e.GetComponent<Demons>() != null)
+                e.GetComponent<Demons>().WaitOrder();
     }
 }

@@ -12,6 +12,7 @@ public class Cannon : MonoBehaviour {
         Vector3 castlePosition = GameObject.Find("Castle").transform.position;
         GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
         Vector3 nearUnitPosition = units[0].transform.position;
+        //近くの敵を狙う処理
         foreach (var e in units)
             if (Vector3.Distance(castlePosition, e.transform.position) < nearUnitPosition.magnitude)
                 nearUnitPosition = e.transform.position;
@@ -40,8 +41,11 @@ public class Cannon : MonoBehaviour {
     {
         if (collision.gameObject.tag == "Unit")
         {
-            collision.gameObject.GetComponent<Demons>().HPpro -= ATK;
-            Debug.Log("Hit");
+            if (collision.gameObject.GetComponent<Demons>() != null)
+            {
+                collision.gameObject.GetComponent<Demons>().HPpro -= ATK;
+                Debug.Log("Cannon Hit");
+            }
         }
 
         Destroy(gameObject);

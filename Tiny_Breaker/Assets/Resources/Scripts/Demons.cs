@@ -105,7 +105,9 @@ public class Demons : MonoBehaviour
             {
                 time = 0;
 
-                target.GetComponent<Castle>().HPpro -= ATK;
+                // お城クラスを持っていたら処理
+                if(target.GetComponent<Castle>() != null)
+                    target.GetComponent<Castle>().HPpro -= ATK;
             }
 
             //1フレームあたりの時間を取得
