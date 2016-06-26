@@ -15,19 +15,24 @@ public class PlayerCommand : MonoBehaviour {
         Enemy,      //敵へ行動
         Wait        //待機（一応）
     }
-    Order currentOrder; //現在の命令
+    private Order currentOrder; //現在の命令
     public Order CurrentOrder { get { return currentOrder; } }  //現在の命令(取得用)
-    
-	// 初期化
-	void Start () {
+
+    //このクラス内で使う変数
+    private GameObject fieldCommand;    //フィールドでの指示
+
+    // 初期化
+    void Start () {
 
         // 命令の初期設定
         currentOrder = Order.Wait;
 
         // Resourcesフォルダからプレハブ情報の取得
-        GameObject fieldCommand = (GameObject)Resources.Load("Prefabs/CommandTarget");
-        // プレハブのインスタンス化
-        Instantiate(fieldCommand, fieldCommand.transform.position, Quaternion.identity);           //とりあえずそのままインスタンス化
+        GameObject fieldCommandPrefab = (GameObject)Resources.Load("Prefabs/CommandTarget");
+        // //とりあえずそのままインスタンス化
+        fieldCommand = (GameObject)Instantiate( fieldCommandPrefab,
+                                                fieldCommandPrefab.transform.position,
+                                                Quaternion.identity);
         
     }
 	
@@ -35,7 +40,6 @@ public class PlayerCommand : MonoBehaviour {
 	void Update () {
 
         // 命令が切り替わる条件
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
         switch (fieldCommand.GetComponent<Mousecontrol>().ClickGameObjectTag)
         {
             case "Ground":

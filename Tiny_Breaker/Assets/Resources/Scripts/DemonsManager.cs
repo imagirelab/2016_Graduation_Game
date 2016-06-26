@@ -20,7 +20,9 @@ public class DemonsManager : MonoBehaviour
     public DemonData PUPU;  //ププ
     public DemonData POPO;  //ポポ
     public DemonData PIPI;  //ピピ
-    
+
+    private GameObject fieldCommand;
+
     // Use this for initialization
     void Start () {
 
@@ -29,6 +31,8 @@ public class DemonsManager : MonoBehaviour
         InstantiateDemons(POPO);
         InstantiateDemons(PIPI);
 
+        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
+        fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
     }
 
     // ユニットのインスタンス化
@@ -77,9 +81,6 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の移動命令処理
     void MoveOrder(GameObject[] units)
     {
-        //目的地までの座標を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-        
         foreach (GameObject e in units)
             //悪魔クラスを持っていたら処理
             if (e.GetComponent<Demons>() != null)
@@ -89,9 +90,6 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
     void BuildingOrder(GameObject[] units)
     {
-        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-
         foreach (var e in units)
             //悪魔クラスを持っていたら処理
             if(e.GetComponent<Demons>() != null)
@@ -104,7 +102,7 @@ public class DemonsManager : MonoBehaviour
         foreach (var e in units)
             //悪魔クラスを持っていたら処理
             if (e.GetComponent<Demons>() != null)
-                e.GetComponent<Demons>().EnemyOrder();
+                e.GetComponent<Demons>().EnemyOrder(fieldCommand.GetComponent<Mousecontrol>().ClickGameObject);
     }
 
     // 悪魔達全体の待機命令の処理(いらないかもしれないが)

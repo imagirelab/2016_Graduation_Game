@@ -12,10 +12,7 @@ public class DemonSpirits : MonoBehaviour
     public int SPEEDpro { get { return spiritsSPEED; } set { spiritsSPEED = value; } }
 
     public GameObject _Demon;
-
-    //public float AtackTime = 1.0f;
-    //public float ATKTimepro { get { return AtackTime; } }
-
+    
     // Use this for initialization
     void Start ()
     {

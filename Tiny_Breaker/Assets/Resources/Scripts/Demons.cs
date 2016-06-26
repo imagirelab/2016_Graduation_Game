@@ -25,7 +25,6 @@ public class Demons : MonoBehaviour
 
     private Vector3 moveDirection;      //移動する方向の角度
     private float time;                 //時間
-    //private bool moveFlag;              //オブジェクトごとの移動フラグ
 
     // 接触しているゲームオブジェクト
     private GameObject hitCollisionObject;
@@ -82,7 +81,11 @@ public class Demons : MonoBehaviour
     {
         //ターゲットが何も無ければ処理しない
         if (target == null)
+        {
+            //速度を０に
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
             return;
+        }
 
         //目的地と離れている場合の処理
         if (hitCollisionObject != target)
@@ -117,10 +120,46 @@ public class Demons : MonoBehaviour
     }
 
     // 敵に攻撃する命令の処理
-    public void EnemyOrder()
+    public void EnemyOrder(GameObject target)
     {
-        //今はとりあえず動きを止める
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //ターゲットが何も無ければ処理しない
+        if (target == null)
+        {
+            //速度を０に
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            return;
+        }
+
+        //目的地と離れている場合の処理
+        if (hitCollisionObject != target)
+        {
+            //角度計算
+            moveDirection = (target.transform.position - transform.position).normalized;
+            //目的地への方向を見る
+            transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
+            //移動方向へ速度をSPEED分の与える
+            this.GetComponent<Rigidbody>().velocity = moveDirection * SPEED;
+        }
+        //目的地に触れている場合の処理
+        else
+        {
+            //速度を０に
+            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+            //アタックタイムを満たしたら
+            if (time > AtackTime)
+            {
+                time = 0;
+
+                // 敵クラスを持っていたら処理
+                if (target.GetComponent<Soldier>() != null)
+                    target.GetComponent<Soldier>().HPpro -= ATK;
+            }
+
+            //1フレームあたりの時間を取得
+            time += Time.deltaTime;
+
+        }
     }
 
     //待機命令の処理(いらないかもしれないが)
