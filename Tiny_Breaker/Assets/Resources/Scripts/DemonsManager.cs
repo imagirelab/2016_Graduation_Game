@@ -32,7 +32,7 @@ public class DemonsManager : MonoBehaviour
         InstantiateDemons(PIPI);
 
         //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
+        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
     }
 
     // ユニットのインスタンス化
@@ -81,6 +81,9 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の移動命令処理
     void MoveOrder(GameObject[] units)
     {
+        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
+        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
+
         foreach (GameObject e in units)
             //悪魔クラスを持っていたら処理
             if (e.GetComponent<Demons>() != null)
@@ -90,6 +93,9 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
     void BuildingOrder(GameObject[] units)
     {
+        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
+        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
+
         foreach (var e in units)
             //悪魔クラスを持っていたら処理
             if(e.GetComponent<Demons>() != null)
@@ -99,6 +105,9 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の敵に攻撃する命令の処理
     void EnemyOrder(GameObject[] units)
     {
+        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
+        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
+
         foreach (var e in units)
             //悪魔クラスを持っていたら処理
             if (e.GetComponent<Demons>() != null)
