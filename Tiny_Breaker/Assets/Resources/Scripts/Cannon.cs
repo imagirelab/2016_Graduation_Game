@@ -43,7 +43,7 @@ public class Cannon : MonoBehaviour {
     {
         if (collision.gameObject.GetComponent<Demons>() != null)
         {
-            collision.gameObject.GetComponent<Demons>().HPpro -= ATK;
+            collision.gameObject.GetComponent<Demons>().status.HP -= ATK;
             Debug.Log("Cannon Hit");
         }
         

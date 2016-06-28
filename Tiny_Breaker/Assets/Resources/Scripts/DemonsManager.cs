@@ -21,8 +21,6 @@ public class DemonsManager : MonoBehaviour
     public DemonData POPO;  //ポポ
     public DemonData PIPI;  //ピピ
 
-    private GameObject fieldCommand;
-
     // Use this for initialization
     void Start () {
 
@@ -30,9 +28,6 @@ public class DemonsManager : MonoBehaviour
         InstantiateDemons(PUPU);
         InstantiateDemons(POPO);
         InstantiateDemons(PIPI);
-
-        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
     }
 
     // ユニットのインスタンス化
@@ -40,9 +35,9 @@ public class DemonsManager : MonoBehaviour
     {
         for (int i = 0; i < demonData.num; i++)
         {
-            demonData.gameObuject.GetComponent<Demons>().HPpro = demonData.gameObuject.GetComponent<Demons>().defaultHPpro;
-            demonData.gameObuject.GetComponent<Demons>().ATKpro = demonData.gameObuject.GetComponent<Demons>().defaultATKpro;
-            demonData.gameObuject.GetComponent<Demons>().SPEEDpro = demonData.gameObuject.GetComponent<Demons>().defaultSPEEDpro;
+            //demonData.gameObuject.GetComponent<Demons>().status.HP = demonData.gameObuject.GetComponent<Demons>().defaultHPpro;
+            //demonData.gameObuject.GetComponent<Demons>().status.ATK = demonData.gameObuject.GetComponent<Demons>().defaultATKpro;
+            //demonData.gameObuject.GetComponent<Demons>().status.SPEED = demonData.gameObuject.GetComponent<Demons>().defaultSPEEDpro;
 
             // プレハブのインスタンス化
             // xyはそのままにz軸方向にだけ少しずつずらしている

@@ -3,23 +3,30 @@
 using UnityEngine;
 using System.Collections;
 
+//悪魔達の初期情報(structの代わりにclassを使用)
+[System.Serializable]
+public class DemonStatus
+{
+    [SerializeField, TooltipAttribute("体力")]
+    public int HP = 100;
+    [SerializeField, TooltipAttribute("攻撃力")]
+    public int ATK = 100;
+    [SerializeField, TooltipAttribute("速度")]
+    public int SPEED = 5;
+    [SerializeField, TooltipAttribute("攻撃間隔")]
+    public float AtackTime = 1.0f;
+
+    private int MaxHP;
+    public int GetMaxHP { get { return MaxHP; } }
+
+    DemonStatus() { MaxHP = HP; }
+}
+
 public class Demons : MonoBehaviour
 {
     //プレイヤーの仮ステータス
-    public int defaultHP = 100;
-    public int defaultHPpro { get { return defaultHP; }}
-    public int HP = 100;
-    public int HPpro { get { return HP; } set { HP = value; } }
-    public int defaultATK = 100;
-    public int defaultATKpro { get { return defaultATK; }}
-    public int ATK = 100;
-    public int ATKpro { get { return ATK; } set { ATK = value; } }
-    public int defaultSPEED = 5;
-    public int defaultSPEEDpro { get { return defaultSPEED; } }
-    public int SPEED = 5;
-    public int SPEEDpro { get { return SPEED; } set { SPEED = value; } }
-    public float AtackTime = 1.0f;
-    public float ATKTimepro { get { return AtackTime; } }
+    [SerializeField, TooltipAttribute("悪魔のステータス")]
+    public DemonStatus status;
 
     public GameObject demonSpirit;
 
@@ -40,14 +47,10 @@ public class Demons : MonoBehaviour
 	void Update ()
     {
         //死亡処理
-        if (HP <= 0)
+        if (status.HP <= 0)
         {
-            demonSpirit.GetComponent<DemonSpirits>().HPpro = 100;
-            demonSpirit.GetComponent<DemonSpirits>().ATKpro = 10;
-            demonSpirit.GetComponent<DemonSpirits>().SPEEDpro = 1;
-
             //スピリットの生成
-            Instantiate(demonSpirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
+            DemonSpirits.InstanceSpirit(demonSpirit, this.gameObject);
             Destroy(gameObject);
         }
     }
@@ -65,7 +68,7 @@ public class Demons : MonoBehaviour
                 //目的地への方向を見る
                 transform.LookAt(transform.position + new Vector3(targetPosition.x, 0, targetPosition.z));
                 //移動方向へ速度をSPEED分の与える
-                this.GetComponent<Rigidbody>().velocity = moveDirection * SPEED;
+                this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
             }
             //目的地に0.1mより近い距離になった場合の処理
             else
@@ -95,7 +98,7 @@ public class Demons : MonoBehaviour
             //目的地への方向を見る
             transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
             //移動方向へ速度をSPEED分の与える
-            this.GetComponent<Rigidbody>().velocity = moveDirection * SPEED;
+            this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
         }
         //目的地に触れている場合の処理
         else
@@ -104,13 +107,13 @@ public class Demons : MonoBehaviour
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
             //アタックタイムを満たしたら
-            if (time > AtackTime)
+            if (time > status.AtackTime)
             {
                 time = 0;
 
                 // お城クラスを持っていたら処理
                 if(target.GetComponent<Castle>() != null)
-                    target.GetComponent<Castle>().HPpro -= ATK;
+                    target.GetComponent<Castle>().HPpro -= status.ATK;
             }
 
             //1フレームあたりの時間を取得
@@ -138,22 +141,22 @@ public class Demons : MonoBehaviour
             //目的地への方向を見る
             transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
             //移動方向へ速度をSPEED分の与える
-            this.GetComponent<Rigidbody>().velocity = moveDirection * SPEED;
+            this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
         }
         //目的地に触れている場合の処理
         else
         {
             //速度を０に
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
+            
             //アタックタイムを満たしたら
-            if (time > AtackTime)
+            if (time > status.AtackTime)
             {
                 time = 0;
 
                 // 敵クラスを持っていたら処理
                 if (target.GetComponent<Soldier>() != null)
-                    target.GetComponent<Soldier>().HPpro -= ATK;
+                    target.GetComponent<Soldier>().HPpro -= status.ATK;
             }
 
             //1フレームあたりの時間を取得
@@ -188,5 +191,14 @@ public class Demons : MonoBehaviour
     {
         //離れたら戻す
         hitCollisionObject = null;
-    }    
+    }
+
+    public void AddStatus(DemonStatus status)
+    {
+        this.status.HP += status.GetMaxHP;
+        this.status.ATK += status.ATK;
+        //this.status.SPEED += status.SPEED;
+        //this.status.AtackTime = status.AtackTime;
+    }
+
 }

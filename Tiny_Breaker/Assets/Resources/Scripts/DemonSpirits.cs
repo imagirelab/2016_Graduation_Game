@@ -4,14 +4,9 @@ using System.Collections;
 public class DemonSpirits : MonoBehaviour
 {
     //プレイヤーの仮ステータス
-    public int spiritsHP = 0;
-    public int HPpro { get { return spiritsHP; } set { spiritsHP = value; } }
-    public int spiritsATK = 0;
-    public int ATKpro { get { return spiritsATK; } set { spiritsATK = value; } }
-    public int spiritsSPEED = 0;
-    public int SPEEDpro { get { return spiritsSPEED; } set { spiritsSPEED = value; } }
+    private DemonStatus status;
+    private string demonName;
 
-    public GameObject _Demon;
     
     // Use this for initialization
     void Start ()
@@ -24,13 +19,18 @@ public class DemonSpirits : MonoBehaviour
     {
 	    if(StaticVariables.catcherFlag)
         {
-            _Demon.GetComponent<Demons>().HPpro += spiritsHP;
-            _Demon.GetComponent<Demons>().ATKpro += spiritsATK;
-            _Demon.GetComponent<Demons>().SPEEDpro += spiritsSPEED;
-
-            Instantiate(_Demon);
+            GameObject prefab = (GameObject)Resources.Load("Prefabs/Unit/" + demonName);
+            GameObject demon = (GameObject)Instantiate(prefab);
+            demon.GetComponent<Demons>().AddStatus(status);
             StaticVariables.catcherFlag = false;
             Destroy(this.gameObject);
         }
 	}
+
+    public static void InstanceSpirit(Object spiritPrefab, GameObject demon)
+    {
+        GameObject spirit = (GameObject)Instantiate(spiritPrefab, demon.transform.position, demon.transform.rotation);
+        spirit.GetComponent<DemonSpirits>().status = demon.GetComponent<Demons>().status;
+        spirit.GetComponent<DemonSpirits>().demonName = demon.name.Replace("(Clone)", "");
+    }
 }

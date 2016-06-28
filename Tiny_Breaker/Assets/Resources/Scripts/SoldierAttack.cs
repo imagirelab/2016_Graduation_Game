@@ -33,10 +33,7 @@ public class SoldierAttack : MonoBehaviour {
 
             //攻撃対象がいることを確認してから攻撃
             if (AttackTarget != null)
-            {
-                AttackTarget.GetComponent<Demons>().HPpro -= ATK;
-                Debug.Log("Soldier Attack");
-            }
+                AttackTarget.GetComponent<Demons>().status.HP -= ATK;
             else
                 IsAttack = false;
         }

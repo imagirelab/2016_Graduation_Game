@@ -22,7 +22,7 @@ public class StatusUI : MonoBehaviour
 
         transform.forward = _MainCamera.transform.forward;
 
-        this.GetComponent<TextMesh>().text = "HP:" + parentDemon.GetComponent<Demons>().HPpro + "\nATK:"
-            + parentDemon.GetComponent<Demons>().ATKpro + "\nSPEED:" + parentDemon.GetComponent<Demons>().SPEEDpro;
+        this.GetComponent<TextMesh>().text = "HP:" + parentDemon.GetComponent<Demons>().status.HP + "\nATK:"
+            + parentDemon.GetComponent<Demons>().status.ATK + "\nSPEED:" + parentDemon.GetComponent<Demons>().status.SPEED;
 	}
 }
