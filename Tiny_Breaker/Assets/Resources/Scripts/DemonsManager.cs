@@ -5,66 +5,72 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-//悪魔達の初期情報(structの代わりにclassを使用)
-[System.Serializable]
-public class DemonData
-{
-    [SerializeField, Range(0, 9), TooltipAttribute("初期出撃数")]
-    public int num;
-    [SerializeField, TooltipAttribute("悪魔の種類")]
-    public GameObject gameObuject;
-}
+////悪魔達の初期情報(structの代わりにclassを使用)
+//[System.Serializable]
+//public class DemonData
+//{
+//    //[SerializeField, TooltipAttribute("悪魔の種類")]
+//    //public GameObject gameObuject;
+    
+//    [SerializeField, TooltipAttribute("体力")]
+//    public int HP = 100;
+//    [SerializeField, TooltipAttribute("攻撃力")]
+//    public int ATK = 100;
+//    [SerializeField, TooltipAttribute("速度")]
+//    public int SPEED = 5;
+//    [SerializeField, TooltipAttribute("攻撃間隔")]
+//    public float AtackTime = 1.0f;
+
+//    private int MaxHP;
+//    public int GetMaxHP { get { return MaxHP; } }
+
+//    DemonData() { MaxHP = HP; }
+//}
 
 public class DemonsManager : MonoBehaviour
 {
-    public DemonData PUPU;  //ププ
-    public DemonData POPO;  //ポポ
-    public DemonData PIPI;  //ピピ
-
-    // Use this for initialization
+    [SerializeField, TooltipAttribute("ププ")]
+    private GameObject PUPU;  //ププ
+    [SerializeField, TooltipAttribute("ポポ")]
+    private GameObject POPO;  //ポポ
+    [SerializeField, TooltipAttribute("ピピ")]
+    private GameObject PIPI;  //ピピ
+    
     void Start () {
 
         // 悪魔たちを召喚
-        InstantiateDemons(PUPU);
-        InstantiateDemons(POPO);
-        InstantiateDemons(PIPI);
+        //InstantiateDemons(PUPU);
+        //InstantiateDemons(POPO);
+        //InstantiateDemons(PIPI);
     }
 
     // ユニットのインスタンス化
-    void InstantiateDemons(DemonData demonData)
-    {
-        for (int i = 0; i < demonData.num; i++)
-        {
-            //demonData.gameObuject.GetComponent<Demons>().status.HP = demonData.gameObuject.GetComponent<Demons>().defaultHPpro;
-            //demonData.gameObuject.GetComponent<Demons>().status.ATK = demonData.gameObuject.GetComponent<Demons>().defaultATKpro;
-            //demonData.gameObuject.GetComponent<Demons>().status.SPEED = demonData.gameObuject.GetComponent<Demons>().defaultSPEEDpro;
-
-            // プレハブのインスタンス化
-            // xyはそのままにz軸方向にだけ少しずつずらしている
-            Instantiate(demonData.gameObuject,
-                        new Vector3(demonData.gameObuject.transform.position.x, demonData.gameObuject.transform.position.y, demonData.gameObuject.transform.position.z - i * 1),
-                        Quaternion.identity);
-        }
-    }
+    //void InstantiateDemons(GameObject gameObuject)
+    //{
+    //    // プレハブのインスタンス化
+    //    Instantiate(gameObuject,
+    //                gameObuject.transform.position,
+    //                Quaternion.identity);
+    //}
 	
 	// Update is called once per frame
 	void Update () {
 
         //プレイヤーの命令と悪魔たちの情報を取るためにFindで探す
-        GameObject playerOrder = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
         GameObject[] units = GameObject.FindGameObjectsWithTag("Unit");
 
         //プレイヤーの現在の命令によって更新を変えている
-        switch (playerOrder.GetComponent<PlayerCommand>().CurrentOrder)
+        switch (player.GetComponent<PlayerControl>().CurrentOrder)
         {
-            case PlayerCommand.Order.Move:
-                MoveOrder(units);
+            case PlayerControl.Order.Move:
+                MoveOrder(player, units);
                 break;
-            case PlayerCommand.Order.Building:
-                BuildingOrder(units);
+            case PlayerControl.Order.Building:
+                BuildingOrder(player, units);
                 break;
-            case PlayerCommand.Order.Enemy:
-                EnemyOrder(units);
+            case PlayerControl.Order.Enemy:
+                EnemyOrder(player, units);
                 break;
             default:
                 WaitOrder(units);
@@ -74,39 +80,24 @@ public class DemonsManager : MonoBehaviour
     }
     
     // 悪魔達全体の移動命令処理
-    void MoveOrder(GameObject[] units)
+    void MoveOrder(GameObject player, GameObject[] units)
     {
-        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-
         foreach (GameObject e in units)
-            //悪魔クラスを持っていたら処理
-            if (e.GetComponent<Demons>() != null)
-                e.GetComponent<Demons>().MoveOrder(fieldCommand.GetComponent<Mousecontrol>().ClickPosition);
+                e.GetComponent<Demons>().MoveOrder(player.GetComponent<Mousecontrol>().ClickPosition);
     }
 
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
-    void BuildingOrder(GameObject[] units)
+    void BuildingOrder(GameObject player, GameObject[] units)
     {
-        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-
         foreach (var e in units)
-            //悪魔クラスを持っていたら処理
-            if(e.GetComponent<Demons>() != null)
-                e.GetComponent<Demons>().BuildingOrder(fieldCommand.GetComponent<Mousecontrol>().ClickGameObject);
+                e.GetComponent<Demons>().BuildingOrder(player.GetComponent<Mousecontrol>().ClickGameObject);
     }
 
     // 悪魔達全体の敵に攻撃する命令の処理
-    void EnemyOrder(GameObject[] units)
+    void EnemyOrder(GameObject player, GameObject[] units)
     {
-        //目的地のゲームオブジェクト情報を手に入れるためフィールドに指示された地点の情報を取っている
-        GameObject fieldCommand = GameObject.FindGameObjectWithTag("Player/Command");
-
         foreach (var e in units)
-            //悪魔クラスを持っていたら処理
-            if (e.GetComponent<Demons>() != null)
-                e.GetComponent<Demons>().EnemyOrder(fieldCommand.GetComponent<Mousecontrol>().ClickGameObject);
+                e.GetComponent<Demons>().EnemyOrder(player.GetComponent<Mousecontrol>().ClickGameObject);
     }
 
     // 悪魔達全体の待機命令の処理(いらないかもしれないが)

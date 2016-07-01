@@ -3,30 +3,11 @@
 using UnityEngine;
 using System.Collections;
 
-//悪魔達の初期情報(structの代わりにclassを使用)
-[System.Serializable]
-public class DemonStatus
-{
-    [SerializeField, TooltipAttribute("体力")]
-    public int HP = 100;
-    [SerializeField, TooltipAttribute("攻撃力")]
-    public int ATK = 100;
-    [SerializeField, TooltipAttribute("速度")]
-    public int SPEED = 5;
-    [SerializeField, TooltipAttribute("攻撃間隔")]
-    public float AtackTime = 1.0f;
-
-    private int MaxHP;
-    public int GetMaxHP { get { return MaxHP; } }
-
-    DemonStatus() { MaxHP = HP; }
-}
-
 public class Demons : MonoBehaviour
 {
     //プレイヤーの仮ステータス
     [SerializeField, TooltipAttribute("悪魔のステータス")]
-    public DemonStatus status;
+    public DemonData status;
 
     public GameObject demonSpirit;
 
@@ -39,7 +20,6 @@ public class Demons : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        //moveFlag = false;
         moveDirection = Vector3.zero;
     }
 	
@@ -193,7 +173,7 @@ public class Demons : MonoBehaviour
         hitCollisionObject = null;
     }
 
-    public void AddStatus(DemonStatus status)
+    public void AddStatus(DemonData status)
     {
         this.status.HP += status.GetMaxHP;
         this.status.ATK += status.ATK;

@@ -4,7 +4,7 @@ using System.Collections;
 public class DemonSpirits : MonoBehaviour
 {
     //プレイヤーの仮ステータス
-    private DemonStatus status;
+    private DemonData status;
     private string demonName;
 
     
