@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Web v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>WebPlayer:6</UnityBuildTarget>
     <UnityVersion>5.3.5f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -45,17 +43,9 @@
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
-    <Reference Include="System.Runtime.Serialization">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Unity Full v3.5\System.Runtime.Serialization.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Core" />
     <Reference Include="Boo.Lang" />
-    <Reference Include="System.Xml.Linq">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v3.5\Profile\Unity Full v3.5\System.Xml.Linq.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityScript.Lang" />
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
@@ -80,14 +70,15 @@
     <Compile Include="Assets\Resources\Scripts\Cannon.cs" />
     <Compile Include="Assets\Resources\Scripts\Castle.cs" />
     <Compile Include="Assets\Resources\Scripts\CastleAttack.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\DemonData.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\DemonSpawner.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\DemonSpirits.cs" />
     <Compile Include="Assets\Resources\Scripts\Demons\Demons.cs" />
     <Compile Include="Assets\Resources\Scripts\Demons\DemonsAttack.cs" />
+    <Compile Include="Assets\Resources\Scripts\Demons\DemonsData.cs" />
     <Compile Include="Assets\Resources\Scripts\Demons\DemonsManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Demons\DemonsSpirits.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\MouseControl.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\PlayerControl.cs" />
+    <Compile Include="Assets\Resources\Scripts\Player\SummonButton.cs" />
+    <Compile Include="Assets\Resources\Scripts\Player\SummonManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Soldier.cs" />
     <Compile Include="Assets\Resources\Scripts\SoldierAttack.cs" />
     <Compile Include="Assets\Resources\Scripts\Spawner.cs" />

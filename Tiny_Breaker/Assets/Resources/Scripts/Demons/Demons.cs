@@ -7,7 +7,7 @@ public class Demons : MonoBehaviour
 {
     //プレイヤーの仮ステータス
     [SerializeField, TooltipAttribute("悪魔のステータス")]
-    public DemonData status;
+    public DemonsData status;
 
     public GameObject demonSpirit;
 
@@ -30,7 +30,7 @@ public class Demons : MonoBehaviour
         if (status.HP <= 0)
         {
             //スピリットの生成
-            DemonSpirits.InstanceSpirit(demonSpirit, this.gameObject);
+            DemonsSpirits.InstanceSpirit(demonSpirit, this.gameObject);
             Destroy(gameObject);
         }
     }
@@ -173,7 +173,7 @@ public class Demons : MonoBehaviour
         hitCollisionObject = null;
     }
 
-    public void AddStatus(DemonData status)
+    public void AddStatus(DemonsData status)
     {
         this.status.HP += status.GetMaxHP;
         this.status.ATK += status.ATK;

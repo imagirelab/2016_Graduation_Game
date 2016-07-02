@@ -1,7 +1,6 @@
 ﻿// 敵のステータスなどを管理するクラス
 
 using UnityEngine;
-using System.Collections;
 
 public class Soldier : MonoBehaviour {
 

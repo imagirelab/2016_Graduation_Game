@@ -1,7 +1,6 @@
 ﻿//お城からの攻撃タイミングの処理をするクラス
 
 using UnityEngine;
-using System.Collections;
 
 public class CastleAttack : MonoBehaviour {
     

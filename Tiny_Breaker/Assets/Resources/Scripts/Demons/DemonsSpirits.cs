@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class DemonSpirits : MonoBehaviour
+public class DemonsSpirits : MonoBehaviour
 {
     //プレイヤーの仮ステータス
-    private DemonData status;
+    private DemonsData status;
     private string demonName;
 
     
@@ -30,7 +29,7 @@ public class DemonSpirits : MonoBehaviour
     public static void InstanceSpirit(Object spiritPrefab, GameObject demon)
     {
         GameObject spirit = (GameObject)Instantiate(spiritPrefab, demon.transform.position, demon.transform.rotation);
-        spirit.GetComponent<DemonSpirits>().status = demon.GetComponent<Demons>().status;
-        spirit.GetComponent<DemonSpirits>().demonName = demon.name.Replace("(Clone)", "");
+        spirit.GetComponent<DemonsSpirits>().status = demon.GetComponent<Demons>().status;
+        spirit.GetComponent<DemonsSpirits>().demonName = demon.name.Replace("(Clone)", "");
     }
 }

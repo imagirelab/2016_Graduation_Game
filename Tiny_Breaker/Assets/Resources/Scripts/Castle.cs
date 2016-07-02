@@ -1,8 +1,6 @@
 ﻿//お城のステータスなどを管理するクラス
 
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class Castle : MonoBehaviour
 {

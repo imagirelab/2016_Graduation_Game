@@ -3,7 +3,6 @@
 // （移動指示や破壊命令など）
 
 using UnityEngine;
-using System.Collections;
 
 public class PlayerControl : MonoBehaviour {
 
@@ -13,6 +12,7 @@ public class PlayerControl : MonoBehaviour {
         Move,       //移動
         Building,   //建造物へ行動
         Enemy,      //敵へ行動
+        Summon,     //召喚
         Wait        //待機（一応）
     }
     private Order currentOrder; //現在の命令
@@ -20,6 +20,7 @@ public class PlayerControl : MonoBehaviour {
 
     //このクラス内で使う変数
     private GameObject fieldCommand;    //フィールドでの指示
+    public GameObject FieldCommand { get { return fieldCommand; } } //フィールドでの指示(取得用)
 
     // 初期化
     void Start () {
@@ -30,31 +31,34 @@ public class PlayerControl : MonoBehaviour {
         // Resourcesフォルダからプレハブ情報の取得
         GameObject fieldCommandPrefab = (GameObject)Resources.Load("Prefabs/CommandTarget");
         // //とりあえずそのままインスタンス化
-        fieldCommand = (GameObject)Instantiate( fieldCommandPrefab,
-                                                fieldCommandPrefab.transform.position,
-                                                Quaternion.identity);
-        
+        fieldCommand = (GameObject)Instantiate(fieldCommandPrefab,
+                                               fieldCommandPrefab.transform.position,
+                                               Quaternion.identity);
     }
 	
 	// 更新
 	void Update () {
-
-        // 命令が切り替わる条件
-        switch (fieldCommand.GetComponent<MouseControl>().ClickGameObject.tag)
+        
+        if (this.GetComponent<SummonManager>().SettingDemonFlag)
+            currentOrder = Order.Summon;
+        else
         {
-            case "Ground":
-                currentOrder = Order.Move;
-                break;
-            case "Building":
-                currentOrder = Order.Building;
-                break;
-            case "Enemy":
-                currentOrder = Order.Enemy;
-                break;
-            default:
-                currentOrder = Order.Wait;
-                break;
+            // 命令が切り替わる条件
+            switch (fieldCommand.GetComponent<MouseControl>().ClickGameObject.tag)
+            {
+                case "Ground":
+                    currentOrder = Order.Move;
+                    break;
+                case "Building":
+                    currentOrder = Order.Building;
+                    break;
+                case "Enemy":
+                    currentOrder = Order.Enemy;
+                    break;
+                default:
+                    currentOrder = Order.Wait;
+                    break;
+            }
         }
-
 	}
 }

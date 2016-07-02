@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 //悪魔達の初期情報(structの代わりにclassを使用)
 [System.Serializable]
-public class DemonData
+public class DemonsData
 {
     //[SerializeField, TooltipAttribute("悪魔の種類")]
     //public GameObject gameObuject;
@@ -20,5 +19,5 @@ public class DemonData
     private int MaxHP;
     public int GetMaxHP { get { return MaxHP; } }
 
-    DemonData() { MaxHP = HP; }
+    DemonsData() { MaxHP = HP; }
 }
