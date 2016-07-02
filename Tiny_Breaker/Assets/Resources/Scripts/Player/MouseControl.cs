@@ -1,21 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Mousecontrol : MonoBehaviour {
+public class MouseControl : MonoBehaviour {
 
 	// スクリーン座標をワールド座標に変換した位置座標
 	private Vector3 screenToWorldPointPosition;
     // クリックされたときの座標
     private Vector3 clickPosition;
     public Vector3 ClickPosition { get { return clickPosition; } }
-
-    // レイがぶつかっている建造物の名前
-    private string hitGameObjectTag;
-    // クリックされたときのオブジェクトの名前
-    private string clickGameObjectTag; 
-    public string ClickGameObjectTag { get { return clickGameObjectTag; } }
-
-    // レイがぶつかっている建造物のゲームオブジェクト
+    
+    // レイがぶつかったゲームオブジェクト
     private GameObject hitGameObject;
     // クリックされたときのゲームオブジェクト
     private GameObject clickGameObject;
@@ -32,8 +26,8 @@ public class Mousecontrol : MonoBehaviour {
         screenToWorldPointPosition = Vector3.zero;
         clickPosition = Vector3.zero;
 
-        hitGameObjectTag = "";
-        clickGameObjectTag = "";
+        hitGameObject = new GameObject();
+        clickGameObject = new GameObject();
 
     }
 	
@@ -50,12 +44,11 @@ public class Mousecontrol : MonoBehaviour {
             if (Physics.Raycast(ray, out hit))
             {
                 screenToWorldPointPosition = hit.point + hit.normal * 0.5f;
-
-                // オブジェクトのタグを取得
-                hitGameObjectTag = hit.collider.gameObject.tag;
-
+                
                 // オブジェクトの取得
                 hitGameObject = hit.collider.gameObject;
+
+                Debug.Log(hit.collider.name);
 
                 if(hit.collider.gameObject.name == "Catcher")
                 {
@@ -64,18 +57,13 @@ public class Mousecontrol : MonoBehaviour {
 
             }
 
-            // ワールド座標に変換されたマウス座標を代入
+            // ワールド座標に変換されたマウス座標を代入 (Y座標の2.5fはマジックナンバー？)
             gameObject.transform.position = new Vector3(screenToWorldPointPosition.x, screenToWorldPointPosition.y + 2.5f, screenToWorldPointPosition.z);
-
-            //移動指示フラグを成立させる
-            ////StaticVariables.goFlag = true;
-            //目的地の座標を格納
-            ////StaticVariables.goPosition = screenToWorldPointPosition;
-
+            
             // クリックされたときの情報の登録
             clickPosition = screenToWorldPointPosition;     // 座標
-            clickGameObjectTag = hitGameObjectTag;          // タグ
             clickGameObject = hitGameObject;                // オブジェクト
+
         }
     }
 }

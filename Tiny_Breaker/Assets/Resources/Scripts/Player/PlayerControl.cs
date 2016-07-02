@@ -40,7 +40,7 @@ public class PlayerControl : MonoBehaviour {
 	void Update () {
 
         // 命令が切り替わる条件
-        switch (fieldCommand.GetComponent<Mousecontrol>().ClickGameObjectTag)
+        switch (fieldCommand.GetComponent<MouseControl>().ClickGameObject.tag)
         {
             case "Ground":
                 currentOrder = Order.Move;

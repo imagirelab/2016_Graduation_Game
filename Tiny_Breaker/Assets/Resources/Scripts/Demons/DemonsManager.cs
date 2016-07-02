@@ -29,12 +29,12 @@ using System.Collections.Generic;
 
 public class DemonsManager : MonoBehaviour
 {
-    [SerializeField, TooltipAttribute("ププ")]
-    private GameObject PUPU;  //ププ
-    [SerializeField, TooltipAttribute("ポポ")]
-    private GameObject POPO;  //ポポ
-    [SerializeField, TooltipAttribute("ピピ")]
-    private GameObject PIPI;  //ピピ
+    //[SerializeField, TooltipAttribute("ププ")]
+    //private GameObject PUPU;  //ププ
+    //[SerializeField, TooltipAttribute("ポポ")]
+    //private GameObject POPO;  //ポポ
+    //[SerializeField, TooltipAttribute("ピピ")]
+    //private GameObject PIPI;  //ピピ
     
     void Start () {
 
@@ -83,21 +83,21 @@ public class DemonsManager : MonoBehaviour
     void MoveOrder(GameObject player, GameObject[] units)
     {
         foreach (GameObject e in units)
-                e.GetComponent<Demons>().MoveOrder(player.GetComponent<Mousecontrol>().ClickPosition);
+                e.GetComponent<Demons>().MoveOrder(player.GetComponent<MouseControl>().ClickPosition);
     }
 
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
     void BuildingOrder(GameObject player, GameObject[] units)
     {
         foreach (var e in units)
-                e.GetComponent<Demons>().BuildingOrder(player.GetComponent<Mousecontrol>().ClickGameObject);
+                e.GetComponent<Demons>().BuildingOrder(player.GetComponent<MouseControl>().ClickGameObject);
     }
 
     // 悪魔達全体の敵に攻撃する命令の処理
     void EnemyOrder(GameObject player, GameObject[] units)
     {
         foreach (var e in units)
-                e.GetComponent<Demons>().EnemyOrder(player.GetComponent<Mousecontrol>().ClickGameObject);
+                e.GetComponent<Demons>().EnemyOrder(player.GetComponent<MouseControl>().ClickGameObject);
     }
 
     // 悪魔達全体の待機命令の処理(いらないかもしれないが)
