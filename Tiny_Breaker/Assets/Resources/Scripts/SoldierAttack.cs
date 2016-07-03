@@ -33,7 +33,7 @@ public class SoldierAttack : MonoBehaviour {
 
             //攻撃対象がいることを確認してから攻撃
             if (AttackTarget != null)
-                AttackTarget.GetComponent<Demons>().status.HP -= ATK;
+                AttackTarget.GetComponent<Demons>().status.CurrentHP -= ATK;
             else
                 IsAttack = false;
         }
@@ -50,7 +50,6 @@ public class SoldierAttack : MonoBehaviour {
         {
             IsAttack = true;
             AttackTarget = collider.gameObject;
-            Debug.Log(collider.gameObject.name);
         }
     }
 

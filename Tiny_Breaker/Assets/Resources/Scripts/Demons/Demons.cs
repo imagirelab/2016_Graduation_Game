@@ -8,6 +8,8 @@ public class Demons : MonoBehaviour
     //プレイヤーの仮ステータス
     [SerializeField, TooltipAttribute("悪魔のステータス")]
     public DemonsData status;
+    [SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
+    public DemonsGrowPointData growPoint;
 
     public GameObject demonSpirit;
 
@@ -27,12 +29,8 @@ public class Demons : MonoBehaviour
 	void Update ()
     {
         //死亡処理
-        if (status.HP <= 0)
-        {
-            //スピリットの生成
-            DemonsSpirits.InstanceSpirit(demonSpirit, this.gameObject);
-            Destroy(gameObject);
-        }
+        if (status.CurrentHP <= 0)
+            Dead();
     }
 
     // 移動命令の処理
@@ -48,7 +46,7 @@ public class Demons : MonoBehaviour
                 //目的地への方向を見る
                 transform.LookAt(transform.position + new Vector3(targetPosition.x, 0, targetPosition.z));
                 //移動方向へ速度をSPEED分の与える
-                this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
+                this.GetComponent<Rigidbody>().velocity = moveDirection * status.CurrentSPEED;
             }
             //目的地に0.1mより近い距離になった場合の処理
             else
@@ -78,7 +76,7 @@ public class Demons : MonoBehaviour
             //目的地への方向を見る
             transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
             //移動方向へ速度をSPEED分の与える
-            this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
+            this.GetComponent<Rigidbody>().velocity = moveDirection * status.CurrentSPEED;
         }
         //目的地に触れている場合の処理
         else
@@ -87,13 +85,13 @@ public class Demons : MonoBehaviour
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
             //アタックタイムを満たしたら
-            if (time > status.AtackTime)
+            if (time > status.CurrentAtackTime)
             {
                 time = 0;
 
                 // お城クラスを持っていたら処理
                 if(target.GetComponent<Castle>() != null)
-                    target.GetComponent<Castle>().HPpro -= status.ATK;
+                    target.GetComponent<Castle>().HPpro -= status.CurrentATK;
             }
 
             //1フレームあたりの時間を取得
@@ -121,7 +119,7 @@ public class Demons : MonoBehaviour
             //目的地への方向を見る
             transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
             //移動方向へ速度をSPEED分の与える
-            this.GetComponent<Rigidbody>().velocity = moveDirection * status.SPEED;
+            this.GetComponent<Rigidbody>().velocity = moveDirection * status.CurrentSPEED;
         }
         //目的地に触れている場合の処理
         else
@@ -130,13 +128,13 @@ public class Demons : MonoBehaviour
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
             
             //アタックタイムを満たしたら
-            if (time > status.AtackTime)
+            if (time > status.CurrentAtackTime)
             {
                 time = 0;
 
                 // 敵クラスを持っていたら処理
                 if (target.GetComponent<Soldier>() != null)
-                    target.GetComponent<Soldier>().HPpro -= status.ATK;
+                    target.GetComponent<Soldier>().HPpro -= status.CurrentATK;
             }
 
             //1フレームあたりの時間を取得
@@ -173,12 +171,12 @@ public class Demons : MonoBehaviour
         hitCollisionObject = null;
     }
 
-    public void AddStatus(DemonsData status)
+    //死んだときの処理
+    void Dead()
     {
-        this.status.HP += status.GetMaxHP;
-        this.status.ATK += status.ATK;
-        //this.status.SPEED += status.SPEED;
-        //this.status.AtackTime = status.AtackTime;
+        //スピリットの生成
+        GameObject spirit = (GameObject)Instantiate(demonSpirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
+        spirit.GetComponent<DemonsSpirits>().GrowPoint = this.gameObject.GetComponent<Demons>().growPoint;
+        Destroy(gameObject);
     }
-
 }

@@ -23,14 +23,14 @@ public class DemonsAttack : MonoBehaviour {
     {
 
         //アタックタイムを満たしていて攻撃フラグが立っていたら攻撃
-        if (time > parent.GetComponent<Demons>().status.AtackTime && IsAttack)
+        if (time > parent.GetComponent<Demons>().status.CurrentAtackTime && IsAttack)
         {
             time = 0;
 
             //攻撃対象がいることを確認してから攻撃
             if (AttackTarget != null)
             {
-                AttackTarget.GetComponent<Demons>().status.HP -= parent.GetComponent<Demons>().status.ATK;
+                AttackTarget.GetComponent<Demons>().status.CurrentHP -= parent.GetComponent<Demons>().status.CurrentATK;
             }
             else
                 IsAttack = false;

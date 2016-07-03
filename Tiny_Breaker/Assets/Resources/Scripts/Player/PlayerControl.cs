@@ -13,6 +13,7 @@ public class PlayerControl : MonoBehaviour {
         Building,   //建造物へ行動
         Enemy,      //敵へ行動
         Summon,     //召喚
+        Catcher,    //キャッチャー(魂の回収)
         Wait        //待機（一応）
     }
     private Order currentOrder; //現在の命令
@@ -39,6 +40,7 @@ public class PlayerControl : MonoBehaviour {
 	// 更新
 	void Update () {
         
+        //召喚命令
         if (this.GetComponent<SummonManager>().SettingDemonFlag)
             currentOrder = Order.Summon;
         else
@@ -55,10 +57,13 @@ public class PlayerControl : MonoBehaviour {
                 case "Enemy":
                     currentOrder = Order.Enemy;
                     break;
+                case "Spirit":
+                    currentOrder = Order.Catcher;
+                    break;
                 default:
                     currentOrder = Order.Wait;
                     break;
             }
         }
-	}
+    }
 }

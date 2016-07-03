@@ -57,10 +57,10 @@ public class MouseControl : MonoBehaviour {
                     // オブジェクトの取得
                     hitGameObject = hit.collider.gameObject;
 
-                    if (hit.collider.gameObject.name == "Catcher")
-                    {
-                        StaticVariables.catcherFlag = true;
-                    }
+                    //if (hit.collider.gameObject.name == "Catcher")
+                    //{
+                    //    StaticVariables.catcherFlag = true;
+                    //}
 
                     // ワールド座標に変換されたマウス座標を代入 (Y座標の2.5fはマジックナンバー？)
                     gameObject.transform.position = new Vector3(screenToWorldPointPosition.x, screenToWorldPointPosition.y + 2.5f, screenToWorldPointPosition.z);
@@ -70,6 +70,8 @@ public class MouseControl : MonoBehaviour {
                     clickGameObject = hitGameObject;                // オブジェクト
 
                     isClick = true;
+
+                    Debug.Log(clickGameObject.name);
                 }
             }
             else

@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class DemonsManager : MonoBehaviour
 {
-    GameObject[] units;
+    private GameObject[] units;
 
     void Start () {
-        
+        units = null;
     }
     
     // Update is called once per frame
     void Update () {
-
+        
         //プレイヤーの命令と悪魔たちの情報を取るためにFindで探す
         units = GameObject.FindGameObjectsWithTag("Unit");
         if (units != null)
@@ -30,7 +30,7 @@ public class DemonsManager : MonoBehaviour
                 case PlayerControl.Order.Enemy:
                     EnemyOrder();
                     break;
-                case PlayerControl.Order.Summon:
+                case PlayerControl.Order.Summon:    //召喚中の他の悪魔達の行動
                     MoveOrder();
                     break;
                 default:
@@ -44,7 +44,7 @@ public class DemonsManager : MonoBehaviour
     void MoveOrder()
     {
         foreach (GameObject e in units)
-                e.GetComponent<Demons>().MoveOrder(this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition);
+            e.GetComponent<Demons>().MoveOrder(this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition);
     }
 
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
@@ -60,12 +60,11 @@ public class DemonsManager : MonoBehaviour
         foreach (var e in units)
                 e.GetComponent<Demons>().EnemyOrder(this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject);
     }
-    
+
     // 悪魔達全体の待機命令の処理(いらないかもしれないが)
     void WaitOrder()
     {
         foreach (var e in units)
-            //悪魔クラスを持っていたら処理
             if (e.GetComponent<Demons>() != null)
                 e.GetComponent<Demons>().WaitOrder();
     }
