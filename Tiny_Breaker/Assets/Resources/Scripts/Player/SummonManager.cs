@@ -73,7 +73,7 @@ public class SummonManager : MonoBehaviour
     void SummonOrder()
     {
         GameObject summonDemonClone = (GameObject)Instantiate(summonDemon,
-                                                              this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition,
+                                                              this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition + summonDemon.transform.position,
                                                               Quaternion.identity);
         switch (summonDemon.name)
         {

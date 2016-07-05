@@ -45,24 +45,27 @@ public class PlayerControl : MonoBehaviour {
             currentOrder = Order.Summon;
         else
         {
-            // 命令が切り替わる条件
-            switch (fieldCommand.GetComponent<MouseControl>().ClickGameObject.tag)
+            if (fieldCommand.GetComponent<MouseControl>().ClickGameObject != null)
             {
-                case "Ground":
-                    currentOrder = Order.Move;
-                    break;
-                case "Building":
-                    currentOrder = Order.Building;
-                    break;
-                case "Enemy":
-                    currentOrder = Order.Enemy;
-                    break;
-                case "Spirit":
-                    currentOrder = Order.Catcher;
-                    break;
-                default:
-                    currentOrder = Order.Wait;
-                    break;
+                // 命令が切り替わる条件
+                switch (fieldCommand.GetComponent<MouseControl>().ClickGameObject.tag)
+                {
+                    case "Ground":
+                        currentOrder = Order.Move;
+                        break;
+                    case "Building":
+                        currentOrder = Order.Building;
+                        break;
+                    case "Enemy":
+                        currentOrder = Order.Enemy;
+                        break;
+                    case "Spirit":
+                        currentOrder = Order.Catcher;
+                        break;
+                    default:
+                        currentOrder = Order.Wait;
+                        break;
+                }
             }
         }
     }

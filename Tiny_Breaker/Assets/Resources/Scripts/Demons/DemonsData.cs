@@ -5,13 +5,13 @@
 public class DemonsData
 {
     [SerializeField, TooltipAttribute("体力")]
-    private int HP;
+    private int HP = 0;
     [SerializeField, TooltipAttribute("攻撃力")]
-    private int ATK;
+    private int ATK = 0;
     [SerializeField, TooltipAttribute("速度")]
-    private int SPEED;
+    private int SPEED = 0;
     [SerializeField, TooltipAttribute("攻撃間隔")]
-    private float AtackTime;
+    private float AtackTime = 0;
     
     public int GetHP { get { return HP; } }
     public int GetATK { get { return ATK; } }
