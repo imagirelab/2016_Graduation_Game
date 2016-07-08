@@ -13,7 +13,7 @@ deploy:
         cd Tiny_Breaker/webGL/
         rm -rf .git
         git init
-        git remote add origin https://github.com/imagirelab/Tiny_Breaker_WebGL.git
+        git remote add origin https://$USERNAME:$PASSWORD@github.com/imagirelab/Tiny_Breaker_WebGL.git
         git add .
         git commit -m "wercker deployed"
         git push -f origin master
