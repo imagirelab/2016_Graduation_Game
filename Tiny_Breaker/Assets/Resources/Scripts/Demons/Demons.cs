@@ -95,7 +95,13 @@ public class Demons : MonoBehaviour
 
                 //家クラスを持っていたら処理
                 if (target.GetComponent<House>() != null)
+                {
                     target.GetComponent<House>().HPpro -= status.CurrentATK;
+
+                    //小屋が壊れたらコストを獲得
+                    if (target.GetComponent<House>().HPpro <= 0)
+                        transform.parent.GetComponent<PlayerCost>().AddCost(transform.parent.GetComponent<PlayerCost>().GetHouseCost);
+                }
             }
 
             //1フレームあたりの時間を取得
@@ -138,7 +144,12 @@ public class Demons : MonoBehaviour
 
                 // 敵クラスを持っていたら処理
                 if (target.GetComponent<Soldier>() != null)
+                {
                     target.GetComponent<Soldier>().HPpro -= status.CurrentATK;
+                    //兵士が死んだらコストを獲得
+                    if (target.GetComponent<Soldier>().HPpro <= 0)
+                        transform.parent.GetComponent<PlayerCost>().AddCost(transform.parent.GetComponent<PlayerCost>().GetSoldierCost);
+                }
             }
 
             //1フレームあたりの時間を取得

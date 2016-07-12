@@ -34,14 +34,18 @@ public class SummonButton : MonoBehaviour
             if(player.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject.tag == "Spirit")
             {
                 growPoint.CurrentHP_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.CurrentHP_GrowPoint;
+                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetHP_GrowPoint +
+                       demon.GetComponent<Demons>().growPoint.GetHP_GrowPoint;
                 growPoint.CurrentATK_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.CurrentATK_GrowPoint;
+                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetATK_GrowPoint +
+                       demon.GetComponent<Demons>().growPoint.GetATK_GrowPoint;
                 growPoint.CurrentSPEED_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.CurrentSPEED_GrowPoint;
+                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetSPEED_GrowPoint +
+                       demon.GetComponent<Demons>().growPoint.GetSPEED_GrowPoint;
                 growPoint.CurrentAtackTime_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.CurrentAtackTime_GrowPoint;
-                
+                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetAtackTime_GrowPoint +
+                       demon.GetComponent<Demons>().growPoint.GetAtackTime_GrowPoint;
+
                 Destroy(player.GetComponent<SpiritCatcher>().GetClickSpirit);
             }
             

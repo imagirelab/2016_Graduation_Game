@@ -55,4 +55,9 @@ public class DemonsGrowPointData
         currentSPEED_GrowPoint = SPEED_GrowPoint;
         currentAtackTime_GrowPoint = AtackTime_GrowPoint;
     }
+
+    public int GetCost()
+    {
+        return currentHP_GrowPoint + currentATK_GrowPoint + currentSPEED_GrowPoint;
+    }
 }

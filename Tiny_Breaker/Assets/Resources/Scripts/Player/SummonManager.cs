@@ -66,7 +66,10 @@ public class SummonManager : MonoBehaviour
         if (this.GetComponent<PlayerControl>().CurrentOrder == PlayerControl.Order.Summon)
             if (this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().IsClick &&
                 this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject.tag == "Ground")
-                SummonOrder();
+                if (this.GetComponent<PlayerCost>().UseableCost(growPoint.GetCost() * this.GetComponent<PlayerCost>().GetDemonCost))
+                {
+                    SummonOrder();
+                }
     }
     
     // 悪魔を召喚するときの処理
@@ -75,20 +78,11 @@ public class SummonManager : MonoBehaviour
         GameObject summonDemonClone = (GameObject)Instantiate(summonDemon,
                                                               this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition + summonDemon.transform.position,
                                                               Quaternion.identity);
-        switch (summonDemon.name)
-        {
-            case "PIPI":
-                SetDemonsStatus(summonDemonClone);
-                break;
-            case "POPO":
-                SetDemonsStatus(summonDemonClone);
-                break;
-            case "PUPU":
-                SetDemonsStatus(summonDemonClone);
-                break;
-            default:
-                break;
-        }
+        //親をSummonManagerの持っているものにする
+        summonDemonClone.transform.parent = this.transform;
+
+        SetDemonsStatus(summonDemonClone);
+
         //召喚が終わったらフラグを戻す
         this.GetComponent<SummonManager>().SettingDemonFlag = false;
     }
@@ -103,8 +97,8 @@ public class SummonManager : MonoBehaviour
             demon.GetComponent<Demons>().status.CurrentHP += (int)(demon.GetComponent<Demons>().status.GetHP * 0.5f);
         for (int i = 0; i < this.growPoint.CurrentATK_GrowPoint - demon.GetComponent<Demons>().growPoint.GetATK_GrowPoint; i++)
             demon.GetComponent<Demons>().status.CurrentATK += (int)(demon.GetComponent<Demons>().status.GetATK * 0.5f);
-        //for (int i = 0; i < summonDemon.GetComponent<Demons>().growPoint.SPEED_GrowPoint - defaultDemon.growPoint.SPEED_GrowPoint; i++)
-        //    summonDemon.GetComponent<Demons>().status.SPEED += (int)(defaultDemon.status.SPEED * 0.5f);
+        for (int i = 0; i < this.growPoint.CurrentSPEED_GrowPoint - demon.GetComponent<Demons>().growPoint.CurrentSPEED_GrowPoint; i++)
+            summonDemon.GetComponent<Demons>().status.CurrentSPEED += (int)(demon.GetComponent<Demons>().status.GetSPEED * 0.15f);
         //for (int i = 0; i < summonDemon.GetComponent<Demons>().growPoint.AtackTime_GrowPoint - defaultDemon.growPoint.AtackTime_GrowPoint; i++)
         //    summonDemon.GetComponent<Demons>().status.AtackTime += (int)(defaultDemon.status.AtackTime * 0.5f);
 

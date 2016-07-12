@@ -8,7 +8,7 @@ public class StatusUI : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        parentDemon = transform.root.gameObject;
+        parentDemon = transform.parent.gameObject;
         _MainCamera = GameObject.Find("Main Camera");
 
     }
