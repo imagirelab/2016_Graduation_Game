@@ -27,7 +27,11 @@ public class Soldier : MonoBehaviour {
 
         if (HP <= 0)
         {
-            Destroy(gameObject);
+            if (this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>().isStopped)
+            {
+                Destroy(gameObject);             
+            }
+            
         }
     }
 }

@@ -63,6 +63,7 @@ public class SummonManager : MonoBehaviour
         //マウスがクリックされた時で、
         //地面(召喚できるスペース)を選んでいたら、
         //出せる
+
         if (this.GetComponent<PlayerControl>().CurrentOrder == PlayerControl.Order.Summon)
             if (this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().IsClick &&
                 this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject.tag == "Ground")
@@ -80,6 +81,7 @@ public class SummonManager : MonoBehaviour
                                                               Quaternion.identity);
         //親をSummonManagerの持っているものにする
         summonDemonClone.transform.parent = this.transform;
+        //summonDemonClone.transform.SetParent(this.transform, false);
 
         SetDemonsStatus(summonDemonClone);
 

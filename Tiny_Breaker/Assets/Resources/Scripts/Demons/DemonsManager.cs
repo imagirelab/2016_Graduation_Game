@@ -43,8 +43,13 @@ public class DemonsManager : MonoBehaviour
     // 悪魔達全体の移動命令処理
     void MoveOrder()
     {
+        if (units.Length == 0)
+            return;
+
         foreach (GameObject e in units)
+        {
             e.GetComponent<Demons>().MoveOrder(this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickPosition);
+        }
     }
 
     // 悪魔達全体の建造物に向かい攻撃する命令の処理
