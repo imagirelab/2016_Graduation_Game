@@ -24,10 +24,8 @@ public class Soldier : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-
-        HP_UI.text = "HP: " + HP.ToString();
-
+	void Update ()
+    {        
         if (HP <= 0)
         {
             if (!deadFlag)
@@ -41,6 +39,10 @@ public class Soldier : MonoBehaviour {
             {
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            HP_UI.text = "HP: " + HP.ToString();
         }
         
     }
