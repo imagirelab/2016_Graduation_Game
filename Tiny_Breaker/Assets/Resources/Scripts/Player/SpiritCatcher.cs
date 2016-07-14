@@ -7,8 +7,10 @@ public class SpiritCatcher : MonoBehaviour {
     private GameObject clickSpirit;
     public GameObject GetClickSpirit { get { return clickSpirit; } }
 
-	// Use this for initialization
-	void Start () {
+    private int spiritCount = 0;
+
+    // Use this for initialization
+    void Start () {
         clickSpirit = null;
     }
 	
@@ -19,11 +21,12 @@ public class SpiritCatcher : MonoBehaviour {
         {
             //まだ回収していなければ登録する
             if (clickSpirit == null)
-            {
+            {                
                 //魂の移動場所(仮置きだから解像度とかで場所が変わるかも)
                 clickSpirit = this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject;
                 this.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject.transform.position
                     = new Vector3(-17.0f, 29.0f, -32.0f);   //マジックナンバー
+                spiritCount++;
             }
         }
     }

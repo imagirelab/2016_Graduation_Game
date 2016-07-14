@@ -9,7 +9,9 @@ public class Soldier : MonoBehaviour {
     private int HP = 300;
 
     //このクラス内で使う変数
-    private GameObject HP_UI;           //HPのUI
+    private TextMesh HP_UI;           //HPのUI
+    private ParticleSystem deadParticle;    //死亡時のパーティクル
+    private bool deadFlag = false;      //死亡判定
 
     //外から見れる変数
     public int HPpro { get { return HP; } set { HP = value; } }
@@ -17,21 +19,29 @@ public class Soldier : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-        HP_UI = transform.FindChild("HP").gameObject;
+        HP_UI = transform.FindChild("HP").gameObject.GetComponent<TextMesh>();
+        deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        HP_UI.GetComponent<TextMesh>().text = "HP: " + HP.ToString();
+        HP_UI.text = "HP: " + HP.ToString();
 
         if (HP <= 0)
         {
-            if (this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>().isStopped)
+            if (!deadFlag)
             {
-                Destroy(gameObject);             
+                Destroy(HP_UI);
+                deadParticle.Play();
+                deadFlag = true;
             }
-            
+
+            if (deadParticle.isStopped)
+            {
+                Destroy(gameObject);
+            }
         }
+        
     }
 }
