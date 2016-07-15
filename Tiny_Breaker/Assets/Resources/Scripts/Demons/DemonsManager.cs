@@ -31,7 +31,7 @@ public class DemonsManager : MonoBehaviour
                     EnemyOrder();
                     break;
                 case PlayerControl.Order.Summon:    //召喚中の他の悪魔達の行動
-                    MoveOrder();
+                    //MoveOrder();
                     break;
                 default:
                     WaitOrder();

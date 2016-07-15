@@ -53,6 +53,9 @@ public class Demons : MonoBehaviour
             {
                 //速度を０に
                 this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                //目的地への方向を見る
+                transform.LookAt(transform.position + new Vector3(targetPosition.x, 0, targetPosition.z));
             }
         }
     }
@@ -68,8 +71,8 @@ public class Demons : MonoBehaviour
             return;
         }
 
-        //目的地と離れている場合の処理
-        if (hitCollisionObject != target)
+        //目的地が攻撃距離より離れている場合の処理
+        if (Vector3.Distance(this.transform.position, target.transform.position) > status.CurrentAtackLength + 6.0f)    //建物の外側の長さがわからないのでマジックナンバー使用
         {
             //角度計算
             moveDirection = (target.transform.position - transform.position).normalized;
@@ -78,11 +81,14 @@ public class Demons : MonoBehaviour
             //移動方向へ速度をSPEED分の与える
             this.GetComponent<Rigidbody>().velocity = moveDirection * status.CurrentSPEED;
         }
-        //目的地に触れている場合の処理
+        //目的地が攻撃距離内に入った場合の処理
         else
         {
             //速度を０に
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+            //目的地への方向を見る
+            transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
 
             //アタックタイムを満たしたら
             if (time > status.CurrentAtackTime)
@@ -121,8 +127,8 @@ public class Demons : MonoBehaviour
             return;
         }
 
-        //目的地と離れている場合の処理
-        if (hitCollisionObject != target)
+        //目的地が攻撃距離より離れている場合の処理
+        if (Vector3.Distance(this.transform.position, target.transform.position) > status.CurrentAtackLength)
         {
             //角度計算
             moveDirection = (target.transform.position - transform.position).normalized;
@@ -131,12 +137,15 @@ public class Demons : MonoBehaviour
             //移動方向へ速度をSPEED分の与える
             this.GetComponent<Rigidbody>().velocity = moveDirection * status.CurrentSPEED;
         }
-        //目的地に触れている場合の処理
+        //目的地が攻撃距離内に入った場合の処理
         else
         {
             //速度を０に
             this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            
+
+            //目的地への方向を見る
+            transform.LookAt(transform.position + new Vector3(target.transform.position.x, 0, target.transform.position.z));
+
             //アタックタイムを満たしたら
             if (time > status.CurrentAtackTime)
             {

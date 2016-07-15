@@ -12,11 +12,14 @@ public class DemonsData
     private int SPEED = 0;
     [SerializeField, TooltipAttribute("攻撃間隔")]
     private float AtackTime = 0;
+    [SerializeField, TooltipAttribute("攻撃距離")]
+    private float AtackLength = 0;
     
     public int GetHP { get { return HP; } }
     public int GetATK { get { return ATK; } }
     public int GetSPEED { get { return SPEED; } }
     public float GetAtackTime { get { return AtackTime; } }
+    public float GetAtackLength { get { return AtackLength; } }
 
     //プレハブのすべて共有の値になってしまうため
     //元々のステータスはいじらないようにするため
@@ -25,6 +28,7 @@ public class DemonsData
     private int currentATK;
     private int currentSPEED;
     private float currentAtackTime;
+    private float currentAtackLength;
 
     public int CurrentHP
     {
@@ -46,6 +50,11 @@ public class DemonsData
         get { return currentAtackTime; }
         set { currentAtackTime = value; }
     }
+    public float CurrentAtackLength
+    {
+        get { return currentAtackLength; }
+        set { currentAtackLength = value; }
+    }
 
     //現在のステータスに代入する
     public void SetStutas()
@@ -54,5 +63,6 @@ public class DemonsData
         currentATK = ATK;
         currentSPEED = SPEED;
         currentAtackTime = AtackTime;
+        currentAtackLength = AtackLength;
     }
 }
