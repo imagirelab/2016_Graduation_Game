@@ -1,58 +1,61 @@
 ﻿//召喚ボタンを押したときの処理
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SummonButton : MonoBehaviour
 {
-
     [SerializeField, TooltipAttribute("悪魔")]
     private GameObject demon;
-
-    //成長値だけを記憶する変数(プレハブを参照すると他の悪魔に影響を与えるため)
-    private DemonsGrowPointData growPoint;
-
+    public GameObject Demon {
+        get { return demon; }
+        set { demon = value; }
+    }
+    
+    [SerializeField, TooltipAttribute("出撃位置")]
+    private Vector3 spawnPosition = Vector3.zero;
+    public Vector3 SpawnPosition{ set { spawnPosition = value; } }
+    
     void Start()
     {
-        //悪魔の初期値の設定
-        demon.GetComponent<Demons>().growPoint.SetGrowPoint();
-        //成長値だけを記憶する
-        growPoint = new DemonsGrowPointData();
-        growPoint.CurrentHP_GrowPoint = demon.GetComponent<Demons>().growPoint.GetHP_GrowPoint;
-        growPoint.CurrentATK_GrowPoint = demon.GetComponent<Demons>().growPoint.GetATK_GrowPoint;
-        growPoint.CurrentSPEED_GrowPoint = demon.GetComponent<Demons>().growPoint.GetSPEED_GrowPoint;
-        growPoint.CurrentAtackTime_GrowPoint = demon.GetComponent<Demons>().growPoint.GetAtackTime_GrowPoint;
+        //仮に何も設定されていなかったら空のゲームオブジェクトを入れる
+        if (demon == null)
+            demon = new GameObject();
+    }
+    
+    //クリックボタンが押された瞬間の処理
+    public void OnClickDownSummon()
+    {
+        //指示画像を出す
+        foreach (Transform child in transform)
+            child.GetComponent<Image>().enabled = true;
+
+        //半透明にしてみる
+        gameObject.GetComponent<Image>().color = Vector4.one * 0.5f;
     }
 
-
-    public void SetDemon()
+    //クリックボタンが離されたときの処理
+    public void OnClickUpSummon()
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        
-        if(player.GetComponent<PlayerControl>().CurrentOrder == PlayerControl.Order.Catcher)
-        {
-            //魂をクリックしている状態でボタンに触れた時の処理
-            if(player.GetComponent<PlayerControl>().FieldCommand.GetComponent<MouseControl>().ClickGameObject.tag == "Spirit")
-            {
-                growPoint.CurrentHP_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetHP_GrowPoint +
-                       demon.GetComponent<Demons>().growPoint.GetHP_GrowPoint;
-                growPoint.CurrentATK_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetATK_GrowPoint +
-                       demon.GetComponent<Demons>().growPoint.GetATK_GrowPoint;
-                growPoint.CurrentSPEED_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetSPEED_GrowPoint +
-                       demon.GetComponent<Demons>().growPoint.GetSPEED_GrowPoint;
-                growPoint.CurrentAtackTime_GrowPoint
-                    += player.GetComponent<SpiritCatcher>().GetClickSpirit.GetComponent<DemonsSpirits>().GrowPoint.GetAtackTime_GrowPoint +
-                       demon.GetComponent<Demons>().growPoint.GetAtackTime_GrowPoint;
+        //指示画像を消す
+        foreach (Transform child in transform)
+            child.GetComponent<Image>().enabled = false;
 
-                Destroy(player.GetComponent<SpiritCatcher>().GetClickSpirit);
-            }
-            
-        }
+        //色を元に戻す
+        gameObject.GetComponent<Image>().color = Vector4.one;
+    }
 
-        player.GetComponent<SummonManager>().SettingDemonFlag = true;
-        player.GetComponent<SummonManager>().SummonDemon = demon;
-        player.GetComponent<SummonManager>().GrowPoint = growPoint;
+    //その場でのクリックが成立した時の処理
+    public void OnClickSummon()
+    {
+        //悪魔を出す
+        GameObject instaceObject = (GameObject)Instantiate(demon,
+                                                           spawnPosition,           //プレイヤーごとの出撃位置
+                                                           Quaternion.identity);
+        GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
+        instaceObject.transform.SetParent(playerObject.transform, false);
+        //悪魔に出すオーダークラスを渡す
+        instaceObject.GetComponent<Demons>().Order = this.GetComponent<DemonsOrder>();
+        instaceObject.GetComponent<Demons>().GrowPoint = demon.GetComponent<Demons>().GrowPoint;
     }
 }

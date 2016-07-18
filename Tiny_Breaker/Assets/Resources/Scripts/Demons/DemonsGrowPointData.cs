@@ -4,6 +4,14 @@
 [System.Serializable]
 public class DemonsGrowPointData
 {
+    public enum Type
+    {
+        POPO,
+        PUPU,
+        PIPI
+    }
+    [SerializeField, TooltipAttribute("種類")]
+    private Type DemonType = Type.POPO;
     [SerializeField, TooltipAttribute("体力の成長値")]
     private int HP_GrowPoint = 0;
     [SerializeField, TooltipAttribute("攻撃力の成長値")]
@@ -13,6 +21,7 @@ public class DemonsGrowPointData
     [SerializeField, TooltipAttribute("攻撃間隔の成長値")]
     private int AtackTime_GrowPoint = 1;
 
+    public Type GetDemonType { get { return DemonType; } }
     public int GetHP_GrowPoint { get { return HP_GrowPoint; } }
     public int GetATK_GrowPoint { get { return ATK_GrowPoint; } }
     public int GetSPEED_GrowPoint { get { return SPEED_GrowPoint; } }

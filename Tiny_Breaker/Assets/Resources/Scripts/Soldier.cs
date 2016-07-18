@@ -1,6 +1,7 @@
 ﻿// 敵のステータスなどを管理するクラス
 
 using UnityEngine;
+using StaticClass;
 
 public class Soldier : MonoBehaviour {
 
@@ -19,12 +20,21 @@ public class Soldier : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
+        // 作られたときにリストに追加して
+        SolgierDataBase.getInstance().AddList(this.gameObject);
+
         HP_UI = transform.FindChild("HP").gameObject.GetComponent<TextMesh>();
         deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    //破壊されたときにリストから外す
+    void OnDisable()
+    {
+        SolgierDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
+    // Update is called once per frame
+    void Update ()
     {        
         if (HP <= 0)
         {

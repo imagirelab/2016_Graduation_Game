@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class PlayerCost : MonoBehaviour {
 
@@ -35,20 +34,18 @@ public class PlayerCost : MonoBehaviour {
 
     [SerializeField]
     Text Cost_UI;     //CostのUI
-
-    // Use this for initialization
+    
     void Start () {
         currentCost = StateCost;
-
-        GameObject canvas = GameObject.Find("Canvas");
+        
         Cost_UI.text = "Cost : " + currentCost.ToString();
     }
 	
-	// Update is called once per frame
 	void Update () {
 
         Cost_UI.text = "Cost : " + currentCost.ToString();
 
+        //毎秒増えるコスト
         if (time >= 1.0f)
         {
             time = 0;
@@ -61,6 +58,8 @@ public class PlayerCost : MonoBehaviour {
         time += Time.deltaTime;
     }
 
+    //コストを足す
+    //上限を超えたときは上限値を代入する
     public void AddCost(int addcost)
     {
         if (currentCost + addcost <= MaxCost)
@@ -69,6 +68,8 @@ public class PlayerCost : MonoBehaviour {
             currentCost = MaxCost;
     }
 
+    //コストが使えるかどうか
+    //使える場合は数値を引いたのち引けたことを返す
     public bool UseableCost(int cost)
     {
 
