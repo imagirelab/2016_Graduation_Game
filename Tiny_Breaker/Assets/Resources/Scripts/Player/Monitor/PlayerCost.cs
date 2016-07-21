@@ -33,17 +33,19 @@ public class PlayerCost : MonoBehaviour {
     float time = 0;     //時間
 
     [SerializeField]
-    Text Cost_UI;     //CostのUI
+    Text Cost_UI = null;     //CostのUI
     
     void Start () {
         currentCost = StateCost;
         
-        Cost_UI.text = "Cost : " + currentCost.ToString();
+        if(Cost_UI != null)
+            Cost_UI.text = "Cost : " + currentCost.ToString();
     }
 	
 	void Update () {
 
-        Cost_UI.text = "Cost : " + currentCost.ToString();
+        if (Cost_UI != null)
+            Cost_UI.text = "Cost : " + currentCost.ToString();
 
         //毎秒増えるコスト
         if (time >= 1.0f)

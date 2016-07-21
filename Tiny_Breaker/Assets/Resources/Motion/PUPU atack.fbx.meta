@@ -105,11 +105,115 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: atk1
+        weight: 1
+      - path: Master
+        weight: 1
+      - path: Master/Hips
+        weight: 1
+      - path: Master/Hips/Back
+        weight: 1
+      - path: Master/Hips/Body
+        weight: 1
+      - path: Master/Hips/Body/L_Leg
+        weight: 1
+      - path: Master/Hips/Body/L_Leg/L_Foot
+        weight: 1
+      - path: Master/Hips/Body/L_Leg/L_Foot/L_Toe
+        weight: 1
+      - path: Master/Hips/Body/R_Leg
+        weight: 1
+      - path: Master/Hips/Body/R_Leg/R_Foot
+        weight: 1
+      - path: Master/Hips/Body/R_Leg/R_Foot/R_Toe
+        weight: 1
+      - path: Master/Hips/Body/Tale
+        weight: 1
+      - path: Master/Hips/Body/Tale/Tale1
+        weight: 1
+      - path: Master/Hips/Body/Tale/Tale1/Tale2
+        weight: 1
+      - path: Master/Hips/Body/Tale/Tale1/Tale2/Tale3
+        weight: 1
+      - path: Master/Hips/Face
+        weight: 1
+      - path: Master/Hips/Head
+        weight: 1
+      - path: Master/Hips/Head/L_Hone
+        weight: 1
+      - path: Master/Hips/Head/L_Hone/L_Hone1
+        weight: 1
+      - path: Master/Hips/Head/L_Hone/L_Hone1/L_Hones
+        weight: 1
+      - path: Master/Hips/Head/R_Hone
+        weight: 1
+      - path: Master/Hips/Head/R_Hone/R_Hone1
+        weight: 1
+      - path: Master/Hips/Head/R_Hone/R_Hone1/R_Hones
+        weight: 1
+      - path: Master/Hips/L_Shoulder
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming/L_Arm
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming/L_Arm/L_handing
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming/L_Arm/L_handing/L_Hand
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming/L_Arm/L_handing/L_Hand/L_fingering
+        weight: 1
+      - path: Master/Hips/L_Shoulder/L_arming/L_Arm/L_handing/L_Hand/L_fingering/L_Finger
+        weight: 1
+      - path: Master/Hips/R_Shoulder
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming/R_Arm
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming/R_Arm/R_handing
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming/R_Arm/R_handing/R_Hand
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming/R_Arm/R_handing/R_Hand/R_fingering
+        weight: 1
+      - path: Master/Hips/R_Shoulder/R_arming/R_Arm/R_handing/R_Hand/R_fingering/R_Finger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 8
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

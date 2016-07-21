@@ -15,6 +15,9 @@ public class PlayerScreen : MonoBehaviour {
     public GameObject PUPUIcon;
     public GameObject PIPIIcon;
 
+    [SerializeField]
+    int stockSpiritMax = 5;
+
     void Update () {
         //リストに魂のデータが入っていたら処理
         if (spiritsData.Count > 0)
@@ -46,14 +49,18 @@ public class PlayerScreen : MonoBehaviour {
         Transform spiritBox = this.transform.FindChild("SpiritBox");
         int intoboxCount = spiritBox.childCount;
 
-        //種類によって変えるところ
-        GameObject spiritIcon = (GameObject)Instantiate(gameObject,
-            new Vector3(gameObject.transform.position.x,
-                        gameObject.transform.position.y - 25.0f * (index + intoboxCount),
-                        gameObject.transform.position.z),
-            Quaternion.identity);
-        spiritIcon.transform.SetParent(spiritBox, false);
-        spiritIcon.GetComponent<IconSpirit>().GrowPoint = spiritsData[index];
+        //ストックの限界までしか溜まらないようにする
+        if (intoboxCount < stockSpiritMax)
+        {
+            //種類によって変えるところ
+            GameObject spiritIcon = (GameObject)Instantiate(gameObject,
+                new Vector3(gameObject.transform.position.x,
+                            gameObject.transform.position.y - 25.0f * (index + intoboxCount),
+                            gameObject.transform.position.z),
+                Quaternion.identity);
+            spiritIcon.transform.SetParent(spiritBox, false);
+            spiritIcon.GetComponent<IconSpirit>().GrowPoint = spiritsData[index];
+        }
     }
 
     //外部から魂の情報をもらうところ

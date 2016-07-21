@@ -10,7 +10,7 @@ public class Player : MonoBehaviour {
 
     //画面になるプレファブ
     public GameObject screenObject;
-    private GameObject instaceScreenObject;
+    GameObject instaceScreenObject;
 
     //スマホ側に送信するのに一時的にデータをためておく場所
     List<GrowPoint> spiritsData = new List<GrowPoint>();
@@ -35,7 +35,7 @@ public class Player : MonoBehaviour {
                 instaceScreenObject.GetComponent<PlayerScreen>().AddSpiritList(e);
             }
 
-            //リストの送ったら中身を消す
+            //リストの送ったら中身を消す(本当は送ったことを確かめてから)
             spiritsData.Clear();
         }
     }

@@ -1,6 +1,7 @@
 ﻿//お城のステータスなどを管理するクラス
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Castle : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class Castle : MonoBehaviour
     
     //このクラス内で使う変数
     private GameObject HP_UI;           //HPのUI
+
+    [SerializeField]
+    Text Clear = null;
 
     //外から見れる変数
     public int HPpro { get { return HP; } set { HP = value; } }
@@ -26,6 +30,9 @@ public class Castle : MonoBehaviour
 
         if (HP <= 0)
         {
+            //クリアーの文字
+            Clear.enabled = true;
+
             Destroy(gameObject);
         }
 

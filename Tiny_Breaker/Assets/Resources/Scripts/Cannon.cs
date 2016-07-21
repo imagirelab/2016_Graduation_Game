@@ -44,7 +44,6 @@ public class Cannon : MonoBehaviour {
         if (collision.gameObject.GetComponent<Demons>() != null)
         {
             collision.gameObject.GetComponent<Demons>().status.CurrentHP -= ATK;
-            Debug.Log("Cannon Hit");
         }
         
         Destroy(gameObject);

@@ -48,14 +48,23 @@ public class SummonButton : MonoBehaviour
     //その場でのクリックが成立した時の処理
     public void OnClickSummon()
     {
-        //悪魔を出す
-        GameObject instaceObject = (GameObject)Instantiate(demon,
-                                                           spawnPosition + demon.transform.position,           //プレイヤーごとの出撃位置
-                                                           Quaternion.identity);
-        GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
-        instaceObject.transform.SetParent(playerObject.transform, false);
-        //悪魔に出すオーダークラスを渡す
-        instaceObject.GetComponent<Demons>().Order = this.GetComponent<DemonsOrder>();
-        instaceObject.GetComponent<Demons>().GrowPoint = demon.GetComponent<Demons>().GrowPoint;
+        //今だけコスト引くために設定する形
+        GameObject playerCost = GameObject.Find("Player"); 
+
+        //コストを確認して召喚する処理
+        if (playerCost.GetComponent<PlayerCost>().UseableCost(playerCost.GetComponent<PlayerCost>().GetDemonCost * demon.GetComponent<Demons>().GrowPoint.GetCost()))
+        {
+            //適当な値を入れて重なることを避ける
+            Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+            //悪魔を出す
+            GameObject instaceObject = (GameObject)Instantiate(demon,
+                                                               spawnPosition + demon.transform.position + randVac,           //プレイヤーごとの出撃位置
+                                                               Quaternion.identity);
+            GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
+            instaceObject.transform.SetParent(playerObject.transform, false);
+            //悪魔に出すオーダークラスを渡す
+            instaceObject.GetComponent<Demons>().Order = this.GetComponent<DemonsOrder>();
+            instaceObject.GetComponent<Demons>().GrowPoint = demon.GetComponent<Demons>().GrowPoint;
+        }
     }
 }

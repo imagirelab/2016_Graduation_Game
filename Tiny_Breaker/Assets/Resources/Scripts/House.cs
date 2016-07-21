@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using StaticClass;
 
 public class House : MonoBehaviour {
 
@@ -14,12 +14,21 @@ public class House : MonoBehaviour {
     public int HPpro { get { return HP; } set { HP = value; } }
     
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
+        // 作られたときにリストに追加する
+        BuildingDataBase.getInstance().AddList(this.gameObject);
+
         HP_UI = transform.FindChild("HP").gameObject;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    //破壊されたときにリストから外す
+    void OnDisable()
+    {
+        BuildingDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
+    void Update () {
 
         HP_UI.GetComponent<TextMesh>().text = "HP: " + HP.ToString();
 

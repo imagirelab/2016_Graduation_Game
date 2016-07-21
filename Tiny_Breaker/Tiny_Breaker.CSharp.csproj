@@ -69,21 +69,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GamePadInput\Demo\DemoScript.cs" />
-    <Compile Include="Assets\GamePadInput\GamePad.cs" />
-    <Compile Include="Assets\Resources\Scripts\AttackRange.cs" />
     <Compile Include="Assets\Resources\Scripts\Cannon.cs" />
     <Compile Include="Assets\Resources\Scripts\Castle.cs" />
     <Compile Include="Assets\Resources\Scripts\CastleAttack.cs" />
+    <Compile Include="Assets\Resources\Scripts\ChangeAnimation.cs" />
+    <Compile Include="Assets\Resources\Scripts\DataBase\BuildingDataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\DataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\DemonDataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\SolgierDataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\SpiritDataBase.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\Demons.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\DemonsAttack.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\GrowPoint.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\Spirits.cs" />
-    <Compile Include="Assets\Resources\Scripts\Demons\Status.cs" />
     <Compile Include="Assets\Resources\Scripts\House.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\PlayerCost.cs" />
@@ -93,11 +87,18 @@
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\IconSpirit.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\PlayerScreen.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\SummonButton.cs" />
-    <Compile Include="Assets\Resources\Scripts\Soldier.cs" />
     <Compile Include="Assets\Resources\Scripts\Spawner.cs" />
-    <Compile Include="Assets\Resources\Scripts\StaticVariables.cs" />
-    <Compile Include="Assets\Resources\Scripts\StatusUI.cs" />
-    <Compile Include="Assets\Resources\Scripts\Unit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\AttackRange.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Collect.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Demons\Demons.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Demons\GrowPoint.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Demons\Spirits.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Soldier\Soldier.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Status.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\StatusUI.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\Unit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\UnitTrigger.cs" />
+    <Compile Include="Assets\SpiritBox.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Resources\Image\HP_UI＆Number\メモ.txt" />
