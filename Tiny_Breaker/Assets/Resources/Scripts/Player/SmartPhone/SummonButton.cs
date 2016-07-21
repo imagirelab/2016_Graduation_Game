@@ -50,7 +50,7 @@ public class SummonButton : MonoBehaviour
     {
         //悪魔を出す
         GameObject instaceObject = (GameObject)Instantiate(demon,
-                                                           spawnPosition,           //プレイヤーごとの出撃位置
+                                                           spawnPosition + demon.transform.position,           //プレイヤーごとの出撃位置
                                                            Quaternion.identity);
         GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
         instaceObject.transform.SetParent(playerObject.transform, false);

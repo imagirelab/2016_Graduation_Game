@@ -9,7 +9,7 @@ public class PlayerScreen : MonoBehaviour {
     public int PlayerID { get { return playerID; } set { playerID = value; } }
 
     //スマホ側に受信するのに一時的にデータをためておく場所
-    List<DemonsGrowPointData> spiritsData = new List<DemonsGrowPointData>();
+    List<GrowPoint> spiritsData = new List<GrowPoint>();
 
     public GameObject POPOIcon;
     public GameObject PUPUIcon;
@@ -23,13 +23,13 @@ public class PlayerScreen : MonoBehaviour {
             {
                 switch(spiritsData[i].GetDemonType)
                 {
-                    case DemonsGrowPointData.Type.POPO:
+                    case GrowPoint.Type.POPO:
                         CreateSpiritIcon(POPOIcon, i);
                         break;
-                    case DemonsGrowPointData.Type.PUPU:
+                    case GrowPoint.Type.PUPU:
                         CreateSpiritIcon(PUPUIcon, i);
                         break;
-                    case DemonsGrowPointData.Type.PIPI:
+                    case GrowPoint.Type.PIPI:
                         CreateSpiritIcon(PIPIIcon, i);
                         break;
                 }
@@ -57,7 +57,7 @@ public class PlayerScreen : MonoBehaviour {
     }
 
     //外部から魂の情報をもらうところ
-    public void AddSpiritList(DemonsGrowPointData spiritdata)
+    public void AddSpiritList(GrowPoint spiritdata)
     {
         spiritsData.Add(spiritdata);
     }

@@ -2,7 +2,7 @@
 
 //悪魔達の初期情報(structの代わりにclassを使用)
 [System.Serializable]
-public class DemonsGrowPointData
+public class GrowPoint
 {
     public enum Type
     {

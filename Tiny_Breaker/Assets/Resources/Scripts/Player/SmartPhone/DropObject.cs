@@ -13,7 +13,7 @@ public class DropObject : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     GameObject demon;
 
     //成長値の保存変数
-    DemonsGrowPointData growPoint;
+    GrowPoint growPoint;
 
     void Start()
     {
@@ -49,7 +49,7 @@ public class DropObject : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPo
     //ドロップした時の処理
     public void OnDrop(PointerEventData pointerEventData)
     {
-        DemonsGrowPointData spiritGrowPoint = pointerEventData.pointerDrag.GetComponent<IconSpirit>().GrowPoint;
+        GrowPoint spiritGrowPoint = pointerEventData.pointerDrag.GetComponent<IconSpirit>().GrowPoint;
 
         //成長値の足し方
         growPoint.CurrentHP_GrowPoint += growPoint.GetHP_GrowPoint + spiritGrowPoint.GetHP_GrowPoint;

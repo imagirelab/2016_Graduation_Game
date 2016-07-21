@@ -13,7 +13,7 @@ public class Player : MonoBehaviour {
     private GameObject instaceScreenObject;
 
     //スマホ側に送信するのに一時的にデータをためておく場所
-    List<DemonsGrowPointData> spiritsData = new List<DemonsGrowPointData>();
+    List<GrowPoint> spiritsData = new List<GrowPoint>();
     
 	void Start ()
     {
@@ -41,7 +41,7 @@ public class Player : MonoBehaviour {
     }
     
     //魂リストへの追加
-    public void AddSpiritList(DemonsGrowPointData spiritdata)
+    public void AddSpiritList(GrowPoint spiritdata)
     {
         spiritsData.Add(spiritdata);
     }

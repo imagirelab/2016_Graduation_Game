@@ -5,8 +5,8 @@ using UnityEngine;
 public class IconSpirit : MonoBehaviour {
 
     //魂の仮ステータス
-    private DemonsGrowPointData growPoint;
-    public DemonsGrowPointData GrowPoint
+    private GrowPoint growPoint;
+    public GrowPoint GrowPoint
     {
         get { return growPoint; }
         set { growPoint = value; }

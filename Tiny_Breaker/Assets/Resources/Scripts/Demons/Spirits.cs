@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using StaticClass;
 
-public class DemonsSpirits : MonoBehaviour
+public class Spirits : MonoBehaviour
 {
     //魂に覚えさせる成長値
-    private DemonsGrowPointData growPoint;
-    public DemonsGrowPointData GrowPoint
+    private GrowPoint growPoint;
+    public GrowPoint GrowPoint
     {
         get { return growPoint; }
         set { growPoint = value; }
