@@ -42,7 +42,7 @@ public class CastleAttack : MonoBehaviour {
                                                             Quaternion.identity);
                 //攻撃対象を大砲の弾に渡す
                 cannon.gameObject.GetComponent<Cannon>().AttackTarget = attackTarget;
-                Debug.Log("Castle Attack");
+                //Debug.Log("Castle Attack");
             }
             else
                 IsAttack = false;
@@ -60,7 +60,7 @@ public class CastleAttack : MonoBehaviour {
         {
             IsAttack = true;
             attackTarget = collider.gameObject;
-            Debug.Log(collider.gameObject.name);
+            //Debug.Log(collider.gameObject.name);
         }
     }
 
@@ -74,7 +74,7 @@ public class CastleAttack : MonoBehaviour {
             {
                 IsAttack = true;
                 attackTarget = collider.gameObject;
-                Debug.Log(collider.gameObject.name);
+                //Debug.Log(collider.gameObject.name);
             }
         }
         //悪魔以外が範囲内に入っていたら攻撃をやめる

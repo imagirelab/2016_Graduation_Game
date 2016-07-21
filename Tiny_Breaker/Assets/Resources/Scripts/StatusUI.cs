@@ -2,13 +2,13 @@
 
 public class StatusUI : MonoBehaviour
 {
-    private GameObject parentDemon;
+    private GameObject parent;
     private GameObject _MainCamera;
 
 	// Use this for initialization
 	void Start ()
     {
-        parentDemon = transform.parent.gameObject;
+        parent = transform.parent.gameObject;
         _MainCamera = GameObject.Find("Main Camera");
 
     }
@@ -20,7 +20,8 @@ public class StatusUI : MonoBehaviour
 
         transform.forward = _MainCamera.transform.forward;
 
-        this.GetComponent<TextMesh>().text = "HP:" + parentDemon.GetComponent<Demons>().status.CurrentHP + "\nATK:"
-            + parentDemon.GetComponent<Demons>().status.CurrentATK + "\nSPEED:" + parentDemon.GetComponent<Demons>().status.CurrentSPEED;
+        this.GetComponent<TextMesh>().text = "HP:" + parent.GetComponent<Unit>().status.CurrentHP + 
+                                            "\nATK:" + parent.GetComponent<Unit>().status.CurrentATK + 
+                                            "\nSPEED:" + parent.GetComponent<Unit>().status.CurrentSPEED;
 	}
 }
