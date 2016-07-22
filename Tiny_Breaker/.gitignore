@@ -48,5 +48,4 @@ sysinfo.txt
 # -------------[ Build ]------------------------ #
 *.apk
 *.unitypackage
-*.html
 *.unity3d
