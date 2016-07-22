@@ -11,8 +11,6 @@ deploy:
         git config --global user.email "miracle-hot1111@ezweb.ne.jp"        
         git config --global user.name "hotta"
         cd Tiny_Breaker/webGL/
-        rm -rf .git
-        git init
         git remote add origin https://$USERNAME:$PASSWORD@github.com/imagirelab/Tiny_Breaker_WebGL.git
         git add .
         git commit -m "wercker deployed"
