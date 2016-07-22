@@ -17,10 +17,16 @@ public class Unit : MonoBehaviour {
 
     protected void Move(GameObject target)
     {
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
         //ターゲットがいない場合
         if (target == null)
         {
-            this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            //NavMeshAgentを止める
+            if (GetComponent<NavMeshAgent>())
+            {
+                NavMeshAgent agent = GetComponent<NavMeshAgent>();
+                agent.destination = this.transform.position;
+            }
             return;
         }
 

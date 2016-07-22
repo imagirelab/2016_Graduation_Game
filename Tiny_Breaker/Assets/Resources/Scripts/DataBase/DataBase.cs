@@ -38,7 +38,7 @@ namespace StaticClass
                 if (Vector3.Distance(center, e.gameObject.transform.position) < Vector3.Distance(center, nearestObject.gameObject.transform.position))
                     nearestObject = e;
             }
-
+            
             return nearestObject;
         }
     }

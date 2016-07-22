@@ -1,0 +1,219 @@
+fileFormatVersion: 2
+guid: 909d3cb511a7ba548b6f537bdbf6c756
+timeCreated: 1469170448
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: gun1
+    100004: gun2
+    100006: gun3
+    100008: gun_core
+    100010: gun_model
+    100012: soldier_rig:Body
+    100014: soldier_rig:Hat
+    100016: soldier_rig:Hat 1
+    100018: soldier_rig:Head
+    100020: soldier_rig:Head 1
+    100022: soldier_rig:Hips
+    100024: soldier_rig:L_Foot
+    100026: soldier_rig:L_Hand
+    100028: soldier_rig:L_Hand 1
+    100030: soldier_rig:L_Knee
+    100032: soldier_rig:L_Leg
+    100034: soldier_rig:pCylinder14
+    100036: soldier_rig:polySurface2
+    100038: soldier_rig:R_Foot
+    100040: soldier_rig:R_Hand
+    100042: soldier_rig:R_Hand 1
+    100044: soldier_rig:R_Knee
+    100046: soldier_rig:R_Leg
+    100048: soldier_rig:Spring
+    100050: soldier_rig:Spring 1
+    400000: //RootNode
+    400002: gun1
+    400004: gun2
+    400006: gun3
+    400008: gun_core
+    400010: gun_model
+    400012: soldier_rig:Body
+    400014: soldier_rig:Hat
+    400016: soldier_rig:Hat 1
+    400018: soldier_rig:Head
+    400020: soldier_rig:Head 1
+    400022: soldier_rig:Hips
+    400024: soldier_rig:L_Foot
+    400026: soldier_rig:L_Hand
+    400028: soldier_rig:L_Hand 1
+    400030: soldier_rig:L_Knee
+    400032: soldier_rig:L_Leg
+    400034: soldier_rig:pCylinder14
+    400036: soldier_rig:polySurface2
+    400038: soldier_rig:R_Foot
+    400040: soldier_rig:R_Hand
+    400042: soldier_rig:R_Hand 1
+    400044: soldier_rig:R_Knee
+    400046: soldier_rig:R_Leg
+    400048: soldier_rig:Spring
+    400050: soldier_rig:Spring 1
+    4300000: gun_model
+    4300002: soldier_rig:R_Hand
+    4300004: soldier_rig:L_Hand
+    4300006: soldier_rig:Spring
+    4300008: soldier_rig:Body
+    4300010: soldier_rig:Hat
+    4300012: soldier_rig:Head
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: gun_model
+    13700002: soldier_rig:Body
+    13700004: soldier_rig:Hat 1
+    13700006: soldier_rig:Head
+    13700008: soldier_rig:L_Hand
+    13700010: soldier_rig:R_Hand
+    13700012: soldier_rig:Spring
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleRotations: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: gun_core
+        weight: 1
+      - path: gun_core/gun1
+        weight: 1
+      - path: gun_core/gun2
+        weight: 1
+      - path: gun_core/gun3
+        weight: 1
+      - path: gun_model
+        weight: 1
+      - path: soldier_rig:Head
+        weight: 1
+      - path: soldier_rig:Hips
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:Head 1
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:Head 1/soldier_rig:Hat
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:L_Hand 1
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:L_Leg
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:L_Leg/soldier_rig:L_Knee
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:L_Leg/soldier_rig:L_Knee/soldier_rig:L_Foot
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:R_Hand 1
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:R_Leg
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:R_Leg/soldier_rig:R_Knee
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:R_Leg/soldier_rig:R_Knee/soldier_rig:R_Foot
+        weight: 1
+      - path: soldier_rig:Hips/soldier_rig:Spring 1
+        weight: 1
+      - path: soldier_rig:L_Hand
+        weight: 1
+      - path: soldier_rig:pCylinder14
+        weight: 1
+      - path: soldier_rig:pCylinder14/soldier_rig:Body
+        weight: 1
+      - path: soldier_rig:pCylinder14/soldier_rig:polySurface2
+        weight: 1
+      - path: soldier_rig:pCylinder14/soldier_rig:polySurface2/soldier_rig:Hat 1
+        weight: 1
+      - path: soldier_rig:R_Hand
+        weight: 1
+      - path: soldier_rig:Spring
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 10
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

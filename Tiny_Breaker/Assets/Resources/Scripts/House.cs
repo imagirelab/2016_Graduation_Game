@@ -12,6 +12,8 @@ public class House : MonoBehaviour {
 
     //外から見れる変数
     public int HPpro { get { return HP; } set { HP = value; } }
+
+    bool IsDead = false;
     
     // Use this for initialization
     void Start ()
@@ -25,7 +27,8 @@ public class House : MonoBehaviour {
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        BuildingDataBase.getInstance().RemoveList(this.gameObject);
+        if(!IsDead)
+            BuildingDataBase.getInstance().RemoveList(this.gameObject);
     }
 
     void Update () {
@@ -34,6 +37,9 @@ public class House : MonoBehaviour {
 
         if (HP <= 0)
         {
+            IsDead = true;
+             
+            BuildingDataBase.getInstance().RemoveList(this.gameObject);
             Destroy(gameObject);
         }
     }
