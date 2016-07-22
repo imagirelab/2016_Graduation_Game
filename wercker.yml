@@ -6,14 +6,14 @@ build:
 deploy:   
   steps:
     - script:
-      name: Deploy to github pages
+      name: Deploy to gitHub pages
       code: |
         git config --global user.email "miracle-hot1111@ezweb.ne.jp"        
         git config --global user.name "hotta"
         cd Tiny_Breaker/webGL/
-	rm -rf .git
-	git init
-        git remote add origin https://$USERNAME:$PASSWORD@github.com/imagirelab/Tiny_Breaker_WebGL.git
+        rm -rf .git
+        git init
+        git remote add origin https://github.com/imagirelab/Tiny_Breaker_WebGL.git
         git add .
         git commit -m "wercker deployed"
         git push -f origin master
