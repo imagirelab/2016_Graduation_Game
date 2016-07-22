@@ -6,7 +6,7 @@ build:
 deploy:   
   steps:
     - script:
-      name: Deploy to bitbucket pages
+      name: Deploy to github pages
       code: |
         git config --global user.email "miracle-hot1111@ezweb.ne.jp"        
         git config --global user.name "hotta"
