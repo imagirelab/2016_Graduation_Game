@@ -69,4 +69,15 @@ public class GrowPoint
     {
         return currentHP_GrowPoint + currentATK_GrowPoint + currentSPEED_GrowPoint;
     }
+    
+    //基準を変えたいときに呼び出す
+    public void SetDefault(int hp, int atk, int speed, int atkspeed)
+    {
+        HP_GrowPoint = hp;
+        ATK_GrowPoint = atk;
+        SPEED_GrowPoint = speed;
+        AtackTime_GrowPoint = atkspeed;
+
+        SetGrowPoint();
+    }
 }

@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour {
     public bool IsAttack;           //攻撃中フラグ
     [HideInInspector]
     public GameObject targetObject;       //目標
-
+    
     protected void Move(GameObject target)
     {
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;

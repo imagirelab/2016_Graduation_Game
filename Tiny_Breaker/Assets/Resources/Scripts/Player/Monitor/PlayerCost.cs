@@ -14,17 +14,14 @@ public class PlayerCost : MonoBehaviour {
 
     [SerializeField, TooltipAttribute("悪魔召喚の初期コスト")]
     int DemonCost = 0;
-
     public int GetDemonCost { get { return DemonCost; } }
 
     [SerializeField, TooltipAttribute("兵士の撃破獲得コスト")]
     int SoldierCost = 0;
-
     public int GetSoldierCost { get { return SoldierCost; } }
 
     [SerializeField, TooltipAttribute("小屋の撃破獲得コスト")]
     int HouseCost = 0;
-
     public int GetHouseCost { get { return HouseCost; } }
 
     //現在のコスト
@@ -83,5 +80,17 @@ public class PlayerCost : MonoBehaviour {
         }
         else
             return false;
+    }
+
+    public void SetDefault(int max, int state, int costparsecond, int demon, int soldier, int house)
+    {
+        MaxCost = max;
+        StateCost = state;
+        CostParSecond = costparsecond;
+        DemonCost = demon;
+        SoldierCost = soldier;
+        HouseCost = house;
+
+        Start();
     }
 }

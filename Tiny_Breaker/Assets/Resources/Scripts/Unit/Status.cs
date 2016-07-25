@@ -17,7 +17,7 @@ public class Status
     public int GetATK { get { return ATK; } }
     public int GetSPEED { get { return SPEED; } }
     public float GetAtackTime { get { return AtackTime; } }
-
+    
     //プレハブのすべて共有の値になってしまうため
     //元々のステータスはいじらないようにするため
     //別の変数を用意
@@ -59,5 +59,16 @@ public class Status
         currentATK = ATK;
         currentSPEED = SPEED;
         currentAtackTime = AtackTime;
+    }
+
+    //基準を変えたいときに呼び出す
+    public void SetDefault(int hp, int atk, int speed, float atkspeed)
+    {
+        HP = hp;
+        ATK = atk;
+        SPEED = speed;
+        AtackTime = atkspeed;
+
+        SetStutas();
     }
 }
