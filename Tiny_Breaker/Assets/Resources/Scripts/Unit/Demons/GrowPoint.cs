@@ -33,7 +33,7 @@ public class GrowPoint
     private int currentHP_GrowPoint;
     private int currentATK_GrowPoint;
     private int currentSPEED_GrowPoint;
-    private float currentAtackTime_GrowPoint;
+    private int currentAtackTime_GrowPoint;
 
     public int CurrentHP_GrowPoint
     {
@@ -50,7 +50,7 @@ public class GrowPoint
         get { return currentSPEED_GrowPoint; }
         set { currentSPEED_GrowPoint = value; }
     }
-    public float CurrentAtackTime_GrowPoint
+    public int CurrentAtackTime_GrowPoint
     {
         get { return currentAtackTime_GrowPoint; }
         set { currentAtackTime_GrowPoint = value; }

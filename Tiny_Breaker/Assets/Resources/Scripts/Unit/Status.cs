@@ -9,13 +9,13 @@ public class Status
     [SerializeField, TooltipAttribute("攻撃力")]
     private int ATK = 0;
     [SerializeField, TooltipAttribute("速度")]
-    private int SPEED = 0;
+    private float SPEED = 0;
     [SerializeField, TooltipAttribute("攻撃間隔")]
     private float AtackTime = 0;
     
     public int GetHP { get { return HP; } }
     public int GetATK { get { return ATK; } }
-    public int GetSPEED { get { return SPEED; } }
+    public float GetSPEED { get { return SPEED; } }
     public float GetAtackTime { get { return AtackTime; } }
     
     //プレハブのすべて共有の値になってしまうため
@@ -23,7 +23,7 @@ public class Status
     //別の変数を用意
     private int currentHP;
     private int currentATK;
-    private int currentSPEED;
+    private float currentSPEED;
     private float currentAtackTime;
 
     public int CurrentHP
@@ -36,7 +36,7 @@ public class Status
         get { return currentATK; }
         set { currentATK = value; }
     }
-    public int CurrentSPEED
+    public float CurrentSPEED
     {
         get { return currentSPEED; }
         set { currentSPEED = value; }
@@ -66,7 +66,7 @@ public class Status
     {
         HP = hp;
         ATK = atk;
-        SPEED = speed;
+        SPEED = (float)speed;
         AtackTime = atkspeed;
 
         SetStutas();

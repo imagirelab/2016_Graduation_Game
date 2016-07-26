@@ -21,17 +21,11 @@ public class Soldier : Unit
     void OnDisable()
     {
         if (!IsDaed)
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
+            SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 
     void Update ()
     {
-        //攻撃対象の設定
-        targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
-
-        //移動
-        Move(targetObject);
-
         //死んだときの処理
         if (status.CurrentHP <= 0)
         {
@@ -43,6 +37,15 @@ public class Soldier : Unit
             {
                 Destroy(gameObject);
             }
+        }
+        else
+        {
+            //攻撃対象の設定
+            targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
+
+            //移動
+            Move(targetObject);
+
         }
     }
 

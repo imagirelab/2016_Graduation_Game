@@ -40,6 +40,11 @@ public class House : MonoBehaviour {
             IsDead = true;
              
             BuildingDataBase.getInstance().RemoveList(this.gameObject);
+
+            //いらない子供から消していく
+            if (transform.IsChildOf(transform))
+                foreach (Transform child in transform)
+                    Destroy(child.gameObject);
             Destroy(gameObject);
         }
     }

@@ -22,6 +22,7 @@ public class StatusUI : MonoBehaviour
 
         this.GetComponent<TextMesh>().text = "HP:" + parent.GetComponent<Unit>().status.CurrentHP + 
                                             "\nATK:" + parent.GetComponent<Unit>().status.CurrentATK + 
-                                            "\nSPEED:" + parent.GetComponent<Unit>().status.CurrentSPEED;
+                                            "\nSPEED:" + parent.GetComponent<Unit>().status.CurrentSPEED.ToString("f2") +
+                                            "\nATKTIME:" + parent.GetComponent<Unit>().status.CurrentAtackTime.ToString("f2");
 	}
 }

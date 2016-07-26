@@ -30,12 +30,12 @@ public class AttackRange : UnitTrigger
             if (hitTarget != null && parent.targetObject != null)
             {
                 //悪魔と兵士について
-                if (parent.targetObject.GetComponent<Unit>())
+                if (hitTarget.GetComponent<Unit>())
                 {
-                    parent.targetObject.GetComponent<Unit>().status.CurrentHP -= parent.status.CurrentATK;
+                    hitTarget.GetComponent<Unit>().status.CurrentHP -= parent.status.CurrentATK;
 
                     //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (parent.targetObject.GetComponent<Unit>().status.CurrentHP <= 0)
+                    if (hitTarget.GetComponent<Unit>().status.CurrentHP <= 0)
                     {
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {
@@ -45,12 +45,12 @@ public class AttackRange : UnitTrigger
                     }
                 }
                 //建物への攻撃はこっち
-                if (parent.targetObject.GetComponent<House>())
+                if (hitTarget.GetComponent<House>())
                 {
-                    parent.targetObject.GetComponent<House>().HPpro -= parent.status.CurrentATK;
+                    hitTarget.GetComponent<House>().HPpro -= parent.status.CurrentATK;
 
                     //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (parent.targetObject.GetComponent<House>().HPpro <= 0)
+                    if (hitTarget.GetComponent<House>().HPpro <= 0)
                     {
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {

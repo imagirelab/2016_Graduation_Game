@@ -53,14 +53,18 @@ public class Demons : Unit
             status.CurrentHP += (int)(status.GetHP * 0.5f);
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
             status.CurrentATK += (int)(status.GetATK * 0.5f);
-        for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.CurrentSPEED_GrowPoint; i++)
-            status.CurrentSPEED += (int)(status.GetSPEED * 0.05f);
-        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.CurrentAtackTime_GrowPoint; i++)
-            status.CurrentAtackTime += status.GetAtackTime * 0.05f;
+        for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
+            status.CurrentSPEED += status.GetSPEED * 0.05f;
+        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
+            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+        if (status.CurrentAtackTime <= 0.1f)
+            status.CurrentAtackTime = 0.1f;
 
         IsDaed = false;
 
         castle = GameObject.Find("Castle");
+
+        Debug.Log(growPoint.CurrentSPEED_GrowPoint);
     }
 
     //破壊されたときにリストから外す
