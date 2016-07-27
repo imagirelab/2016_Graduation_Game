@@ -7,6 +7,8 @@ public class Soldier : Unit
 {
     ////このクラス内で使う変数       //HPのUI
     private ParticleSystem deadParticle;    //死亡時のパーティクル
+
+    public Transform[] LoiteringPointObj;
     
     void Start () {
 
@@ -40,12 +42,19 @@ public class Soldier : Unit
         }
         else
         {
-            //攻撃対象の設定
-            targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
+            //攻撃対象がサーチ範囲内に入った場合の処理
+            if (IsFind)
+            {
+                //攻撃対象の設定
+                targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
 
-            //移動
-            Move(targetObject);
-
+                //移動
+                Move(targetObject);
+            }
+            else
+            {
+                Loitering(LoiteringPointObj);
+            }
         }
     }
 

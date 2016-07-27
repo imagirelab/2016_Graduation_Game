@@ -23,6 +23,7 @@ public class UnitTrigger : MonoBehaviour {
             else
             {
                 parent.IsAttack = false;
+                parent.IsFind = false;
                 hitTarget = null;
             }
         }
@@ -41,6 +42,7 @@ public class UnitTrigger : MonoBehaviour {
             else
             {
                 parent.IsAttack = false;
+                parent.IsFind = false;
                 hitTarget = null;
             }
         }
@@ -52,6 +54,7 @@ public class UnitTrigger : MonoBehaviour {
         if (collider.gameObject == parent.targetObject)
         {
             parent.IsAttack = false;
+            parent.IsFind = false;
             hitTarget = null;
         }
     }
