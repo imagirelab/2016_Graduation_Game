@@ -11,8 +11,8 @@
         public string NAME { get; private set; }
         public int HP { get; private set; }
         public int ATK { get; private set; }
-        public int SPEED { get; private set; }
-        public int ATKSPEED { get; private set; }
+        public float SPEED { get; private set; }
+        public float ATKSPEED { get; private set; }
         public float ATKRENGE { get; private set; }
     }
 }

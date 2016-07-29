@@ -78,7 +78,7 @@ public class Unit : MonoBehaviour {
             if (GetComponent<NavMeshAgent>())
             {
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.speed = status.CurrentSPEED;
+                agent.speed = 1.8f;
                 agent.destination = targetPosition;
             }
         }

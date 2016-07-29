@@ -62,11 +62,11 @@ public class Status
     }
 
     //基準を変えたいときに呼び出す
-    public void SetDefault(int hp, int atk, int speed, float atkspeed)
+    public void SetDefault(int hp, int atk, float speed, float atkspeed)
     {
         HP = hp;
         ATK = atk;
-        SPEED = (float)speed;
+        SPEED = speed;
         AtackTime = atkspeed;
 
         SetStutas();

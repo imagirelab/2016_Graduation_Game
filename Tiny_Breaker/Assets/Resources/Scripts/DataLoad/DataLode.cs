@@ -15,39 +15,9 @@ namespace Loader
         //public string paramurl = "https://yoo3006.github.io/ParamData.csv";
         //public string growurl = "https://yoo3006.github.io/GrowData.csv";
         //public string costurl = "https://yoo3006.github.io/CostData.csv";
-
-        //[SerializeField]
-        //GameObject prePOPO;
-        //[SerializeField]
-        //GameObject prePUPU;
-        //[SerializeField]
-        //GameObject prePIPI;
-        //[SerializeField]
-        //GameObject preShield;
-        //[SerializeField]
-        //GameObject preAx;
-        //[SerializeField]
-        //GameObject preGun;
-
-        //[SerializeField]
-        //GameObject playerCost;
         
         public void Load(string text)
         {
-            //WWW www = new WWW(filePath);
-            //WWW paramwww = new WWW(paramurl);
-            //WWW growwww = new WWW(growurl);
-            //WWW costwww = new WWW(costurl);
-            //yield return www;
-            //yield return paramwww;
-            //yield return growwww;
-            //yield return costwww;
-
-            //string text = www.text;
-            //string paramtext = paramwww.text;
-            //string growtext = growwww.text;
-            //string costtext = costwww.text;
-
             text = text.Trim().Replace("\r", "") + "\n";
             List<string> lines = text.Split('\n').ToList();
 

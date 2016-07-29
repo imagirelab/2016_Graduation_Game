@@ -9,6 +9,10 @@ public class Soldier : Unit
     private ParticleSystem deadParticle;    //死亡時のパーティクル
 
     public Transform[] LoiteringPointObj;
+
+    float deadcount;
+    [SerializeField]
+    float deadTime = 1.0f;
     
     void Start () {
 
@@ -17,6 +21,8 @@ public class Soldier : Unit
 
         status.SetStutas();
         deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
+
+        deadcount = 0.0f;
     }
 
     //破壊されたときにリストから外す
@@ -34,11 +40,15 @@ public class Soldier : Unit
             //死後の処理
             Dead();
 
-            //パーティクルが止まったら本当の終わり
-            if (deadParticle.isStopped)
-            {
+            deadcount += Time.deltaTime;
+
+            if(deadcount > deadTime)
                 Destroy(gameObject);
-            }
+
+            ////パーティクルが止まったら本当の終わり
+            //if (deadParticle.isStopped)
+            //{
+            //}
         }
         else
         {
@@ -72,8 +82,23 @@ public class Soldier : Unit
             //いらない子供から消していく
             if (transform.IsChildOf(transform))
                 foreach (Transform child in transform)
-                    if (!child.GetComponent<ParticleSystem>())   //パーティクルシステム以外を消す
+                    if (child.name == "Model")
+                    {
+                        foreach (GameObject e in GetAllChildren.GetAll(child.gameObject))
+                        {
+                            if (e.GetComponent<Collider>())
+                            {
+                                e.GetComponent<Collider>().enabled = true;
+                                e.AddComponent<Rigidbody>();
+                            }
+                        }
+                    }
+                    else
                         Destroy(child.gameObject);
+
+            foreach (Component comp in this.GetComponents<Component>())
+                if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())
+                    Destroy(comp);
         }
     }
 }

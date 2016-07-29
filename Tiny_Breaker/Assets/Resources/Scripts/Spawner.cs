@@ -35,8 +35,13 @@ public class Spawner : MonoBehaviour
             //時間をリセット
             timer = 0;
 
+            int solcount = 0;
+            foreach (Transform child in transform)
+                if (child.tag == "Enemy/Unit")
+                    solcount++;
+            
             //最大生成数の上限かを確認
-            if (this.gameObject.transform.childCount < maxSpawns)
+            if (solcount < maxSpawns)
             {
                 //生成数までループ
                 for (int i = 0; i < spawn_Num; i++)
