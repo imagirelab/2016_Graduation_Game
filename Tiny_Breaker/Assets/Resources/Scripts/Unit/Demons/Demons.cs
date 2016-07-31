@@ -2,6 +2,8 @@
 
 using UnityEngine;
 using StaticClass;
+using System.Collections.Generic;
+using NCMB;
 
 public class Demons : Unit
 {
@@ -30,37 +32,24 @@ public class Demons : Unit
     //悪魔に作られた画面のプレイヤーのIDを入れておく変数
     private int playerID;
     public int PlayerID { set { playerID = value; } }
-    
+
     // 触れているものの情報
     // 接触しているゲームオブジェクト
     private GameObject hitObject;
 
     GameObject castle;
 
-    void Start ()
+    private bool loadEndFlag = false;
+    private bool loadStartFlag = false;
+
+    void Start()
     {
         // 作られたときにリストに追加する
         DemonDataBase.getInstance().AddList(this.gameObject);
 
-        //初期ステータス(プロパティからの設定情報)
-        status.SetStutas();
-        //外部からの変更がなかった場合初期の成長値を設定する
-        if (!changeGrowPoint)
-            growPoint.SetGrowPoint();
-
-        //成長値によって今のステータスを算出する
-        for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
-            status.CurrentHP += (int)(status.GetHP * 0.5f);
-        for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
-            status.CurrentATK += (int)(status.GetATK * 0.5f);
-        for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
-            status.CurrentSPEED += status.GetSPEED * 0.05f;
-        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
-            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
-        if (status.CurrentAtackTime <= 0.1f)
-            status.CurrentAtackTime = 0.1f;
-
         IsDaed = false;
+
+        Debug.Log("DemonSummoned by Hp:" + status.CurrentHP);
 
         castle = GameObject.Find("Castle");
 
@@ -73,8 +62,19 @@ public class Demons : Unit
         DemonDataBase.getInstance().RemoveList(this.gameObject);
     }
 
-    void Update ()
+    void Update()
     {
+        if(!loadEndFlag)
+        {
+            if (!loadStartFlag)
+            {
+                loadStartFlag = true;
+                Demon_SetStatus();
+            }
+            if(status.CurrentHP > 0)
+                loadEndFlag = true;
+        }
+
         //オーダークラスがちゃんと設定されていれば処理する
         if (order)
             switch (order.CurrentOrder)
@@ -94,7 +94,7 @@ public class Demons : Unit
             }
 
         //死亡処理
-        if (status.CurrentHP <= 0)
+        if (status.CurrentHP <= 0 && loadEndFlag)
             Dead();
     }
 
@@ -157,7 +157,7 @@ public class Demons : Unit
         //離れたら戻す
         hitObject = null;
     }
-    
+
     //死んだときの処理
 
     void Dead()
@@ -168,5 +168,37 @@ public class Demons : Unit
         GameObject instacespirit = (GameObject)Instantiate(spirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
         instacespirit.GetComponent<Spirits>().GrowPoint = growPoint;
         Destroy(gameObject);
+    }
+
+    void Demon_SetStatus()
+    {
+        //クエリを作成
+        NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
+
+        //PlayerNoが1のものを取得
+        demonStatus.WhereEqualTo("PlayerNo", "1");
+
+        //検索
+        demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        {
+            //検索失敗時
+            if (e != null)
+            {
+                Debug.Log(e.ToString());
+                return;
+            }
+            else
+            {
+                foreach (NCMBObject ncmbObj in objList)
+                {
+                    //成長値によって今のステータスを算出する
+                    status.CurrentHP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
+                    status.CurrentATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
+                    status.CurrentSPEED = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
+                    status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+                    status.CurrentAtackTime = 0.1f;
+                }
+            }
+        });
     }
 }

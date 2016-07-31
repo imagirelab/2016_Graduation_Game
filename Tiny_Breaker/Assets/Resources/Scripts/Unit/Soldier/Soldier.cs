@@ -19,7 +19,7 @@ public class Soldier : Unit
         // 作られたときにリストに追加する
         SolgierDataBase.getInstance().AddList(this.gameObject);
 
-        status.SetStutas();
+        status.SetStatus();
         deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
 
         deadcount = 0.0f;

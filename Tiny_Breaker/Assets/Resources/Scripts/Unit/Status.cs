@@ -49,11 +49,11 @@ public class Status
 
     Status()
     {
-        SetStutas();
+        SetStatus();
     }
 
     //現在のステータスに代入する
-    public void SetStutas()
+    public void SetStatus()
     {
         currentHP = HP;
         currentATK = ATK;
@@ -69,6 +69,6 @@ public class Status
         SPEED = speed;
         AtackTime = atkspeed;
 
-        SetStutas();
+        SetStatus();
     }
 }
