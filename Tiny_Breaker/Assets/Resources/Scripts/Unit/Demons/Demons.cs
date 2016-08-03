@@ -3,7 +3,6 @@
 using UnityEngine;
 using StaticClass;
 using System.Collections.Generic;
-using NCMB;
 
 public class Demons : Unit
 {
@@ -172,33 +171,11 @@ public class Demons : Unit
 
     void Demon_SetStatus()
     {
-        //クエリを作成
-        NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
-
-        //PlayerNoが1のものを取得
-        demonStatus.WhereEqualTo("PlayerNo", "1");
-
-        //検索
-        demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            //検索失敗時
-            if (e != null)
-            {
-                Debug.Log(e.ToString());
-                return;
-            }
-            else
-            {
-                foreach (NCMBObject ncmbObj in objList)
-                {
-                    //成長値によって今のステータスを算出する
-                    status.CurrentHP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
-                    status.CurrentATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
-                    status.CurrentSPEED = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
-                    status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
-                    status.CurrentAtackTime = 0.1f;
-                }
-            }
-        });
+        //今のステータスを算出する
+        status.CurrentHP = playerStatusHP;
+        status.CurrentATK = playerStatusATK;
+        status.CurrentSPEED = playerStatusSPEED;
+        status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+        status.CurrentAtackTime = 0.1f;
     }
 }
