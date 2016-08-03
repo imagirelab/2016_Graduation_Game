@@ -113,7 +113,9 @@ public class Player : MonoBehaviour {
                             GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
                             instaceObject.transform.SetParent(playerObject.transform, false);
 
-                            ncmbObj.DeleteAsync();
+                            ncmbObj["Order"] = "Summoned";
+
+                            ncmbObj.SaveAsync();
                         }
                         else if (ncmbObj["Order"].ToString() == "Soldier")
                         {
