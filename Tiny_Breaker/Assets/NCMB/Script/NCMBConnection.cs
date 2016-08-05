@@ -422,9 +422,20 @@ namespace NCMB.Internal
 				req.Headers.Add (HEADER_SESSION_TOKEN, _sessionToken);
 				NCMBDebug.Log ("Session token :" + _sessionToken);
 			}
-			req.Headers.Add (HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-			return req;
-		}
+            req.Headers.Add(HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+            //UNITYの実行のみ(アプリビルド以外)利用する為Define使って分ける
+#if UNITY_EDITOR
+            //特殊なプロキシ設定追加開始
+            WebProxy myProxy = new WebProxy();
+            //環境変数HTTP_Proxy値を取得・設定する
+            myProxy = (WebProxy)req.Proxy;
+            //ユーザー認証値を設定する
+            myProxy.Credentials = new System.Net.NetworkCredential("game", "game");
+            req.Proxy = myProxy;
+            //特殊なプロキシ設定追加終了
+#endif
+            return req;
+        }
 
 		private StringBuilder _makeSignatureHashData ()
 		{

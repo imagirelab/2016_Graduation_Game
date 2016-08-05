@@ -67,8 +67,8 @@ public class Player : MonoBehaviour {
             demonStatus.WhereNotEqualTo("PlayerNo", "");
 
             //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
-            demonStatus.OrderByDescending("createDate");
-            demonStatus.Limit = 1;
+            //demonStatus.OrderByDescending("createDate");
+            //demonStatus.Limit = 1;
 
             //検索
             demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
