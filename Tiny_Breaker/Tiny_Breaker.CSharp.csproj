@@ -116,6 +116,9 @@
     <Compile Include="Assets\Resources\Scripts\DataLoad\GrowData.cs" />
     <Compile Include="Assets\Resources\Scripts\DataLoad\LoadManager.cs" />
     <Compile Include="Assets\Resources\Scripts\DataLoad\ParamData.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\DebugControl.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\DebugCost.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\DebugUnit.cs" />
     <Compile Include="Assets\Resources\Scripts\House.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\PlayerCost.cs" />

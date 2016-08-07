@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerCost : MonoBehaviour {
 
     [SerializeField, TooltipAttribute("最大コスト")]
     int MaxCost = 0;
+    public int GetMaxCost { get { return MaxCost; } }
 
     [SerializeField, TooltipAttribute("初期コスト")]
     int StateCost = 0;
@@ -26,24 +26,15 @@ public class PlayerCost : MonoBehaviour {
 
     //現在のコスト
     int currentCost = 0;
+    public int CurrentCost { get { return currentCost; } }
 
     float time = 0;     //時間
-
-    [SerializeField]
-    Text Cost_UI = null;     //CostのUI
     
     void Start () {
         currentCost = StateCost;
-        
-        if(Cost_UI != null)
-            Cost_UI.text = "Cost : " + currentCost.ToString();
     }
 	
 	void Update () {
-
-        if (Cost_UI != null)
-            Cost_UI.text = "Cost : " + currentCost.ToString();
-
         //毎秒増えるコスト
         if (time >= 1.0f)
         {
