@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 using Loader;
 
 public class LoadManager : MonoBehaviour
 {
-
-    private static readonly string paramurl = "https://yoo3006.github.io/ParamData.csv";
-    private static readonly string growurl = "https://yoo3006.github.io/GrowData.csv";
-    private static readonly string costurl = "https://yoo3006.github.io/CostData.csv";
-
     [SerializeField]
     GameObject prePOPO;
     [SerializeField]
@@ -21,32 +17,36 @@ public class LoadManager : MonoBehaviour
     GameObject preAx;
     [SerializeField]
     GameObject preGun;
-
-    //[SerializeField]
-    //GameObject playerCost;
-
-    public IEnumerator Start()
+    
+    void Start()
     {
-        WWW paramwww = new WWW(paramurl);
-        WWW growwww = new WWW(growurl);
-        WWW costwww = new WWW(costurl);
+        //ゲームオブジェクトの設定しわすれがあった時、
+        //メッセージを名前にして空のオブジェクトを作る
+        if (prePOPO == null)
+            prePOPO = new GameObject(this.ToString() + " prePOPO Null");
+        if (prePUPU == null)
+            prePUPU = new GameObject(this.ToString() + " prePUPU Null");
+        if (prePIPI == null)
+            prePIPI = new GameObject(this.ToString() + " prePIPI Null");
+        if (preShield == null)
+            preShield = new GameObject(this.ToString() + " preShield Null");
+        if (preAx == null)
+            preAx = new GameObject(this.ToString() + " preAx Null");
+        if (preGun == null)
+            preGun = new GameObject(this.ToString() + " preGun Null");
 
-        yield return paramwww;
-        yield return growwww;
-        yield return costwww;
-
-        string paramtext = paramwww.text;
-        string growtext = growwww.text;
-        string costtext = costwww.text;
+        string paramtext = GetCSVString("/Resources/CSVData/ParamData.csv");
+        string growtext = GetCSVString("/Resources/CSVData/GrowData.csv");
+        string costtext = GetCSVString("/Resources/CSVData/CostData.csv");
 
         ParamData ParamTable = new ParamData();
-        ParamTable.Load(paramwww.text);
+        ParamTable.Load(paramtext);
 
         GrowData GrowTable = new GrowData();
-        GrowTable.Load(growwww.text);
+        GrowTable.Load(growtext);
 
         CostData CostTable = new CostData();
-        CostTable.Load(costwww.text);
+        CostTable.Load(costtext);
         
         foreach (var param in ParamTable.All)
         {
@@ -105,6 +105,19 @@ public class LoadManager : MonoBehaviour
         SetCost(CostTable);
 
         Debug.Log("Load END");
+    }
+
+    /// <summary>
+    ///　CSVファイルの文字列を取得
+    /// </summary>
+    /// <param name="path">Assetフォルダ以下のCSVファイルの位置を書く</param>
+    /// <returns>CSVファイルの文字列</returns>
+    string GetCSVString(string path)
+    {
+        StreamReader sr = new StreamReader(Application.dataPath + path);
+        string strStream = sr.ReadToEnd();
+
+        return strStream;
     }
 
     void SetParm(ParamMaster param, GameObject unit)

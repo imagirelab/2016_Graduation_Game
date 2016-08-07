@@ -11,10 +11,6 @@ namespace Loader
     {
         protected List<T> masters;
         public List<T> All { get { return masters; } }
-
-        //public string paramurl = "https://yoo3006.github.io/ParamData.csv";
-        //public string growurl = "https://yoo3006.github.io/GrowData.csv";
-        //public string costurl = "https://yoo3006.github.io/CostData.csv";
         
         public void Load(string text)
         {
