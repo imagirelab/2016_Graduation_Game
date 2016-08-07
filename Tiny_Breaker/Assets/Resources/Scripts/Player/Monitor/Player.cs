@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using NCMB;
 
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
@@ -12,131 +13,213 @@ public class Player : MonoBehaviour {
     //スマホ側に送信するのに一時的にデータをためておく場所
     List<GrowPoint> spiritsData = new List<GrowPoint>();
 
-    //仮//
-    bool onecall = false;
-    int counter = 6000;
-    int typeNum = 0;
-
-    string oldupdateDate = "";
-
-    enum SET_TYPE
+    enum Demon_TYPE
     {
-        PUPU,
         POPO,
+        PUPU,
         PIPI
     }
-
-    public static int playerStatusHP;
-    public static int playerStatusATK;
-    public static int playerStatusSPEED;
-
-    [SerializeField, TooltipAttribute("悪魔")]
-    private GameObject[] demon;
-    public GameObject[] Demon
+    //スマホからのメッセージ一覧
+    struct SmaphoMsg
     {
-        get { return demon; }
-        set { demon = value; }
-    }
+        public string order;
+        public Demon_TYPE type;
+        public int G_HP;
+        public int G_ATK;
+        public int G_SPD;
+        public int G_ATKTime;
+    };
+    List<SmaphoMsg> smaphoMsgList = new List<SmaphoMsg>();
+    
+    //スマホ側から受け取る情報を抑制するためのカウンター
+    int counter = 0;
+
+    //各種悪魔のプレファブ
+    Dictionary<Demon_TYPE, GameObject> demons = new Dictionary<Demon_TYPE, GameObject>(){
+        {Demon_TYPE.POPO, null},
+        {Demon_TYPE.PUPU, null},
+        {Demon_TYPE.PIPI, null}
+    };
+
+    //悪魔別指示クラス
+    Dictionary<Demon_TYPE, DemonsOrder> orders = new Dictionary<Demon_TYPE, DemonsOrder>(){
+        {Demon_TYPE.POPO, new DemonsOrder()},
+        {Demon_TYPE.PUPU, new DemonsOrder()},
+        {Demon_TYPE.PIPI, new DemonsOrder()}
+    };
 
     [SerializeField, TooltipAttribute("出撃位置")]
-    private Vector3 spawnPosition = new Vector3(0, 1, -22);
-    public Vector3 SpawnPosition { set { spawnPosition = value; } }
-    //仮//
+    Vector3 spawnPosition = new Vector3(0, 1, -22);
 
-
-    void Start ()
+    void Start()
     {
-        for (int i = 0; i < demon.Length; i++)
-        {
-            //仮に何も設定されていなかったら空のゲームオブジェクトを入れる
-            if (demon[i] == null)
-                demon[i] = new GameObject();
-        }
+        //悪魔達をセットし忘れていたときは検索して取得する
+        //速度に困ったら代入方法を変える
+        if (demons[Demon_TYPE.POPO] == null)
+            demons[Demon_TYPE.POPO] = (GameObject)Resources.Load("Prefabs/Unit/POPO");
+        if (demons[Demon_TYPE.PUPU] == null)
+            demons[Demon_TYPE.PUPU] = (GameObject)Resources.Load("Prefabs/Unit/PUPU");
+        if (demons[Demon_TYPE.PIPI] == null)
+            demons[Demon_TYPE.PIPI] = (GameObject)Resources.Load("Prefabs/Unit/PIPI");
     }
-	
-	void Update ()
+
+    void Update()
     {
-        if (counter > 30)
-        {
-            counter = 0;
-            
-            //クエリを作成
-            NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
-
-            //PlayerNoが記入されていないもの以外を取得
-            demonStatus.WhereNotEqualTo("PlayerNo", "");
-
-            //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
-            //demonStatus.OrderByDescending("createDate");
-            //demonStatus.Limit = 1;
-
-            //検索
-            demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-            {
-            //検索失敗時
-            if (e != null)
-                {
-                    Debug.Log(e.ToString());
-                    return;
-                }
-                else
-                {
-                    foreach (NCMBObject ncmbObj in objList)
-                    {      
-                        if (ncmbObj["Order"].ToString() == "Summon")
-                        {
-                            //ステータスを算出する
-                            playerStatusHP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
-                            playerStatusATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
-                            playerStatusSPEED = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
-
-                            //適当な値を入れて重なることを避ける
-                            Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-
-                            if(ncmbObj["Type"].ToString() == "PUPU")
-                            {
-                                typeNum = (int)SET_TYPE.PUPU;
-                            }
-                            else if (ncmbObj["Type"].ToString() == "POPO")
-                            {
-                                typeNum = (int)SET_TYPE.POPO;
-                            }
-                            else if (ncmbObj["Type"].ToString() == "PIPI")
-                            {
-                                typeNum = (int)SET_TYPE.PIPI;
-                            }
-
-                            //悪魔を出す
-                            GameObject instaceObject = (GameObject)Instantiate(demon[typeNum],
-                                                                            spawnPosition + demon[typeNum].transform.position + randVac,           //プレイヤーごとの出撃位置
-                                                                            Quaternion.identity);
-                            GameObject playerObject = GameObject.Find("Player");        //別の方法でプレイヤーを取得方法を考えたい
-                            instaceObject.transform.SetParent(playerObject.transform, false);
-
-                            ncmbObj["Order"] = "Summoned";
-
-                            ncmbObj.SaveAsync();
-                        }
-                        else if (ncmbObj["Order"].ToString() == "Soldier")
-                        {
-
-                        }
-                        else
-                        {
-
-                        }
-                    }
-                }
-            });
-        }
-
         counter++;
 
+        if (counter > 60)
+        {
+            counter = 0;
+
+            //受信後の処理
+            Receive();
+        }
+
+        //リストの初めのやつから処理を行う
+        if (smaphoMsgList.Count > 0)
+        {
+            //悪魔別指示クラス
+            DemonsOrder order = orders[smaphoMsgList[0].type];
+            switch (smaphoMsgList[0].order)
+            {
+                case "Summon":
+                    SummonOrder();
+                    break;
+                case "Atack_Castle":
+                    order.ChangeOrder(DemonsOrder.Order.Castle);
+                    break;
+                case "Atack_House":
+                    order.ChangeOrder(DemonsOrder.Order.Building);
+                    break;
+                case "Atack_Soldier":
+                    order.ChangeOrder(DemonsOrder.Order.Enemy);
+                    break;
+                case "Get_Spirit":
+                    order.ChangeOrder(DemonsOrder.Order.Spirit);
+                    break;
+            }
+
+            //処理したらリストから外す
+            smaphoMsgList.Remove(smaphoMsgList[0]);
+        }
     }
-    
+
     //魂リストへの追加
     public void AddSpiritList(GrowPoint spiritdata)
     {
         spiritsData.Add(spiritdata);
     }
+
+    //受信したときの処理
+    void Receive()
+    {
+        //クエリを作成
+        NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
+
+        //PlayerNoが記入されていないもの以外を取得
+        demonStatus.WhereNotEqualTo("PlayerNo", "");
+
+        //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
+        //demonStatus.OrderByDescending("createDate");
+        //demonStatus.Limit = 1;
+
+        //検索
+        demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        {
+            //検索失敗時
+            if (e != null)
+            {
+                Debug.Log(e.ToString());
+                return;
+            }
+            else
+            {
+                foreach (NCMBObject ncmbObj in objList)
+                {
+                    SmaphoMsg smaphoMsg = new SmaphoMsg();
+                    //スマホ側から受け取ったメッセージを変換して登録する
+                    if (ncmbObj["Order"] != null)
+                        smaphoMsg.order = ncmbObj["Order"].ToString();
+                    else
+                        smaphoMsg.order = "";
+
+                    //タイプの振り分け
+                    Demon_TYPE type = Demon_TYPE.POPO;
+                    switch (ncmbObj["Type"].ToString())
+                    {
+                        case "POPO":
+                            type = Demon_TYPE.POPO;
+                            break;
+                        case "PUPU":
+                            type = Demon_TYPE.PUPU;
+                            break;
+                        case "PIPI":
+                            type = Demon_TYPE.PIPI;
+                            break;
+                        default:
+                            Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
+                            break;
+                    }
+                    smaphoMsg.type = type;
+
+                    //if (ncmbObj["HP"] != null)
+                    //    smaphoMsg.G_HP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
+                    //else
+                    //    smaphoMsg.G_HP = 0;
+
+                    //if (ncmbObj["ATK"] != null)
+                    //    smaphoMsg.G_ATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
+                    //else
+                    //    smaphoMsg.G_ATK = 0;
+
+                    //if (ncmbObj["DEX"] != null)
+                    //    smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
+                    //else
+                    //    smaphoMsg.G_SPD = 0;
+
+                    smaphoMsg.G_HP = 0;
+                    smaphoMsg.G_ATK = 0;
+                    smaphoMsg.G_SPD = 0;
+                    //smaphoMsg.G_ATKTime = System.Convert.ToInt32(ncmbObj["ATKTime"].ToString());
+                    smaphoMsg.G_ATKTime = 1;
+
+                    smaphoMsgList.Add(smaphoMsg);
+                    
+                    //記録を取ったら消す
+                    ncmbObj.DeleteAsync();
+
+                    //Debug.Log(ncmbObj["Order"].ToString());
+                    //Debug.Log(ncmbObj["Type"].ToString());
+                    //Debug.Log(ncmbObj["HP"].ToString());
+                    //Debug.Log(ncmbObj["ATK"].ToString());
+                    //Debug.Log(ncmbObj["DEX"].ToString());
+                }
+            }
+        });
+
+
+    }
+
+    //召喚指示を受け取った時の処理
+    void SummonOrder()
+    {
+        //適当な値を入れて重なることを避ける
+        Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+
+        GameObject demon = demons[smaphoMsgList[0].type];
+        demon.GetComponent<Demons>().GrowPoint.CurrentHP_GrowPoint = smaphoMsgList[0].G_HP;
+        demon.GetComponent<Demons>().GrowPoint.CurrentATK_GrowPoint = smaphoMsgList[0].G_ATK;
+        demon.GetComponent<Demons>().GrowPoint.CurrentSPEED_GrowPoint = smaphoMsgList[0].G_SPD;
+        demon.GetComponent<Demons>().GrowPoint.CurrentAtackTime_GrowPoint = smaphoMsgList[0].G_ATKTime;
+
+        //悪魔を出す
+        GameObject instaceObject = (GameObject)Instantiate(demon,
+                                                        spawnPosition + randVac,           //プレイヤーごとの出撃位置
+                                                        Quaternion.identity);
+        instaceObject.transform.SetParent(this.transform, false);
+        instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
+        instaceObject.GetComponent<Demons>().GrowPoint = demon.GetComponent<Demons>().GrowPoint;
+    }
+
+
 }

@@ -2,8 +2,8 @@
 
 using UnityEngine;
 
-public class DemonsOrder : MonoBehaviour {
-
+public class DemonsOrder
+{
     //命令
     public enum Order
     {
@@ -13,14 +13,14 @@ public class DemonsOrder : MonoBehaviour {
         Spirit,     //魂を回収させる
         Wait        //待機（一応）
     }
-    private Order currentOrder; //現在の命令
+    private Order currentOrder = Order.Wait; //現在の命令
     public Order CurrentOrder { get { return currentOrder; } }  //現在の命令(取得用)
-    
+
     //ドロップが成立した時の処理
-    public void OnDropOrder(int ordernum)
+    public void ChangeOrder(Order order)
     {
         //渡された数字からオーダーを変更
-        currentOrder = (Order)ordernum;
+        currentOrder = order;
         Debug.Log(currentOrder);
     }
 }

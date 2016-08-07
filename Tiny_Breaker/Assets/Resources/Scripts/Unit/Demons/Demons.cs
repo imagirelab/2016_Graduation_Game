@@ -2,7 +2,6 @@
 
 using UnityEngine;
 using StaticClass;
-using System.Collections.Generic;
 
 public class Demons : Unit
 {
@@ -13,7 +12,6 @@ public class Demons : Unit
     public GrowPoint GrowPoint
     {
         get { return growPoint; }
-
         set
         {
             growPoint = value;
@@ -26,33 +24,28 @@ public class Demons : Unit
 
     //悪魔に渡される指示を出すクラス
     private DemonsOrder order;
-    public DemonsOrder Order { set { order = value; } }
-
-    //悪魔に作られた画面のプレイヤーのIDを入れておく変数
-    private int playerID;
-    public int PlayerID { set { playerID = value; } }
-
-    // 触れているものの情報
-    // 接触しているゲームオブジェクト
-    private GameObject hitObject;
-
+    public DemonsOrder Order { /*get { return order; }*/set { order = value; } }
+    
+    //お城
     GameObject castle;
-
-    private bool loadEndFlag = false;
-    private bool loadStartFlag = false;
-
+    
     void Start()
     {
         // 作られたときにリストに追加する
         DemonDataBase.getInstance().AddList(this.gameObject);
 
+        //死亡フラグ
         IsDaed = false;
-
-        Debug.Log("DemonSummoned by Hp:" + status.CurrentHP);
-
+        
+        //お城を見つける
         castle = GameObject.Find("Castle");
 
-        Debug.Log(growPoint.CurrentSPEED_GrowPoint);
+        //成長値の初期設定
+        if (!changeGrowPoint)
+            growPoint.SetGrowPoint();
+
+        //ステータスの決定
+        SetStatus();
     }
 
     //破壊されたときにリストから外す
@@ -63,19 +56,8 @@ public class Demons : Unit
 
     void Update()
     {
-        if(!loadEndFlag)
-        {
-            if (!loadStartFlag)
-            {
-                loadStartFlag = true;
-                Demon_SetStatus();
-            }
-            if(status.CurrentHP > 0)
-                loadEndFlag = true;
-        }
-
         //オーダークラスがちゃんと設定されていれば処理する
-        if (order)
+        if (order != null)
             switch (order.CurrentOrder)
             {
                 case DemonsOrder.Order.Castle:
@@ -93,11 +75,11 @@ public class Demons : Unit
             }
 
         //死亡処理
-        if (status.CurrentHP <= 0 && loadEndFlag)
+        if (status.CurrentHP <= 0/* && loadEndFlag*/)
             Dead();
     }
-
-
+    
+    //お城への攻撃
     void CastleOrder()
     {
         //攻撃対象の設定
@@ -135,30 +117,8 @@ public class Demons : Unit
         //移動
         Move(targetObject);
     }
-
-    //オブジェクトが衝突したときの処理
-    void OnCollisionEnter(Collision collision)
-    {
-        //接触したゲームオブジェクトを保存
-        hitObject = collision.gameObject;
-    }
-
-    //オブジェクトが触れている間
-    void OnCollisionStay(Collision collision)
-    {
-        //接触しているゲームオブジェクトを保存
-        hitObject = collision.gameObject;
-    }
-
-    //オブジェクトが離れた時
-    void OnCollisionExit(Collision collision)
-    {
-        //離れたら戻す
-        hitObject = null;
-    }
-
+    
     //死んだときの処理
-
     void Dead()
     {
         IsDaed = true;
@@ -169,13 +129,21 @@ public class Demons : Unit
         Destroy(gameObject);
     }
 
-    void Demon_SetStatus()
+    //ステータスの設定
+    void SetStatus()
     {
+        //基礎ステータスの代入
+        status.SetStatus();
+
         //今のステータスを算出する
-        status.CurrentHP = playerStatusHP;
-        status.CurrentATK = playerStatusATK;
-        status.CurrentSPEED = playerStatusSPEED;
-        status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
-        status.CurrentAtackTime = 0.1f;
+        for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
+            status.CurrentHP += (int)(status.GetHP * 0.5f);
+        for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
+            status.CurrentATK += (int)(status.GetATK * 0.5f);
+        for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.CurrentSPEED_GrowPoint; i++)
+            status.CurrentSPEED += status.GetSPEED * 0.15f;
+
+        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.CurrentAtackTime_GrowPoint; i++)
+            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
     }
 }
