@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
+using StaticClass;
 
 public class DebugControl : MonoBehaviour
 {
-
-    bool debugFlag;
-
     [SerializeField]
     GameObject DebugCost;
     [SerializeField]
@@ -12,14 +10,14 @@ public class DebugControl : MonoBehaviour
 
     void Start()
     {
-        debugFlag = true;
+        GameRule.getInstance().debugFlag = true;
 
         if (DebugCost == null)
             DebugCost = new GameObject(this.ToString() + "DebugCost");
         if (DebugUnit == null)
             DebugUnit = new GameObject(this.ToString() + "DebugUnit");
 
-        SetDebugActive(debugFlag);
+        SetDebugActive(GameRule.getInstance().debugFlag);
     }
 
     void Update()
@@ -27,9 +25,9 @@ public class DebugControl : MonoBehaviour
         //デバッグ表示の切り替え
         if (Input.GetKeyDown(KeyCode.Keypad0))
         {
-            debugFlag = !debugFlag;
+            GameRule.getInstance().debugFlag = !GameRule.getInstance().debugFlag;
 
-            SetDebugActive(debugFlag);
+            SetDebugActive(GameRule.getInstance().debugFlag);
         }
 
         if (Input.GetKeyDown(KeyCode.Keypad9))

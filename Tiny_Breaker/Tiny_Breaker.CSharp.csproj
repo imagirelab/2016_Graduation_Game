@@ -119,6 +119,9 @@
     <Compile Include="Assets\Resources\Scripts\Debug\DebugControl.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugCost.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugUnit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\WireFrame.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\WireSphereScale.cs" />
+    <Compile Include="Assets\Resources\Scripts\GameRule.cs" />
     <Compile Include="Assets\Resources\Scripts\House.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\PlayerCost.cs" />
@@ -144,6 +147,14 @@
     <Compile Include="Assets\Resources\Scripts\Util\GetAllChildren.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Editor\Simplygon Bumped Specular.shader" />
+    <None Include="Assets\Editor\Simplygon Specular.shader" />
+    <None Include="Assets\Editor\Simplygon Transparent Bumped Diffuse.shader" />
+    <None Include="Assets\Editor\Simplygon Transparent Bumped Specular Detail.shader" />
+    <None Include="Assets\Editor\Simplygon Transparent Bumped Specular.shader" />
+    <None Include="Assets\Editor\Simplygon Transparent Diffuse.shader" />
+    <None Include="Assets\Editor\Simplygon Transparent Specular.shader" />
+    <None Include="Assets\Editor\SimplygonReadMe.txt" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Plugins\Android\res\values\version.xml" />
     <None Include="Assets\Resources\Image\HP_UI＆Number\メモ.txt" />
