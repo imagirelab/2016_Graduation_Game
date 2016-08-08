@@ -7,6 +7,8 @@ public class DebugControl : MonoBehaviour
     GameObject DebugCost;
     [SerializeField]
     GameObject DebugUnit;
+    [SerializeField]
+    GameObject DebugExplanation;
 
     void Start()
     {
@@ -16,6 +18,8 @@ public class DebugControl : MonoBehaviour
             DebugCost = new GameObject(this.ToString() + "DebugCost");
         if (DebugUnit == null)
             DebugUnit = new GameObject(this.ToString() + "DebugUnit");
+        if (DebugExplanation == null)
+            DebugExplanation = new GameObject(this.ToString() + "DebugExplanation");
 
         SetDebugActive(GameRule.getInstance().debugFlag);
     }
@@ -44,5 +48,6 @@ public class DebugControl : MonoBehaviour
     {
         DebugCost.SetActive(flag);
         DebugUnit.SetActive(flag);
+        DebugExplanation.SetActive(flag);
     }
 }
