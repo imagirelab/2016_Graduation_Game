@@ -24,7 +24,7 @@ public class Demons : Unit
 
     //悪魔に渡される指示を出すクラス
     private DemonsOrder order;
-    public DemonsOrder Order { /*get { return order; }*/set { order = value; } }
+    public DemonsOrder Order { set { order = value; } }
     
     //お城
     GameObject castle;
@@ -72,6 +72,9 @@ public class Demons : Unit
                 case DemonsOrder.Order.Spirit:
                     OrderSpirit();
                     break;
+                default:    //待機
+                    OrderWait();
+                    break;
             }
 
         //死亡処理
@@ -117,6 +120,19 @@ public class Demons : Unit
         //移動
         Move(targetObject);
     }
+
+    //待機指示
+    void OrderWait()
+    {
+        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        //NavMeshAgentを止める
+        if (GetComponent<NavMeshAgent>())
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.destination = this.transform.position;
+        }
+    }
     
     //死んだときの処理
     void Dead()
@@ -130,7 +146,7 @@ public class Demons : Unit
     }
 
     //ステータスの設定
-    void SetStatus()
+    public void SetStatus()
     {
         //基礎ステータスの代入
         status.SetStatus();

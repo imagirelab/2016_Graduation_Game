@@ -5,7 +5,6 @@ using NCMB;
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
 public class Player : MonoBehaviour
 {
-
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
     public int playerID = 1;
@@ -162,37 +161,30 @@ public class Player : MonoBehaviour
                     }
                     smaphoMsg.type = type;
 
-                    //if (ncmbObj["HP"] != null)
-                    //    smaphoMsg.G_HP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
-                    //else
-                    //    smaphoMsg.G_HP = 0;
-
-                    //if (ncmbObj["ATK"] != null)
-                    //    smaphoMsg.G_ATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
-                    //else
-                    //    smaphoMsg.G_ATK = 0;
-
-                    //if (ncmbObj["DEX"] != null)
-                    //    smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
-                    //else
-                    //    smaphoMsg.G_SPD = 0;
-
                     smaphoMsg.G_HP = 0;
                     smaphoMsg.G_ATK = 0;
                     smaphoMsg.G_SPD = 0;
-                    //smaphoMsg.G_ATKTime = System.Convert.ToInt32(ncmbObj["ATKTime"].ToString());
                     smaphoMsg.G_ATKTime = 1;
+
+                    //orderがSummonでないとステータスが設定できない
+                    if (smaphoMsg.order == "Summon")
+                    {
+                        if (ncmbObj["HP"] != null)
+                            smaphoMsg.G_HP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
+
+                        if (ncmbObj["ATK"] != null)
+                            smaphoMsg.G_ATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
+
+                        if (ncmbObj["DEX"] != null)
+                            smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
+
+                        //smaphoMsg.G_ATKTime = System.Convert.ToInt32(ncmbObj["ATKTime"].ToString());
+                    }
 
                     smaphoMsgList.Add(smaphoMsg);
                     
                     //記録を取ったら消す
                     ncmbObj.DeleteAsync();
-
-                    //Debug.Log(ncmbObj["Order"].ToString());
-                    //Debug.Log(ncmbObj["Type"].ToString());
-                    //Debug.Log(ncmbObj["HP"].ToString());
-                    //Debug.Log(ncmbObj["ATK"].ToString());
-                    //Debug.Log(ncmbObj["DEX"].ToString());
                 }
             }
         });
@@ -206,11 +198,20 @@ public class Player : MonoBehaviour
         //適当な値を入れて重なることを避ける
         Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 
+        //プレファブの悪魔のデータの設定
+        //悪魔が作られてからやるSetStatusは個別のステータス
+        //おそらくアドレス渡しになるため同じプレファブから作られたすべてのオブジェクトが共通の値を持つこととなる
         GameObject demon = demons[smaphoMsgList[0].type];
-        demon.GetComponent<Demons>().GrowPoint.CurrentHP_GrowPoint = smaphoMsgList[0].G_HP;
-        demon.GetComponent<Demons>().GrowPoint.CurrentATK_GrowPoint = smaphoMsgList[0].G_ATK;
-        demon.GetComponent<Demons>().GrowPoint.CurrentSPEED_GrowPoint = smaphoMsgList[0].G_SPD;
-        demon.GetComponent<Demons>().GrowPoint.CurrentAtackTime_GrowPoint = smaphoMsgList[0].G_ATKTime;
+        GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
+
+        //成長値の代入
+        growPoint.CurrentHP_GrowPoint = smaphoMsgList[0].G_HP;
+        growPoint.CurrentATK_GrowPoint = smaphoMsgList[0].G_ATK;
+        growPoint.CurrentSPEED_GrowPoint = smaphoMsgList[0].G_SPD;
+        growPoint.CurrentAtackTime_GrowPoint = smaphoMsgList[0].G_ATKTime;
+
+        //ステータスの代入
+        demon.GetComponent<Demons>().SetStatus();
 
         //悪魔を出す
         GameObject instaceObject = (GameObject)Instantiate(demon,
@@ -218,7 +219,7 @@ public class Player : MonoBehaviour
                                                         Quaternion.identity);
         instaceObject.transform.SetParent(this.transform, false);
         instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
-        instaceObject.GetComponent<Demons>().GrowPoint = demon.GetComponent<Demons>().GrowPoint;
+        instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
     }
 
 

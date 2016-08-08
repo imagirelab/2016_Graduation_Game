@@ -17,15 +17,21 @@ public class Status
     public int GetATK { get { return ATK; } }
     public float GetSPEED { get { return SPEED; } }
     public float GetAtackTime { get { return AtackTime; } }
-    
+
     //プレハブのすべて共有の値になってしまうため
     //元々のステータスはいじらないようにするため
     //別の変数を用意
+    private int maxHP;
     private int currentHP;
     private int currentATK;
     private float currentSPEED;
     private float currentAtackTime;
 
+    public int MaxHP
+    {
+        get { return maxHP; }
+        set { maxHP = value; }
+    }
     public int CurrentHP
     {
         get { return currentHP; }
@@ -52,7 +58,7 @@ public class Status
         SetStatus();
     }
 
-    //現在のステータスに代入する
+    ////現在のステータスに代入する
     public void SetStatus()
     {
         currentHP = HP;

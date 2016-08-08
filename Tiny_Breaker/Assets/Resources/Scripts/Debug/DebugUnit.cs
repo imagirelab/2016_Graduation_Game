@@ -57,16 +57,16 @@ public class DebugUnit : MonoBehaviour
     void Update()
     {
         this.GetComponent<Text>().text = "Demon:" + demons[demonsPage].name + "\n" +
-                                         "HP:" + demons[demonsPage].GetComponent<Unit>().status.GetHP + "\t\t\t   G_HP:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentHP_GrowPoint + "\n" +
-                                         "ATK:" + demons[demonsPage].GetComponent<Unit>().status.GetATK + "\t\t\t   G_ATK:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentATK_GrowPoint + "\n" +
-                                         "SPD:" + demons[demonsPage].GetComponent<Unit>().status.GetSPEED.ToString("f2") + "\t\t   G_SPD:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentSPEED_GrowPoint + "\n" +
-                                         "ATKTime:" + demons[demonsPage].GetComponent<Unit>().status.GetAtackTime.ToString("f2") + "  G_ATKTime:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentAtackTime_GrowPoint + "\n" +
+                                         "HP:" + demons[demonsPage].GetComponent<Unit>().status.CurrentHP + "\t\t\t   G_HP:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentHP_GrowPoint + "\n" +
+                                         "ATK:" + demons[demonsPage].GetComponent<Unit>().status.CurrentATK + "\t\t\t   G_ATK:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentATK_GrowPoint + "\n" +
+                                         "SPD:" + demons[demonsPage].GetComponent<Unit>().status.CurrentSPEED.ToString("f2") + "\t\t   G_SPD:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentSPEED_GrowPoint + "\n" +
+                                         "ATKTime:" + demons[demonsPage].GetComponent<Unit>().status.CurrentAtackTime.ToString("f2") + "  G_ATKTime:" + demons[demonsPage].GetComponent<Demons>().GrowPoint.CurrentAtackTime_GrowPoint + "\n" +
                                          "\n" +
                                          "Enemy:" + soldiers[soldiersPage].name + "\n" +
-                                         "HP:" + soldiers[soldiersPage].GetComponent<Unit>().status.GetHP + "\n" +
-                                         "ATK:" + soldiers[soldiersPage].GetComponent<Unit>().status.GetATK + "\n" +
-                                         "SPD:" + soldiers[soldiersPage].GetComponent<Unit>().status.GetSPEED.ToString("f2") + "\n" +
-                                         "ATKTime:" + soldiers[soldiersPage].GetComponent<Unit>().status.GetAtackTime.ToString("f2");
+                                         "HP:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentHP + "\n" +
+                                         "ATK:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentATK + "\n" +
+                                         "SPD:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentSPEED.ToString("f2") + "\n" +
+                                         "ATKTime:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentAtackTime.ToString("f2");
     }
 
     //進めたいページ数 戻したいときはマイナスを入れる
