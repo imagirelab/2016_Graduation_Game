@@ -3,6 +3,9 @@ using StaticClass;
 
 public class DebugControl : MonoBehaviour
 {
+    [SerializeField, TooltipAttribute("デバック表示するかどうか")]
+    bool IsDebug = false;
+
     [SerializeField]
     GameObject DebugCost;
     [SerializeField]
@@ -12,7 +15,7 @@ public class DebugControl : MonoBehaviour
 
     void Start()
     {
-        GameRule.getInstance().debugFlag = true;
+        GameRule.getInstance().debugFlag = IsDebug;
 
         if (DebugCost == null)
             DebugCost = new GameObject(this.ToString() + "DebugCost");

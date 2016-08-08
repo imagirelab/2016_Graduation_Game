@@ -161,5 +161,7 @@ public class Demons : Unit
 
         for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.CurrentAtackTime_GrowPoint; i++)
             status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+
+        status.MaxHP = status.CurrentHP;
     }
 }

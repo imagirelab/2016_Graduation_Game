@@ -118,6 +118,7 @@
     <Compile Include="Assets\Resources\Scripts\DataLoad\ParamData.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugControl.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugCost.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\DebugStatusUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugUnit.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\WireFrame.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\WireSphereScale.cs" />
