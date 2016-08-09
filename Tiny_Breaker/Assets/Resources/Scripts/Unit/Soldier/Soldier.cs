@@ -13,6 +13,9 @@ public class Soldier : Unit
     float deadcount;
     [SerializeField]
     float deadTime = 1.0f;
+
+    AudioSource audio;
+    bool onecall = false;
     
     void Start () {
 
@@ -26,6 +29,8 @@ public class Soldier : Unit
         //deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
 
         deadcount = 0.0f;
+
+        audio = GetComponent<AudioSource>();
     }
 
     //破壊されたときにリストから外す
@@ -55,10 +60,21 @@ public class Soldier : Unit
         {
             //攻撃対象がサーチ範囲内に入った場合の処理
             if (IsFind)
+            {
+
+                if (!onecall)
+                {
+                    onecall = true;
+                    audio.Play();
+                }
                 //移動
                 Move(targetObject);
+            }
             else
+            {
+                onecall = false;
                 Loitering(LoiteringPointObj);
+            }
         }
     }
 
