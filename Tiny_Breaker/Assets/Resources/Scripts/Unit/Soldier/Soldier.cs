@@ -6,7 +6,7 @@ using StaticClass;
 public class Soldier : Unit
 {
     ////このクラス内で使う変数       //HPのUI
-    private ParticleSystem deadParticle;    //死亡時のパーティクル
+    //private ParticleSystem deadParticle;    //死亡時のパーティクル
 
     public Transform[] LoiteringPointObj;
 
@@ -23,7 +23,7 @@ public class Soldier : Unit
         status.SetStatus();
         status.MaxHP = status.CurrentHP;
 
-        deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
+        //deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
 
         deadcount = 0.0f;
     }
@@ -31,12 +31,15 @@ public class Soldier : Unit
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if (!IsDaed)
+        if (!IsDead)
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 
     void Update ()
     {
+        //常に近くの悪魔を攻撃対象に設定
+        targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
+
         //死んだときの処理
         if (status.CurrentHP <= 0)
         {
@@ -47,40 +50,29 @@ public class Soldier : Unit
 
             if(deadcount > deadTime)
                 Destroy(gameObject);
-
-            ////パーティクルが止まったら本当の終わり
-            //if (deadParticle.isStopped)
-            //{
-            //}
         }
         else
         {
             //攻撃対象がサーチ範囲内に入った場合の処理
             if (IsFind)
-            {
-                //攻撃対象の設定
-                targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
-
                 //移動
                 Move(targetObject);
-            }
             else
-            {
                 Loitering(LoiteringPointObj);
-            }
         }
     }
 
+    //死んだときの処理
     void Dead()
     {
-        if (!IsDaed)
+        if (!IsDead)
         {
-            IsDaed = true;
+            IsDead = true;
 
             //リストから外すタイミングを死んだ条件の中に入れる
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
 
-            deadParticle.Play();
+            //deadParticle.Play();
 
             //いらない子供から消していく
             if (transform.IsChildOf(transform))

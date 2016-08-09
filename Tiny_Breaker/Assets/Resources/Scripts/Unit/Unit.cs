@@ -6,7 +6,7 @@ public class Unit : MonoBehaviour
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
 
-    public bool IsDaed;
+    public bool IsDead;
     
     //攻撃関連
     [HideInInspector]
@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour
             if (GetComponent<NavMeshAgent>())
             {
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.destination = this.transform.position;
+                agent.destination = transform.position;
             }
         }
     }

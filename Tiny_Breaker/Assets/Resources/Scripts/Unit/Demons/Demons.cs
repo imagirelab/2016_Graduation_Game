@@ -35,7 +35,7 @@ public class Demons : Unit
         DemonDataBase.getInstance().AddList(this.gameObject);
 
         //死亡フラグ
-        IsDaed = false;
+        IsDead = false;
         
         //お城を見つける
         castle = GameObject.Find("Castle");
@@ -78,7 +78,7 @@ public class Demons : Unit
             }
 
         //死亡処理
-        if (status.CurrentHP <= 0/* && loadEndFlag*/)
+        if (status.CurrentHP <= 0)
             Dead();
     }
     
@@ -137,7 +137,7 @@ public class Demons : Unit
     //死んだときの処理
     void Dead()
     {
-        IsDaed = true;
+        IsDead = true;
 
         //スピリットの生成
         GameObject instacespirit = (GameObject)Instantiate(spirit, this.gameObject.transform.position, this.gameObject.transform.rotation);

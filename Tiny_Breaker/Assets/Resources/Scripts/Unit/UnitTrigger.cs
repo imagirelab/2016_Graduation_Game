@@ -9,23 +9,15 @@ public class UnitTrigger : MonoBehaviour {
     protected Unit parent;
 
     protected GameObject hitTarget;       //範囲内に入ったターゲット
-    
+    protected bool hitFlag = false;
+
     void OnTriggerEnter(Collider collider)
     {
         //悪魔が範囲内に入ってきたとき攻撃を開始する
         if (collider.gameObject == parent.targetObject)
         {
-            if (!parent.IsDaed)
-            {
-                parent.IsAttack = true;
-                hitTarget = collider.gameObject;
-            }
-            else
-            {
-                parent.IsAttack = false;
-                parent.IsFind = false;
-                hitTarget = null;
-            }
+            hitTarget = collider.gameObject;
+            hitFlag = true;
         }
     }
 
@@ -34,17 +26,8 @@ public class UnitTrigger : MonoBehaviour {
         //悪魔が範囲内に入っているとき攻撃を続ける
         if (collider.gameObject == parent.targetObject)
         {
-            if (!parent.IsDaed)
-            {
-                parent.IsAttack = true;
-                hitTarget = collider.gameObject;
-            }
-            else
-            {
-                parent.IsAttack = false;
-                parent.IsFind = false;
-                hitTarget = null;
-            }
+            hitTarget = collider.gameObject;
+            hitFlag = true;
         }
     }
 
@@ -53,9 +36,8 @@ public class UnitTrigger : MonoBehaviour {
         //範囲内から出たら攻撃をやめる
         if (collider.gameObject == parent.targetObject)
         {
-            parent.IsAttack = false;
-            parent.IsFind = false;
             hitTarget = null;
+            hitFlag = false;
         }
     }
 }

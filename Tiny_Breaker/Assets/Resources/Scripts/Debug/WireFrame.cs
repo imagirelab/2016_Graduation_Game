@@ -9,6 +9,10 @@ public class WireFrame : MonoBehaviour {
     MeshRenderer mr;
     
     void Start () {
+    }
+
+    void Update()
+    {
         MeshFilter mf;
         if (GetComponent<MeshFilter>() != null)
             mf = GetComponent<MeshFilter>();
@@ -30,10 +34,7 @@ public class WireFrame : MonoBehaviour {
         }
         mr.enabled = GameRule.getInstance().debugFlag;  //デバッグ表示
         mr.material.color = color;
-    }
 
-    void Update()
-    {
         mr.enabled = GameRule.getInstance().debugFlag;  //デバッグ表示
     }
 }

@@ -19,8 +19,8 @@ public class AttackRange : UnitTrigger
         time = 0.0f;
     }
 
-    void Update () {
-        
+    void Update ()
+    {
         //アタックタイムを満たしていて攻撃フラグが立っていたら攻撃
         if (time > parent.status.CurrentAtackTime && parent.IsAttack)
         {
@@ -66,8 +66,14 @@ public class AttackRange : UnitTrigger
                 }
             }
             else
-                parent.IsAttack = false;
+            {
+                hitTarget = null;
+                hitFlag = false;
+            }
         }
+
+        //攻撃フラグの更新
+        parent.IsAttack = hitFlag;
 
         //1フレームあたりの時間を取得
         time += Time.deltaTime;
