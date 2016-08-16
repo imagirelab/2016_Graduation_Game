@@ -101,12 +101,31 @@ public class Player : MonoBehaviour
             //処理したらリストから外す
             smaphoMsgList.Remove(smaphoMsgList[0]);
         }
+
+        //スピリットデータの数が1個以上ある場合の処理
+        if(spiritsData.Count > 0)
+        {
+            PushSpirit(spiritsData[0]);
+
+            spiritsData.Remove(spiritsData[0]);
+        }
     }
 
     //魂リストへの追加
     public void AddSpiritList(GrowPoint spiritdata)
     {
         spiritsData.Add(spiritdata);
+    }
+
+    //魂をサーバーに送信
+    void PushSpirit(GrowPoint _spiritData)
+    {
+        NCMBObject spiritObj = new NCMBObject("SpiritData");
+
+        spiritObj["TYPE"] = _spiritData.GetDemonType.ToString();
+
+        spiritObj.SaveAsync();
+
     }
 
     //受信したときの処理
@@ -116,7 +135,7 @@ public class Player : MonoBehaviour
         NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
 
         //PlayerNoが記入されていないもの以外を取得
-        demonStatus.WhereNotEqualTo("PlayerNo", "");
+        //demonStatus.WhereNotEqualTo("PlayerNo", "");
 
         //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
         //demonStatus.OrderByDescending("createDate");
@@ -188,8 +207,6 @@ public class Player : MonoBehaviour
                 }
             }
         });
-
-
     }
 
     //召喚指示を受け取った時の処理
