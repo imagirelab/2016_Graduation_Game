@@ -163,6 +163,7 @@
     <None Include="Assets\Plugins\Android\res\values\version.xml" />
     <None Include="Assets\Resources\Image\HP_UI＆Number\メモ.txt" />
     <None Include="Assets\Resources\Shader\Diffuse_ZWrite.shader" />
+    <None Include="Assets\Resources\Shader\Sprites-Custom.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

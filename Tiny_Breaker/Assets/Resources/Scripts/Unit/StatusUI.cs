@@ -24,7 +24,7 @@ public class StatusUI : MonoBehaviour
 
     void Update()
     {
-        transform.LookAt(_MainCamera.transform);
+        //transform.LookAt(_MainCamera.transform);
         transform.forward = _MainCamera.transform.forward;
 
         //デバッグによってオンオフ切り替え

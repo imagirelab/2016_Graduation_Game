@@ -55,7 +55,7 @@ public class Soldier : Unit
 
             deadcount += Time.deltaTime;
 
-            if(deadcount > deadTime)
+            if (deadcount > deadTime)
                 Destroy(gameObject);
         }
         else
@@ -95,19 +95,31 @@ public class Soldier : Unit
             //いらない子供から消していく
             if (transform.IsChildOf(transform))
                 foreach (Transform child in transform)
-                    if (child.name == "Model")
+                {
+                    if (child.name == "Models")
                     {
-                        foreach (GameObject e in GetAllChildren.GetAll(child.gameObject))
-                        {
-                            if (e.GetComponent<Collider>())
+                        foreach (Component comp in child.GetComponents<Component>())
+                            if (comp != child.GetComponent<Transform>())
+                                Destroy(comp);
+
+                        foreach (Transform grandson in child)
+                            if (grandson.name == "Model")
                             {
-                                e.GetComponent<Collider>().enabled = true;
-                                e.AddComponent<Rigidbody>();
+                                foreach (Component comp in grandson.GetComponents<Component>())
+                                    if (comp != grandson.GetComponent<Transform>())
+                                        Destroy(comp);
+
+                                foreach (GameObject e in GetAllChildren.GetAll(grandson.gameObject))
+                                    if (e.GetComponent<Collider>())
+                                    {
+                                        e.GetComponent<Collider>().enabled = true;
+                                        e.AddComponent<Rigidbody>();
+                                    }
                             }
-                        }
                     }
                     else
                         Destroy(child.gameObject);
+                }
 
             foreach (Component comp in this.GetComponents<Component>())
                 if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())

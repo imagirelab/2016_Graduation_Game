@@ -43,7 +43,9 @@ public class UnitModels : MonoBehaviour {
                 if (count > subChildCount)
                     return;
 
-                Destroy(child.gameObject);
+                //一番最後の一匹になるまではこちらで消す
+                if(transform.childCount > 1)
+                    Destroy(child.gameObject);
             }
         }
 
