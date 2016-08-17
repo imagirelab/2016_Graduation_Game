@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     };
 
     [SerializeField, TooltipAttribute("出撃位置")]
-    Vector3 spawnPosition = new Vector3(0, 1, -22);
+    Transform spawnPoint;
 
     [SerializeField, Range(0.0f, 1.0f), TooltipAttribute("強化時のスケール倍率")]
     float powerUpScale = 0.2f;
@@ -67,6 +67,9 @@ public class Player : MonoBehaviour
             demons[Demon_TYPE.PUPU] = (GameObject)Resources.Load("Prefabs/Unit/PUPU");
         if (demons[Demon_TYPE.PIPI] == null)
             demons[Demon_TYPE.PIPI] = (GameObject)Resources.Load("Prefabs/Unit/PIPI");
+
+        if (spawnPoint == null)
+            spawnPoint = new GameObject().transform;
     }
 
     void Update()
@@ -219,6 +222,8 @@ public class Player : MonoBehaviour
     //召喚指示を受け取った時の処理
     void SummonOrder()
     {
+        //出撃座標
+        Vector3 spawnPosition = spawnPoint.position;
         //適当な値を入れて重なることを避ける
         Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
 

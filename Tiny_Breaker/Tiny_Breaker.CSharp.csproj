@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -109,6 +103,7 @@
     <Compile Include="Assets\NCMB\Script\NCMBUtility.cs" />
     <Compile Include="Assets\NCMB\Script\NamespaceDoc.cs" />
     <Compile Include="Assets\NCMB\Script\Platform.cs" />
+    <Compile Include="Assets\Resources\Scripts\CameraMove.cs" />
     <Compile Include="Assets\Resources\Scripts\Cannon.cs" />
     <Compile Include="Assets\Resources\Scripts\Castle.cs" />
     <Compile Include="Assets\Resources\Scripts\CastleAttack.cs" />
@@ -139,6 +134,7 @@
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\PlayerScreen.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\SpiritBox.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\SmartPhone\SummonButton.cs" />
+    <Compile Include="Assets\Resources\Scripts\SpawnPoint.cs" />
     <Compile Include="Assets\Resources\Scripts\Spawner.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\AttackRange.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\Collect.cs" />
