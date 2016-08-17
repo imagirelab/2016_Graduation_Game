@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
 
+    [HideInInspector]
     public bool IsDead;
     
     //攻撃関連

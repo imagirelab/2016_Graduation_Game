@@ -14,7 +14,7 @@ public class Soldier : Unit
     [SerializeField]
     float deadTime = 1.0f;
 
-    AudioSource audio;
+    AudioSource se;
     bool onecall = false;
     
     void Start () {
@@ -30,7 +30,9 @@ public class Soldier : Unit
 
         deadcount = 0.0f;
 
-        audio = GetComponent<AudioSource>();
+        if (se == null)
+            gameObject.AddComponent<AudioSource>();
+        se = GetComponent<AudioSource>();
     }
 
     //破壊されたときにリストから外す
@@ -65,7 +67,7 @@ public class Soldier : Unit
                 if (!onecall)
                 {
                     onecall = true;
-                    audio.Play();
+                    se.Play();
                 }
                 //移動
                 Move(targetObject);

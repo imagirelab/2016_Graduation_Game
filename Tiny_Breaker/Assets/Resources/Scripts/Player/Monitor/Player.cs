@@ -5,6 +5,8 @@ using NCMB;
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
 public class Player : MonoBehaviour
 {
+    #region フィールド
+
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
     public int playerID = 1;
@@ -49,6 +51,11 @@ public class Player : MonoBehaviour
 
     [SerializeField, TooltipAttribute("出撃位置")]
     Vector3 spawnPosition = new Vector3(0, 1, -22);
+
+    [SerializeField, Range(0.0f, 1.0f), TooltipAttribute("強化時のスケール倍率")]
+    float powerUpScale = 0.2f;
+
+    #endregion
 
     void Start()
     {
@@ -237,6 +244,10 @@ public class Player : MonoBehaviour
         instaceObject.transform.SetParent(this.transform, false);
         instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
+
+        //強さに応じてスケールを変える処理
+        float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
+        instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
     }
 
 
