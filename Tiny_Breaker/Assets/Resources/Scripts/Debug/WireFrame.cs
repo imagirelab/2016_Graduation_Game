@@ -34,7 +34,5 @@ public class WireFrame : MonoBehaviour {
         }
         mr.enabled = GameRule.getInstance().debugFlag;  //デバッグ表示
         mr.material.color = color;
-
-        mr.enabled = GameRule.getInstance().debugFlag;  //デバッグ表示
     }
 }

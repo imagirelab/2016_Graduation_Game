@@ -19,8 +19,11 @@ public class SpawnPoint : MonoBehaviour {
         if (DemonDataBase.getInstance().GetListCount() == 0)
             targetPosition = defaultPosition;
         
-        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        agent.speed = speed;
-        agent.destination = targetPosition;
+        if(Vector3.Distance(transform.position, targetPosition) > 5.0f)
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.speed = speed;
+            agent.destination = targetPosition;
+        }
     }
 }

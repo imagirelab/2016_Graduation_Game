@@ -14,7 +14,7 @@ public class Soldier : Unit
     }
     State state = State.Wait;
 
-    public Transform[] LoiteringPointObj;
+    Transform[] loiteringPointObj;
 
     [SerializeField]
     float deadTime = 1.0f;
@@ -33,6 +33,15 @@ public class Soldier : Unit
         status.MaxHP = status.CurrentHP;
         
         deadcount = 0.0f;
+        
+        //親がある場合
+        if (gameObject.transform.parent.gameObject != null)
+        {
+            GameObject parent = gameObject.transform.parent.gameObject;
+            //親がスポナークラスを持っている場合
+            if (parent.GetComponent<Spawner>() != null)
+                loiteringPointObj = parent.GetComponent<Spawner>().LoiteringPointObj;
+        }
     }
 
     //破壊されたときにリストから外す
@@ -90,7 +99,7 @@ public class Soldier : Unit
         //見つけたいもの
         targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
 
-        Loitering(LoiteringPointObj);
+        Loitering(loiteringPointObj);
     }
 
     //待機処理　一応

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using StaticClass;
 
 public class CameraMove : MonoBehaviour {
     
@@ -7,16 +8,31 @@ public class CameraMove : MonoBehaviour {
     [SerializeField, TooltipAttribute("カメラが付き添う対象物")]
     GameObject target;
 
+    [SerializeField]
+    Vector3 allFieldPosition = new Vector3(0.0f, 180.0f, -210.0f);
+    bool IsAllSeeing = false;
+
     void Start()
     {
         if (target == null)
             target = new GameObject();
+
+        IsAllSeeing = false;
     }
 	
 	void Update ()
     {
-        Vector3 targetPosition = target.transform.position + distance;
+        transform.position = target.transform.position + distance;
 
-        transform.position = targetPosition;
+        //デバッグ表示の時のカメラ
+        if (GameRule.getInstance().debugFlag)
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                IsAllSeeing = !IsAllSeeing;
+
+            //ステージ全体表示
+            if(IsAllSeeing)
+                transform.position = allFieldPosition;
+        }
     }
 }

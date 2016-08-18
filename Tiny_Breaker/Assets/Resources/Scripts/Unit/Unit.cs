@@ -83,7 +83,7 @@ public class Unit : MonoBehaviour
             }
         }
 
-        if(Vector3.Distance(transform.position, targetPosition) < 1.0f)
+        if(Vector3.Distance(transform.position, targetPosition) < 3.0f)
         {
             currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
         }

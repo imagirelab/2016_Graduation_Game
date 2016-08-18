@@ -121,8 +121,9 @@
     <Compile Include="Assets\Resources\Scripts\Debug\DebugCost.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugStatusUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugUnit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\WireCapsule.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\WireFrame.cs" />
-    <Compile Include="Assets\Resources\Scripts\Debug\WireSphereScale.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\WireSphere.cs" />
     <Compile Include="Assets\Resources\Scripts\GameRule.cs" />
     <Compile Include="Assets\Resources\Scripts\House.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Monitor\Player.cs" />
