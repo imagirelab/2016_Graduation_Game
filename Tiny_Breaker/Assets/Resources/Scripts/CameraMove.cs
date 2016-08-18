@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using StaticClass;
 
 public class CameraMove : MonoBehaviour {
     
@@ -8,12 +7,8 @@ public class CameraMove : MonoBehaviour {
     [SerializeField, TooltipAttribute("カメラが付き添う対象物")]
     GameObject target;
 
-    Vector3 defaultPosition = Vector3.zero;
-
     void Start()
     {
-        defaultPosition = transform.position;
-
         if (target == null)
             target = new GameObject();
     }

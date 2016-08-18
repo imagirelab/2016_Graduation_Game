@@ -5,34 +5,34 @@ using StaticClass;
 
 public class Soldier : Unit
 {
-    ////このクラス内で使う変数       //HPのUI
-    //private ParticleSystem deadParticle;    //死亡時のパーティクル
+    enum State
+    {
+        Dead,
+        Find,
+        Search,
+        Wait
+    }
+    State state = State.Wait;
 
     public Transform[] LoiteringPointObj;
 
-    float deadcount;
     [SerializeField]
     float deadTime = 1.0f;
-
-    AudioSource se;
-    bool onecall = false;
+    float deadcount = 0.0f;
     
-    void Start () {
-
+    void Start ()
+    {
         // 作られたときにリストに追加する
         SolgierDataBase.getInstance().AddList(this.gameObject);
+        
+        //状態の設定
+        state = State.Wait;
 
         //ステータスの設定
         status.SetStatus();
         status.MaxHP = status.CurrentHP;
-
-        //deadParticle = this.transform.FindChild("deadParticle").GetComponent<ParticleSystem>();
-
+        
         deadcount = 0.0f;
-
-        if (se == null)
-            gameObject.AddComponent<AudioSource>();
-        se = GetComponent<AudioSource>();
     }
 
     //破壊されたときにリストから外す
@@ -44,40 +44,75 @@ public class Soldier : Unit
 
     void Update ()
     {
-        //常に近くの悪魔を攻撃対象に設定
-        targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
-
         //死んだときの処理
         if (status.CurrentHP <= 0)
-        {
-            //死後の処理
             Dead();
 
-            deadcount += Time.deltaTime;
-
-            if (deadcount > deadTime)
-                Destroy(gameObject);
-        }
+        //状態の変更条件
+        if (IsDead)
+            state = State.Dead;
         else
         {
-            //攻撃対象がサーチ範囲内に入った場合の処理
             if (IsFind)
-            {
-
-                if (!onecall)
-                {
-                    onecall = true;
-                    se.Play();
-                }
-                //移動
-                Move(targetObject);
-            }
+                state = State.Find;
             else
-            {
-                onecall = false;
-                Loitering(LoiteringPointObj);
-            }
+                state = State.Search;
         }
+        
+        //状態ごとの処理
+        switch (state)
+        {
+            case State.Dead:
+                Dying();
+                break;
+            case State.Find:
+                Find();
+                break;
+            case State.Search:
+                Search();
+                break;
+            default:
+                Wait();
+                break;
+        }
+    }
+
+    //発見時処理
+    void Find()
+    {
+        //移動
+        Move(targetObject);
+    }
+
+    //索敵処理
+    void Search()
+    {
+        //見つけたいもの
+        targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
+
+        Loitering(LoiteringPointObj);
+    }
+
+    //待機処理　一応
+    void Wait()
+    {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        //NavMeshAgentを止める
+        if (GetComponent<NavMeshAgent>())
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.destination = transform.position;
+        }
+    }
+
+    //死にかけている時の処理
+    void Dying()
+    {
+        deadcount += Time.deltaTime;
+
+        if (deadcount > deadTime)
+            Destroy(gameObject);
     }
 
     //死んだときの処理
@@ -89,9 +124,7 @@ public class Soldier : Unit
 
             //リストから外すタイミングを死んだ条件の中に入れる
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
-
-            //deadParticle.Play();
-
+            
             //いらない子供から消していく
             if (transform.IsChildOf(transform))
                 foreach (Transform child in transform)

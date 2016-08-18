@@ -13,7 +13,7 @@ public class UnitTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        //悪魔が範囲内に入ってきたとき攻撃を開始する
+        //目標が範囲内に入ってきたとき
         if (collider.gameObject == parent.targetObject)
         {
             hitTarget = collider.gameObject;
@@ -23,7 +23,7 @@ public class UnitTrigger : MonoBehaviour {
 
     void OnTriggerStay(Collider collider)
     {
-        //悪魔が範囲内に入っているとき攻撃を続ける
+        //目標が範囲内に入っているとき
         if (collider.gameObject == parent.targetObject)
         {
             hitTarget = collider.gameObject;
@@ -33,7 +33,7 @@ public class UnitTrigger : MonoBehaviour {
 
     void OnTriggerExit(Collider collider)
     {
-        //範囲内から出たら攻撃をやめる
+        //目標が範囲内から出たとき
         if (collider.gameObject == parent.targetObject)
         {
             hitTarget = null;
