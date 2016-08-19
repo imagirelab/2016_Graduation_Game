@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
     Transform spawnPoint;
 
     [SerializeField, Range(0.0f, 1.0f), TooltipAttribute("強化時のスケール倍率")]
-    float powerUpScale = 0.2f;
+    float powerUpScale = 0.1f;
 
     #endregion
 
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
             spawnPoint = new GameObject().transform;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         counter++;
 
@@ -252,6 +252,9 @@ public class Player : MonoBehaviour
 
         //強さに応じてスケールを変える処理
         float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
+        //制限
+        if (growScale >= 3.0f)
+            growScale = 3.0f;
         instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
     }
 

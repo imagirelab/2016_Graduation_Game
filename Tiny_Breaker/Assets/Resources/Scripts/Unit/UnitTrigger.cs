@@ -13,31 +13,34 @@ public class UnitTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        //目標が範囲内に入ってきたとき
-        if (collider.gameObject == parent.targetObject)
-        {
-            hitTarget = collider.gameObject;
-            hitFlag = true;
-        }
+        if (parent != null)
+            //目標が範囲内に入ってきたとき
+            if (collider.gameObject == parent.targetObject)
+            {
+                hitTarget = collider.gameObject;
+                hitFlag = true;
+            }
     }
 
     void OnTriggerStay(Collider collider)
     {
-        //目標が範囲内に入っているとき
-        if (collider.gameObject == parent.targetObject)
-        {
-            hitTarget = collider.gameObject;
-            hitFlag = true;
-        }
+        if(parent != null)
+            //目標が範囲内に入っているとき
+            if (collider.gameObject == parent.targetObject)
+            {
+                hitTarget = collider.gameObject;
+                hitFlag = true;
+            }
     }
 
     void OnTriggerExit(Collider collider)
     {
-        //目標が範囲内から出たとき
-        if (collider.gameObject == parent.targetObject)
-        {
-            hitTarget = null;
-            hitFlag = false;
-        }
+        if (parent != null)
+            //目標が範囲内から出たとき
+            if (collider.gameObject == parent.targetObject)
+            {
+                hitTarget = null;
+                hitFlag = false;
+            }
     }
 }

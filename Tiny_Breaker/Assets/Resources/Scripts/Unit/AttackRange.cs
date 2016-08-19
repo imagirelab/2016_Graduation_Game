@@ -1,6 +1,7 @@
 ﻿//攻撃範囲に関するクラス
 
 using UnityEngine;
+using NCMB;
 
 public class AttackRange : UnitTrigger
 {
@@ -10,7 +11,7 @@ public class AttackRange : UnitTrigger
     {
         //親にUnitClassを継承しているスクリプトを持っていたら登録する
         if (transform.parent.GetComponent<Unit>())
-            parent = transform.parent.GetComponent<Unit>();
+            parent = transform.parent.gameObject.GetComponent<Unit>();
         else
             Debug.Log("UnitTrigger: parent =" + parent);
 
@@ -40,7 +41,13 @@ public class AttackRange : UnitTrigger
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {
                             PlayerCost playerCost = parent.transform.root.gameObject.GetComponent<PlayerCost>();
-                            playerCost.AddCost(playerCost.GetSoldierCost);
+                            //playerCost.AddCost(playerCost.GetSoldierCost);
+
+                            NCMBObject spiritObj = new NCMBObject("CostData");
+
+                            spiritObj["Cost"] = playerCost.GetSoldierCost.ToString();
+
+                            spiritObj.SaveAsync();
                         }
                     }
                 }
@@ -55,7 +62,13 @@ public class AttackRange : UnitTrigger
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {
                             PlayerCost playerCost = parent.transform.root.gameObject.GetComponent<PlayerCost>();
-                            playerCost.AddCost(playerCost.GetHouseCost);
+                            //playerCost.AddCost(playerCost.GetHouseCost);
+                            
+                            NCMBObject spiritObj = new NCMBObject("CostData");
+
+                            spiritObj["Cost"] = playerCost.GetHouseCost.ToString();
+
+                            spiritObj.SaveAsync();
                         }
                     }
                 }

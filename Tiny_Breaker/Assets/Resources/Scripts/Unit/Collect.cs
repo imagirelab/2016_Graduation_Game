@@ -6,7 +6,7 @@ public class Collect : UnitTrigger
     {
         //親にUnitClassを継承しているスクリプトを持っていたら登録する
         if (transform.parent.GetComponent<Unit>())
-            parent = transform.parent.GetComponent<Unit>();
+            parent = transform.parent.gameObject.GetComponent<Unit>();
         else
             Debug.Log("UnitTrigger: parent =" + parent);
 
