@@ -7,6 +7,10 @@ public class Player : MonoBehaviour
 {
     #region フィールド
 
+    //受信が必要ないときにOFFにする
+    [SerializeField]
+    bool IsReceive = true;
+
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
     public int playerID = 1;
@@ -81,7 +85,8 @@ public class Player : MonoBehaviour
             counter = 0;
 
             //受信後の処理
-            Receive();
+            if(IsReceive)   //trueの時だけ受信する
+                Receive();
         }
 
         //リストの初めのやつから処理を行う

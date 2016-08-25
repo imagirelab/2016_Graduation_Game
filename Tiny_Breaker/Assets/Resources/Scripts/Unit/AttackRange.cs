@@ -22,6 +22,12 @@ public class AttackRange : UnitTrigger
 
     void Update ()
     {
+        //攻撃フラグの更新
+        parent.IsAttack = hitFlag;
+
+        //1フレームあたりの時間を取得
+        time += Time.deltaTime;
+
         //アタックタイムを満たしていて攻撃フラグが立っていたら攻撃
         if (time > parent.status.CurrentAtackTime && parent.IsAttack)
         {
@@ -73,9 +79,9 @@ public class AttackRange : UnitTrigger
                     }
                 }
                 //城への攻撃はこっち
-                if (parent.targetObject.GetComponent<Castle>())
+                if (parent.targetObject.GetComponent<DefenseBase>())
                 {
-                    parent.targetObject.GetComponent<Castle>().HPpro -= parent.status.CurrentATK;
+                    parent.targetObject.GetComponent<DefenseBase>().HPpro -= parent.status.CurrentATK;
                 }
             }
             else
@@ -84,11 +90,5 @@ public class AttackRange : UnitTrigger
                 hitFlag = false;
             }
         }
-
-        //攻撃フラグの更新
-        parent.IsAttack = hitFlag;
-
-        //1フレームあたりの時間を取得
-        time += Time.deltaTime;
     }
 }

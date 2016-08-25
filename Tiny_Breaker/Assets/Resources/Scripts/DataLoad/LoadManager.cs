@@ -6,6 +6,9 @@ using Loader;
 public class LoadManager : MonoBehaviour
 {
     [SerializeField]
+    bool IsLoad = true;
+
+    [SerializeField]
     GameObject prePOPO;
     [SerializeField]
     GameObject prePUPU;
@@ -20,6 +23,10 @@ public class LoadManager : MonoBehaviour
     
     void Start()
     {
+        //ロードしない設定なら飛ばす
+        if (!IsLoad)
+            return;
+
         //ゲームオブジェクトの設定しわすれがあった時、
         //メッセージを名前にして空のオブジェクトを作る
         if (prePOPO == null)

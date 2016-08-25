@@ -15,11 +15,15 @@ public class Soldier : Unit
     State state = State.Wait;
 
     Transform[] loiteringPointObj;
+    public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
 
     [SerializeField]
     float deadTime = 1.0f;
     float deadcount = 0.0f;
-    
+
+    //お城
+    GameObject defenseBase;
+
     void Start ()
     {
         // 作られたときにリストに追加する
@@ -33,15 +37,11 @@ public class Soldier : Unit
         status.MaxHP = status.CurrentHP;
         
         deadcount = 0.0f;
-        
-        //親がある場合
-        if (gameObject.transform.parent.gameObject != null)
-        {
-            GameObject parent = gameObject.transform.parent.gameObject;
-            //親がスポナークラスを持っている場合
-            if (parent.GetComponent<Spawner>() != null)
-                loiteringPointObj = parent.GetComponent<Spawner>().LoiteringPointObj;
-        }
+
+        if (gameObject.transform.parent == null)
+            loiteringPointObj = new Transform[] { transform };
+
+        defenseBase = GameObject.Find("SpawnPoint");
     }
 
     //破壊されたときにリストから外す
@@ -62,10 +62,15 @@ public class Soldier : Unit
             state = State.Dead;
         else
         {
-            if (IsFind)
-                state = State.Find;
+            if (defenseBase == null)
+                state = State.Wait;
             else
-                state = State.Search;
+            {
+                if (IsFind)
+                    state = State.Find;
+                else
+                    state = State.Search;
+            }
         }
         
         //状態ごとの処理
@@ -97,7 +102,10 @@ public class Soldier : Unit
     void Search()
     {
         //見つけたいもの
-        targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
+        if (IsDefenseBase)
+            targetObject = defenseBase;
+        else
+            targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
 
         Loitering(loiteringPointObj);
     }

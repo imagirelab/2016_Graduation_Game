@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 
-public class WireSphere : MonoBehaviour {
-    
-	void Start () {
+public class WireSphere : MonoBehaviour
+{
+
+    void Start()
+    {
     }
-	
-	void Update () {
+
+    void Update()
+    {
         GameObject parent = this.transform.parent.gameObject;
 
         Vector3 colliderCenter = parent.GetComponent<SphereCollider>().center;

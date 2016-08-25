@@ -56,6 +56,9 @@ public class Demons : Unit
 
     void Update()
     {
+        //EnemyOrder();
+        //CastleOrder();
+
         //オーダークラスがちゃんと設定されていれば処理する
         if (order != null)
             switch (order.CurrentOrder)
@@ -87,7 +90,7 @@ public class Demons : Unit
     {
         //攻撃対象の設定
         targetObject = castle;
-
+        
         //移動
         Move(targetObject);
     }

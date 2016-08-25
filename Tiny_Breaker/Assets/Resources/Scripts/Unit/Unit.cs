@@ -15,6 +15,8 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public bool IsFind;             //発見フラグ
     [HideInInspector]
+    public bool IsDefenseBase;             //発見フラグ
+    [HideInInspector]
     public GameObject targetObject;       //目標
 
     private int currentRoot = 0;
