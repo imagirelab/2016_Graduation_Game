@@ -13,10 +13,7 @@ public class Soldier : Unit
         Wait
     }
     State state = State.Wait;
-
-    Transform[] loiteringPointObj;
-    public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
-
+    
     [SerializeField]
     float deadTime = 1.0f;
     float deadcount = 0.0f;
@@ -72,7 +69,17 @@ public class Soldier : Unit
                     state = State.Search;
             }
         }
-        
+
+        //攻撃対象の設定
+        if (transform.parent.gameObject != null)
+        {
+            targetObject = transform.parent.gameObject.GetComponent<Castle>().target;
+            if(DemonDataBase.getInstance().GetNearestObject(this.transform.position) != null)
+                if (Vector3.Distance(this.transform.position, DemonDataBase.getInstance().GetNearestObject(this.transform.position).transform.position ) < 
+                        Vector3.Distance(this.transform.position, targetObject.transform.position))
+                    targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
+        }
+
         //状態ごとの処理
         switch (state)
         {
@@ -101,11 +108,11 @@ public class Soldier : Unit
     //索敵処理
     void Search()
     {
-        //見つけたいもの
-        if (IsDefenseBase)
-            targetObject = defenseBase;
-        else
-            targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
+        ////見つけたいもの
+        //if (IsDefenseBase)
+        //    targetObject = defenseBase;
+        //else
+            //targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
 
         Loitering(loiteringPointObj);
     }

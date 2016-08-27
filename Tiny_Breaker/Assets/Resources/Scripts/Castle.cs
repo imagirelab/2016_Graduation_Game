@@ -8,12 +8,15 @@ public class Castle : MonoBehaviour
     //兵士が通るルート配列
     [SerializeField]
     GameObject[] rootes;    //一つ目は出現位置。あと巡回ルート
-    //List<Transform> rootPointes;
     Dictionary<int, List<Transform>> rootPointes = new Dictionary<int, List<Transform>>();
 
     //最終目標物
     [SerializeField]
-    GameObject target;
+    public GameObject target;
+
+    //相手のタグ
+    [SerializeField]
+    string tergetTag = "";
 
     //同時生成数
     [SerializeField, Range(1, 5)]
@@ -31,8 +34,11 @@ public class Castle : MonoBehaviour
         timer = 0.0f;
 
         GameObject Ax = (GameObject)Resources.Load("Prefabs/Soldier/SoldierAx");
+        Ax.GetComponent<Unit>().status.SetStatus();
         GameObject Gun = (GameObject)Resources.Load("Prefabs/Soldier/SoldierGun");
+        Gun.GetComponent<Unit>().status.SetStatus();
         GameObject Shield = (GameObject)Resources.Load("Prefabs/Soldier/SoldierShield");
+        Shield.GetComponent<Unit>().status.SetStatus();
 
         soldiers = new GameObject[] { Ax, Gun, Shield };
 
@@ -69,7 +75,7 @@ public class Castle : MonoBehaviour
     void Spawn()
     {
         //ランダムでルートを決定
-        int rootNum = Random.Range(0, 100) % 3;
+        int rootNum = Random.Range(0, rootes.Length);
 
         //生成数までループ
         for (int i = 0; i < spawnNum; i++)
@@ -80,6 +86,8 @@ public class Castle : MonoBehaviour
             GameObject instance = (GameObject)Instantiate(soldiers[solNum],
                                 rootes[rootNum].transform.position,
                                 soldiers[solNum].transform.rotation);
+            instance.tag = transform.gameObject.tag;    //自分のタグを設定
+            instance.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
             instance.transform.parent = gameObject.transform;
             instance.GetComponent<Soldier>().LoiteringPointObj = rootPointes[rootNum].ToArray();
         }

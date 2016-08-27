@@ -6,17 +6,12 @@ using StaticClass;
 public class Demons : Unit
 {
     //成長値
-    bool changeGrowPoint = false;   //外部から変更があったかどうかのフラグ
     [SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
     private GrowPoint growPoint;
     public GrowPoint GrowPoint
     {
         get { return growPoint; }
-        set
-        {
-            growPoint = value;
-            changeGrowPoint = true;
-        }
+        set { growPoint = value; }
     }
 
     //悪魔がなる魂オブジェクト
@@ -39,10 +34,10 @@ public class Demons : Unit
         
         //お城を見つける
         castle = GameObject.Find("Castle");
-
-        //成長値の初期設定
-        if (!changeGrowPoint)
-            growPoint.SetGrowPoint();
+        
+        //巡回ルート
+        if (gameObject.transform.parent == null)
+            loiteringPointObj = new Transform[] { transform };
 
         //ステータスの決定
         SetStatus();
@@ -58,27 +53,50 @@ public class Demons : Unit
     {
         //EnemyOrder();
         //CastleOrder();
+        //OrderSpirit();
 
-        //オーダークラスがちゃんと設定されていれば処理する
-        if (order != null)
-            switch (order.CurrentOrder)
-            {
-                case DemonsOrder.Order.Castle:
-                    CastleOrder();
-                    break;
-                case DemonsOrder.Order.Enemy:
-                    EnemyOrder();
-                    break;
-                case DemonsOrder.Order.Building:
-                    BuildingOrder();
-                    break;
-                case DemonsOrder.Order.Spirit:
-                    OrderSpirit();
-                    break;
-                default:    //待機
-                    OrderWait();
-                    break;
-            }
+        //終わり
+        if (transform.parent.gameObject.GetComponent<Player>().target == null)
+        {
+            OrderWait();
+            return;
+        }
+
+        //攻撃対象の設定
+        if (transform.parent.gameObject != null)
+        {
+            targetObject = transform.parent.gameObject.GetComponent<Player>().target;
+            if (SolgierDataBase.getInstance().GetNearestObject(this.transform.position) != null)
+                if (Vector3.Distance(this.transform.position, SolgierDataBase.getInstance().GetNearestObject(this.transform.position).transform.position) <
+                        Vector3.Distance(this.transform.position, targetObject.transform.position))
+                    targetObject = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+        }
+
+        if (!IsFind)
+            Loitering(loiteringPointObj);
+        else
+            Move(targetObject);
+
+        ////オーダークラスがちゃんと設定されていれば処理する
+        //if (order != null)
+        //    switch (order.CurrentOrder)
+        //    {
+        //        case DemonsOrder.Order.Castle:
+        //            CastleOrder();
+        //            break;
+        //        case DemonsOrder.Order.Enemy:
+        //            EnemyOrder();
+        //            break;
+        //        case DemonsOrder.Order.Building:
+        //            BuildingOrder();
+        //            break;
+        //        case DemonsOrder.Order.Spirit:
+        //            OrderSpirit();
+        //            break;
+        //        default:    //待機
+        //            OrderWait();
+        //            break;
+        //    }
 
         //死亡処理
         if (status.CurrentHP <= 0)
@@ -142,9 +160,14 @@ public class Demons : Unit
     {
         IsDead = true;
 
-        //スピリットの生成
-        GameObject instacespirit = (GameObject)Instantiate(spirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
-        instacespirit.GetComponent<Spirits>().GrowPoint = growPoint;
+        //死んだ直後に魂を回収してみる
+        if(transform.parent.gameObject != null)
+            transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
+
+        ////スピリットの生成
+        //GameObject instacespirit = (GameObject)Instantiate(spirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
+        //instacespirit.GetComponent<Spirits>().GrowPoint = growPoint;
+
         Destroy(gameObject);
     }
 
@@ -166,5 +189,7 @@ public class Demons : Unit
             status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
 
         status.MaxHP = status.CurrentHP;
+
+        loiteringSPEED = status.CurrentSPEED;
     }
 }

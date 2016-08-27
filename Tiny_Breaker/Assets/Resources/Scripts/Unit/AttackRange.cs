@@ -1,7 +1,6 @@
 ﻿//攻撃範囲に関するクラス
 
 using UnityEngine;
-using NCMB;
 
 public class AttackRange : UnitTrigger
 {
@@ -13,7 +12,10 @@ public class AttackRange : UnitTrigger
         if (transform.parent.GetComponent<Unit>())
             parent = transform.parent.gameObject.GetComponent<Unit>();
         else
+        {
+            parent = new Unit();
             Debug.Log("UnitTrigger: parent =" + parent);
+        }
 
         parent.IsAttack = false;
         
@@ -24,6 +26,12 @@ public class AttackRange : UnitTrigger
     {
         //攻撃フラグの更新
         parent.IsAttack = hitFlag;
+        
+        if (parent.targetObject == null)
+        {
+            parent.IsAttack = false;
+            hitFlag = false;
+        }
 
         //1フレームあたりの時間を取得
         time += Time.deltaTime;
@@ -37,44 +45,37 @@ public class AttackRange : UnitTrigger
             if (hitTarget != null && parent.targetObject != null)
             {
                 //悪魔と兵士について
-                if (hitTarget.GetComponent<Unit>())
+                if (parent.targetObject.GetComponent<Unit>())
                 {
-                    hitTarget.GetComponent<Unit>().status.CurrentHP -= parent.status.CurrentATK;
+                    parent.targetObject.GetComponent<Unit>().status.CurrentHP -= parent.status.CurrentATK;
 
                     //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (hitTarget.GetComponent<Unit>().status.CurrentHP <= 0)
+                    if (parent.targetObject.GetComponent<Unit>().status.CurrentHP <= 0)
                     {
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {
                             PlayerCost playerCost = parent.transform.root.gameObject.GetComponent<PlayerCost>();
-                            //playerCost.AddCost(playerCost.GetSoldierCost);
+                            Player player = parent.transform.root.gameObject.GetComponent<Player>();
 
-                            NCMBObject spiritObj = new NCMBObject("CostData");
-
-                            spiritObj["Cost"] = playerCost.GetSoldierCost.ToString();
-
-                            spiritObj.SaveAsync();
+                            //parent.transform.root は　悪魔のRootつまりプレイヤー
+                            player.AddCostList(playerCost.GetSoldierCost);
                         }
                     }
                 }
                 //建物への攻撃はこっち
-                if (hitTarget.GetComponent<House>())
+                if (parent.targetObject.GetComponent<House>())
                 {
-                    hitTarget.GetComponent<House>().HPpro -= parent.status.CurrentATK;
+                    parent.targetObject.GetComponent<House>().HPpro -= parent.status.CurrentATK;
 
                     //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (hitTarget.GetComponent<House>().HPpro <= 0)
+                    if (parent.targetObject.GetComponent<House>().HPpro <= 0)
                     {
                         if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
                         {
                             PlayerCost playerCost = parent.transform.root.gameObject.GetComponent<PlayerCost>();
-                            //playerCost.AddCost(playerCost.GetHouseCost);
-                            
-                            NCMBObject spiritObj = new NCMBObject("CostData");
+                            Player player = parent.transform.root.gameObject.GetComponent<Player>();
 
-                            spiritObj["Cost"] = playerCost.GetHouseCost.ToString();
-
-                            spiritObj.SaveAsync();
+                            player.AddCostList(playerCost.GetSoldierCost);
                         }
                     }
                 }

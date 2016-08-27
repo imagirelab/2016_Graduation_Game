@@ -3,7 +3,8 @@
 
 using UnityEngine;
 
-public class UnitTrigger : MonoBehaviour {
+public class UnitTrigger : MonoBehaviour
+{
 
     //Unitクラスの親
     protected Unit parent;
@@ -13,34 +14,36 @@ public class UnitTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        if (parent != null)
-            //目標が範囲内に入ってきたとき
-            if (collider.gameObject == parent.targetObject)
-            {
-                hitTarget = collider.gameObject;
-                hitFlag = true;
-            }
+        //目標が範囲内に入ってきたとき
+        if (collider.gameObject == parent.targetObject)
+        {
+            hitTarget = collider.gameObject;
+            //if (parent.targetObject == null)
+            //    parent.targetObject = collider.gameObject;
+            hitFlag = true;
+        }
     }
 
     void OnTriggerStay(Collider collider)
     {
-        if(parent != null)
-            //目標が範囲内に入っているとき
-            if (collider.gameObject == parent.targetObject)
-            {
-                hitTarget = collider.gameObject;
-                hitFlag = true;
-            }
+        //目標が範囲内に入っているとき
+        if (collider.gameObject == parent.targetObject)
+        {
+            hitTarget = collider.gameObject;
+            //if (parent.targetObject == null)
+            //    parent.targetObject = collider.gameObject;
+            hitFlag = true;
+        }
     }
 
     void OnTriggerExit(Collider collider)
     {
-        if (parent != null)
-            //目標が範囲内から出たとき
-            if (collider.gameObject == parent.targetObject)
-            {
-                hitTarget = null;
-                hitFlag = false;
-            }
+        //目標が範囲内から出たとき
+        if (collider.gameObject == parent.targetObject)
+        {
+            hitTarget = null;
+            //parent.targetObject = null;
+            hitFlag = false;
+        }
     }
 }

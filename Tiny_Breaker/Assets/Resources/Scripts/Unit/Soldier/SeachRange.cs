@@ -12,7 +12,10 @@ public class SeachRange : UnitTrigger
         if (transform.parent.GetComponent<Unit>())
             parent = transform.parent.GetComponent<Unit>();
         else
+        {
+            parent = new Unit();
             Debug.Log("UnitTrigger: parent =" + parent);
+        }
 
         parent.IsFind = false;
         loseCounter = 0.0f;
@@ -20,11 +23,11 @@ public class SeachRange : UnitTrigger
 
     void Update()
     {
-        if (!(hitTarget != null && parent.targetObject != null))
-        {
-            hitTarget = null;
-            hitFlag = false;
-        }
+        //if (!(/*hitTarget != null && */parent.targetObject != null))
+        //{
+        //    //hitTarget = null;
+        //    hitFlag = false;
+        //}
         
         //見失う時間の扱い
         if (hitFlag)
@@ -34,9 +37,9 @@ public class SeachRange : UnitTrigger
         }
         else
             loseCounter += Time.deltaTime;
-
+        
         //発見フラグが戻る条件
-        if (loseCounter > loseTime)
+        if (loseCounter > loseTime || hitTarget == null)
             parent.IsFind = false;
     }
 }

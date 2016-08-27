@@ -67,6 +67,16 @@ public class DebugUnit : MonoBehaviour
                                          "ATK:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentATK + "\n" +
                                          "SPD:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentSPEED.ToString("f2") + "\n" +
                                          "ATKTime:" + soldiers[soldiersPage].GetComponent<Unit>().status.CurrentAtackTime.ToString("f2");
+
+        //ページ送り
+        if (Input.GetKeyDown(KeyCode.Keypad9))
+            AddDemonsPage(1);
+        if (Input.GetKeyDown(KeyCode.Keypad7))
+            AddDemonsPage(-1);
+        if (Input.GetKeyDown(KeyCode.Keypad6))
+            AddSoldiersPage(1);
+        if (Input.GetKeyDown(KeyCode.Keypad4))
+            AddSoldiersPage(-1);
     }
 
     //進めたいページ数 戻したいときはマイナスを入れる

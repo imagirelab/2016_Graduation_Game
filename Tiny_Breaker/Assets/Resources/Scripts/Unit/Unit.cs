@@ -6,6 +6,9 @@ public class Unit : MonoBehaviour
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
 
+    [SerializeField]
+    public float loiteringSPEED = 1.0f;
+
     [HideInInspector]
     public bool IsDead;
     
@@ -14,12 +17,19 @@ public class Unit : MonoBehaviour
     public bool IsAttack;           //攻撃中フラグ
     [HideInInspector]
     public bool IsFind;             //発見フラグ
-    [HideInInspector]
-    public bool IsDefenseBase;             //発見フラグ
+    //[HideInInspector]
+    //public bool IsDefenseBase;
     [HideInInspector]
     public GameObject targetObject;       //目標
+    
+    [HideInInspector]
+    public string targetTag;       //相手のタグ
 
-    private int currentRoot = 0;
+    //巡回地点
+    protected Transform[] loiteringPointObj;
+    public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
+
+    int currentRoot = 0;
     
     protected void Move(GameObject target)
     {
@@ -36,7 +46,6 @@ public class Unit : MonoBehaviour
             }
 
             IsFind = false;
-
             return;
         }
 
@@ -80,14 +89,17 @@ public class Unit : MonoBehaviour
             if (GetComponent<NavMeshAgent>())
             {
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.speed = 1.8f;
+                agent.speed = loiteringSPEED;
                 agent.destination = targetPosition;
             }
         }
 
-        if(Vector3.Distance(transform.position, targetPosition) < 3.0f)
+        if(Vector3.Distance(transform.position, targetPosition) < 5.0f)
         {
-            currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
+            //巡回しない方
+            if(currentRoot < LoiteringPos.Length - 1)
+                currentRoot++;
+            //currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
         }
     }
 }

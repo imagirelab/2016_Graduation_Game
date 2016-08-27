@@ -56,6 +56,11 @@ public class GrowPoint
         set { currentAtackTime_GrowPoint = value; }
     }
 
+    GrowPoint()
+    {
+        SetGrowPoint();
+    }
+
     //現在の成長値に代入する
     public void SetGrowPoint()
     {

@@ -15,20 +15,20 @@ public class FindObjectRenge : MonoBehaviour
             Debug.Log("UnitTrigger: parent =" + parent);
     }
 
-    void OnTriggerEnter(Collider collider)
-    {
-        if (collider.gameObject.GetComponent<DefenseBase>() != null)
-            parent.IsDefenseBase = true;
-    }
+    //void OnTriggerEnter(Collider collider)
+    //{
+    //    if (collider.gameObject.GetComponent<DefenseBase>() != null)
+    //        parent.IsDefenseBase = true;
+    //}
 
-    void OnTriggerStay(Collider collider)
-    {
-        if (collider.gameObject.GetComponent<DefenseBase>() != null)
-            parent.IsDefenseBase = true;
-    }
+    //void OnTriggerStay(Collider collider)
+    //{
+    //    if (collider.gameObject.GetComponent<DefenseBase>() != null)
+    //        parent.IsDefenseBase = true;
+    //}
 
-    void OnTriggerExit(Collider collider)
-    {
-        parent.IsDefenseBase = false;
-    }
+    //void OnTriggerExit(Collider collider)
+    //{
+    //    parent.IsDefenseBase = false;
+    //}
 }
