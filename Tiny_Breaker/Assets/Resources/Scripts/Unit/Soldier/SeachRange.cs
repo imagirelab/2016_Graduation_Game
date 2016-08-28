@@ -23,12 +23,6 @@ public class SeachRange : UnitTrigger
 
     void Update()
     {
-        //if (!(/*hitTarget != null && */parent.targetObject != null))
-        //{
-        //    //hitTarget = null;
-        //    hitFlag = false;
-        //}
-        
         //見失う時間の扱い
         if (hitFlag)
         {
@@ -37,9 +31,13 @@ public class SeachRange : UnitTrigger
         }
         else
             loseCounter += Time.deltaTime;
-        
+
         //発見フラグが戻る条件
-        if (loseCounter > loseTime || hitTarget == null)
+        if (loseCounter > loseTime && hitTarget == null)
+        {
+            loseCounter = 0.0f;
             parent.IsFind = false;
+        }
+
     }
 }

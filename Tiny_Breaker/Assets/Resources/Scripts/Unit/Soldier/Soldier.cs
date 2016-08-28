@@ -18,6 +18,8 @@ public class Soldier : Unit
     float deadTime = 1.0f;
     float deadcount = 0.0f;
 
+    public int powerUPCount = 0;
+
     //お城
     GameObject defenseBase;
 
@@ -30,8 +32,10 @@ public class Soldier : Unit
         state = State.Wait;
 
         //ステータスの設定
-        status.SetStatus();
-        status.MaxHP = status.CurrentHP;
+        SetStatus();
+    
+        //status.SetStatus();
+        //status.MaxHP = status.CurrentHP;
         
         deadcount = 0.0f;
 
@@ -182,5 +186,24 @@ public class Soldier : Unit
                 if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())
                     Destroy(comp);
         }
+    }
+    
+    //ステータスの設定
+    void SetStatus()
+    {
+        //基礎ステータスの代入
+        status.SetStatus();
+
+        //今のステータスを算出する
+        for (int i = 0; i < powerUPCount; i++)
+            status.CurrentHP += (int)(status.GetHP * 0.5f);
+        for (int i = 0; i < powerUPCount; i++)
+            status.CurrentATK += (int)(status.GetATK * 0.5f);
+        for (int i = 0; i < powerUPCount; i++)
+            status.CurrentSPEED += status.GetSPEED * 0.15f;
+        for (int i = 0; i < powerUPCount; i++)
+            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+        
+        status.MaxHP = status.CurrentHP;
     }
 }

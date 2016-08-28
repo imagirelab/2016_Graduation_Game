@@ -71,7 +71,7 @@ public class Demons : Unit
                         Vector3.Distance(this.transform.position, targetObject.transform.position))
                     targetObject = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
         }
-
+        
         if (!IsFind)
             Loitering(loiteringPointObj);
         else
@@ -183,10 +183,19 @@ public class Demons : Unit
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
             status.CurrentATK += (int)(status.GetATK * 0.5f);
         for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
-            status.CurrentSPEED += status.GetSPEED * 2.0f/*0.15f*/;
-
-        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.CurrentAtackTime_GrowPoint; i++)
+            status.CurrentSPEED += status.GetSPEED * 0.15f;
+        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
             status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+
+        //カンスト
+        if (status.CurrentHP >= 9999)
+            status.CurrentHP = 9999;
+        if (status.CurrentATK >= 2000)
+            status.CurrentATK = 2000;
+        if (status.CurrentSPEED >= 10)
+            status.CurrentSPEED = 10;
+        if (status.CurrentAtackTime <= 0.5f)    //１フレーム以下にならない方がいいかも
+            status.CurrentAtackTime = 0.5f;
 
         status.MaxHP = status.CurrentHP;
 

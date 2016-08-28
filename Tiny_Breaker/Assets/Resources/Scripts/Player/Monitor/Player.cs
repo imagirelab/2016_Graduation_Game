@@ -400,8 +400,16 @@ public class Player : MonoBehaviour
         //強さに応じてスケールを変える処理
         float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
         //制限
-        if (growScale >= 2.0f)
-            growScale = 2.0f;
+        if (growScale >= 4.0f)
+            growScale = 4.0f;
         instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
+    }
+
+    public GrowPoint GetFirstSpirit()
+    {
+        if (spiritsDataCopy.Count == 0)
+            return null;
+        else
+            return spiritsDataCopy[0];
     }
 }

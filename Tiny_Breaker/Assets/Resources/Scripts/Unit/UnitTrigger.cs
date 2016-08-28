@@ -18,8 +18,6 @@ public class UnitTrigger : MonoBehaviour
         if (collider.gameObject == parent.targetObject)
         {
             hitTarget = collider.gameObject;
-            //if (parent.targetObject == null)
-            //    parent.targetObject = collider.gameObject;
             hitFlag = true;
         }
     }
@@ -30,8 +28,6 @@ public class UnitTrigger : MonoBehaviour
         if (collider.gameObject == parent.targetObject)
         {
             hitTarget = collider.gameObject;
-            //if (parent.targetObject == null)
-            //    parent.targetObject = collider.gameObject;
             hitFlag = true;
         }
     }
@@ -39,10 +35,9 @@ public class UnitTrigger : MonoBehaviour
     void OnTriggerExit(Collider collider)
     {
         //目標が範囲内から出たとき
-        if (collider.gameObject == parent.targetObject)
+        if (collider.gameObject == hitTarget)
         {
             hitTarget = null;
-            //parent.targetObject = null;
             hitFlag = false;
         }
     }

@@ -13,9 +13,9 @@ public class Unit : MonoBehaviour
     public bool IsDead;
     
     //攻撃関連
-    [HideInInspector]
+    //[HideInInspector]
     public bool IsAttack;           //攻撃中フラグ
-    [HideInInspector]
+    //[HideInInspector]
     public bool IsFind;             //発見フラグ
     //[HideInInspector]
     //public bool IsDefenseBase;
@@ -34,18 +34,24 @@ public class Unit : MonoBehaviour
     protected void Move(GameObject target)
     {
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //NavMeshAgentを止める
+        if (GetComponent<NavMeshAgent>())
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.Stop();
+        }
 
         //ターゲットがいない場合
         if (target == null)
         {
-            //NavMeshAgentを止める
-            if (GetComponent<NavMeshAgent>())
-            {
-                NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.destination = this.transform.position;
-            }
+            ////NavMeshAgentを止める
+            //if (GetComponent<NavMeshAgent>())
+            //{
+            //    NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            //    agent.Stop();
+            //}
 
-            IsFind = false;
+            //IsFind = false;
             return;
         }
 
@@ -61,6 +67,7 @@ public class Unit : MonoBehaviour
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
                 agent.speed = status.CurrentSPEED;
                 agent.destination = targetPosition;
+                agent.Resume();
             }
         }
         else
@@ -69,7 +76,7 @@ public class Unit : MonoBehaviour
             if (GetComponent<NavMeshAgent>())
             {
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.destination = transform.position;
+                agent.Stop();
             }
         }
     }
@@ -78,6 +85,12 @@ public class Unit : MonoBehaviour
     protected void Loitering(Transform[] LoiteringPos)
     {
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //NavMeshAgentを止める
+        if (GetComponent<NavMeshAgent>())
+        {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.Stop();
+        }
 
         Vector3 targetPosition = LoiteringPos[currentRoot].transform.position;
         //目的地への方向を見る
@@ -91,13 +104,19 @@ public class Unit : MonoBehaviour
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
                 agent.speed = loiteringSPEED;
                 agent.destination = targetPosition;
+                agent.Resume();
             }
         }
 
         if(Vector3.Distance(transform.position, targetPosition) < 5.0f)
         {
             //巡回しない方
-            if(currentRoot < LoiteringPos.Length - 1)
+            if (GetComponent<NavMeshAgent>())
+            {
+                NavMeshAgent agent = GetComponent<NavMeshAgent>();
+                agent.destination = transform.position;
+            }
+            if (currentRoot < LoiteringPos.Length - 1)
                 currentRoot++;
             //currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
         }

@@ -23,7 +23,7 @@ public class Castle : MonoBehaviour
     int spawnNum = 1;
     //生成間隔
     [SerializeField]
-    float spawnCount = 3.0f;
+    float spawnCountRange = 3.0f;
     float timer = 0.0f;
 
     //兵士たち
@@ -64,6 +64,9 @@ public class Castle : MonoBehaviour
         
         if (timer < 0.0f)
         {
+            //生成にムラを出す
+            float spawnCount = Random.Range(1.0f, spawnCountRange);
+
             //時間をリセット
             timer = spawnCount;
 
@@ -90,6 +93,14 @@ public class Castle : MonoBehaviour
             instance.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
             instance.transform.parent = gameObject.transform;
             instance.GetComponent<Soldier>().LoiteringPointObj = rootPointes[rootNum].ToArray();
+
+            //適当に何体かに１体強化個体を作る
+            int powerUPRand = Random.Range(0, 10);
+            if (powerUPRand == 0)
+            {
+                instance.GetComponent<Soldier>().powerUPCount = 8;
+                instance.transform.localScale *= 2.0f;
+            }
         }
     }
 }
