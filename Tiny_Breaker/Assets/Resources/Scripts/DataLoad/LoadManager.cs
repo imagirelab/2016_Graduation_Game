@@ -94,15 +94,15 @@ public class LoadManager : MonoBehaviour
             {
                 case "popo":
                     if (prePOPO != null)
-                        SetGrow(grow, prePOPO);
+                        SetGrow(grow, prePOPO, GrowPoint.Type.POPO);
                     break;
                 case "pupu":
                     if (prePUPU != null)
-                        SetGrow(grow, prePUPU);
+                        SetGrow(grow, prePUPU, GrowPoint.Type.PUPU);
                     break;
                 case "pipi":
                     if (prePIPI != null)
-                        SetGrow(grow, prePIPI);
+                        SetGrow(grow, prePIPI, GrowPoint.Type.PIPI);
                     break;
                 default:
                     break;
@@ -135,10 +135,10 @@ public class LoadManager : MonoBehaviour
             unit.transform.FindChild("AttackRange").gameObject.GetComponent<CapsuleCollider>().radius = param.ATKRENGE;
     }
 
-    void SetGrow(GrowMaster grow, GameObject unit)
+    void SetGrow(GrowMaster grow, GameObject unit, GrowPoint.Type type)
     {
         if (unit.GetComponent<Demons>())
-            unit.GetComponent<Demons>().GrowPoint.SetDefault(grow.GHP, grow.GATK, grow.GSPEED, grow.GATKSPEED);
+            unit.GetComponent<Demons>().GrowPoint.SetDefault(type, grow.GHP, grow.GATK, grow.GSPEED, grow.GATKSPEED);
     }
 
     void SetCost(CostData CostTable)

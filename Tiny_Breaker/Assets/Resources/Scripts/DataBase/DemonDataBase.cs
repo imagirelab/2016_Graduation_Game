@@ -13,33 +13,48 @@ namespace StaticClass
         {
             return dataBase;
         }
-
-        List<GameObject> list = new List<GameObject>();
+        
+        Dictionary<GameObject, string> dictionary = new Dictionary<GameObject, string>();
 
         public void ClearList()
         {
-            list.Clear();
+            dictionary.Clear();
         }
 
-        public void AddList(GameObject item)
+        public void AddList(GameObject key, string value)
         {
-            list.Add(item);
+            dictionary.Add(key, value);
         }
 
-        public void RemoveList(GameObject item)
+        public void RemoveList(GameObject key)
         {
-            list.Remove(item);
+            dictionary.Remove(key);
         }
 
-        //リストにある数の取得
-        public int GetListCount()
+        //辞書にある数の取得
+        public int GetCount()
         {
-            return list.Count;
+            return dictionary.Count;
+        }
+
+        //指定したvalueの要素だけを取得
+        public List<GameObject> GetListToTag(string tag)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            foreach(GameObject e in dictionary.Keys)
+                if(dictionary[e] == tag)
+                    list.Add(e);
+
+            return list;
         }
 
         //一番近い悪魔を返す
-        public GameObject GetNearestObject(Vector3 center)
+        public GameObject GetNearestObject(string tag, Vector3 center)
         {
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
+
             if (list.Count == 0)
                 return null;
 
@@ -55,21 +70,27 @@ namespace StaticClass
         }
 
         //出ている悪魔達の中心点を返す
-        public Vector3 GetCenterPosition()
+        public Vector3 GetCenterPosition(string tag)
         {
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
+
             if (list.Count == 0)
                 return Vector3.zero;
 
             Vector3 center = Vector3.zero;
 
-            center = (GetMaxPosition() + GetMinPosition()) * 0.5f;
+            center = (GetMaxPosition(tag) + GetMinPosition(tag)) * 0.5f;
 
             return center;
         }
 
         //出ている悪魔達の最大座標を返す
-        public Vector3 GetMaxPosition()
+        public Vector3 GetMaxPosition(string tag)
         {
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
+
             if (list.Count == 0)
                 return Vector3.zero;
 
@@ -89,8 +110,11 @@ namespace StaticClass
         }
 
         //出ている悪魔達の最小座標を返す
-        public Vector3 GetMinPosition()
+        public Vector3 GetMinPosition(string tag)
         {
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
+
             if (list.Count == 0)
                 return Vector3.zero;
 

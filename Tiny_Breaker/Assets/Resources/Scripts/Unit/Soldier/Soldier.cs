@@ -20,9 +20,6 @@ public class Soldier : Unit
 
     public int powerUPCount = 0;
 
-    //お城
-    GameObject defenseBase;
-
     void Start ()
     {
         // 作られたときにリストに追加する
@@ -33,16 +30,11 @@ public class Soldier : Unit
 
         //ステータスの設定
         SetStatus();
-    
-        //status.SetStatus();
-        //status.MaxHP = status.CurrentHP;
-        
+
         deadcount = 0.0f;
 
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { transform };
-
-        defenseBase = GameObject.Find("SpawnPoint");
     }
 
     //破壊されたときにリストから外す
@@ -63,7 +55,7 @@ public class Soldier : Unit
             state = State.Dead;
         else
         {
-            if (defenseBase == null)
+            if (goalObject == null)
                 state = State.Wait;
             else
             {
@@ -73,15 +65,35 @@ public class Soldier : Unit
                     state = State.Search;
             }
         }
-
+        
         //攻撃対象の設定
         if (transform.parent.gameObject != null)
         {
-            targetObject = transform.parent.gameObject.GetComponent<Castle>().target;
-            if(DemonDataBase.getInstance().GetNearestObject(this.transform.position) != null)
-                if (Vector3.Distance(this.transform.position, DemonDataBase.getInstance().GetNearestObject(this.transform.position).transform.position ) < 
+            //プレイヤーのTarget
+            targetObject = goalObject;
+
+            //悪魔
+            GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+            if (nearestObject != null)
+                if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
                         Vector3.Distance(this.transform.position, targetObject.transform.position))
-                    targetObject = DemonDataBase.getInstance().GetNearestObject(this.transform.position);
+                    targetObject = nearestObject;
+
+            //兵士
+            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+            if (nearSol != null)
+                if (nearSol.tag != transform.gameObject.tag)
+                    if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
+                            Vector3.Distance(this.transform.position, targetObject.transform.position))
+                        targetObject = nearSol;
+
+            //建物
+            GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
+            if (nearBuild != null)
+                if (nearBuild.tag != transform.gameObject.tag)
+                    if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
+                            Vector3.Distance(this.transform.position, targetObject.transform.position))
+                        targetObject = nearBuild;
         }
 
         //状態ごとの処理

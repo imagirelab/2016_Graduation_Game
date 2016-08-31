@@ -45,11 +45,19 @@ public class Player : MonoBehaviour
     //スマホ側から受け取る情報を抑制するためのカウンター
     int counter = 0;
 
+
     //各種悪魔のプレファブ
     Dictionary<Demon_TYPE, GameObject> demons = new Dictionary<Demon_TYPE, GameObject>(){
         {Demon_TYPE.POPO, null},
         {Demon_TYPE.PUPU, null},
         {Demon_TYPE.PIPI, null}
+    };
+
+    //各種悪魔のプレファブ
+    Dictionary<GrowPoint.Type, GrowPoint> growPoints = new Dictionary<GrowPoint.Type, GrowPoint>(){
+        {GrowPoint.Type.POPO, null},
+        {GrowPoint.Type.PUPU, null},
+        {GrowPoint.Type.PIPI, null}
     };
 
     //悪魔別指示クラス
@@ -61,6 +69,7 @@ public class Player : MonoBehaviour
 
     [SerializeField, TooltipAttribute("出撃位置")]
     Transform spawnPoint;
+    public Transform SpawnPoint { get { return spawnPoint; } }
 
     [SerializeField, Range(0.0f, 1.0f), TooltipAttribute("強化時のスケール倍率")]
     float powerUpScale = 0.1f;
@@ -76,7 +85,8 @@ public class Player : MonoBehaviour
     //相手のタグ
     [SerializeField]
     string tergetTag = "";
-    
+    public string TergetTag { get { return tergetTag; } }
+
     //召喚する道番号
     int rootNum = 0;
 
@@ -103,6 +113,41 @@ public class Player : MonoBehaviour
             demons[Demon_TYPE.PIPI] = (GameObject)Resources.Load("Prefabs/Unit/PIPI");
             demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.SetGrowPoint();
             demons[Demon_TYPE.PIPI].GetComponent<Demons>().status.SetStatus();
+        }
+
+        //成長値の初期化
+        if (growPoints[GrowPoint.Type.POPO] == null)
+        {
+            growPoints[GrowPoint.Type.POPO] = new GrowPoint();
+            growPoints[GrowPoint.Type.POPO].SetDefault(
+                GrowPoint.Type.POPO,
+                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
+                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
+                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
+                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
+            growPoints[GrowPoint.Type.POPO].SetGrowPoint();
+        }
+        if (growPoints[GrowPoint.Type.PUPU] == null)
+        {
+            growPoints[GrowPoint.Type.PUPU] = new GrowPoint();
+            growPoints[GrowPoint.Type.PUPU].SetDefault(
+                GrowPoint.Type.PUPU,
+                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
+                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
+                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
+                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
+            growPoints[GrowPoint.Type.PUPU].SetGrowPoint();
+        }
+        if (growPoints[GrowPoint.Type.PIPI] == null)
+        {
+            growPoints[GrowPoint.Type.PIPI] = new GrowPoint();
+            growPoints[GrowPoint.Type.PIPI].SetDefault(
+                GrowPoint.Type.PIPI,
+                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
+                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
+                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
+                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
+            growPoints[GrowPoint.Type.PIPI].SetGrowPoint();
         }
 
         //設定し忘れたときは今いる場所を設定
@@ -331,14 +376,14 @@ public class Player : MonoBehaviour
         growPoint.CurrentAtackTime_GrowPoint = smaphoMsgList[0].G_ATKTime;
 
         //ステータスの代入
-        demon.GetComponent<Demons>().SetStatus();
+        //demon.GetComponent<Demons>().SetStatus();
 
         //悪魔を出す
         GameObject instaceObject = (GameObject)Instantiate(demon,
                                                         spawnPosition + randVac,           //プレイヤーごとの出撃位置
                                                         Quaternion.identity);
         instaceObject.transform.SetParent(this.transform, false);
-        instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
+        //instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
 
         //強さに応じてスケールを変える処理
@@ -354,7 +399,8 @@ public class Player : MonoBehaviour
         if (spiritsDataCopy.Count == 0)
             return;
 
-        GrowPoint demonPoint = demon.GetComponent<Demons>().GrowPoint;
+        //GrowPoint demonPoint = demon.GetComponent<Demons>().GrowPoint;
+        GrowPoint demonPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
         GrowPoint spiritPoint = spiritsDataCopy[0];
 
         //成長値の足し方
@@ -363,10 +409,10 @@ public class Player : MonoBehaviour
         demonPoint.CurrentSPEED_GrowPoint += demonPoint.GetSPEED_GrowPoint + spiritPoint.GetSPEED_GrowPoint;
         demonPoint.CurrentAtackTime_GrowPoint += demonPoint.GetAtackTime_GrowPoint + spiritPoint.GetAtackTime_GrowPoint;
 
-        demon.GetComponent<Demons>().GrowPoint = demonPoint;
+        //demon.GetComponent<Demons>().GrowPoint = demonPoint;
 
         //ステータスの代入  あってもなくてもいい　デバック用の表示更新用
-        demon.GetComponent<Demons>().SetStatus();
+        //demon.GetComponent<Demons>().SetStatus();
 
         spiritsDataCopy.Remove(spiritsDataCopy[0]);
     }
@@ -384,8 +430,9 @@ public class Player : MonoBehaviour
         //プレファブの悪魔のデータの設定
         //悪魔が作られてからやるSetStatusは個別のステータス
         //おそらくアドレス渡しになるため同じプレファブから作られたすべてのオブジェクトが共通の値を持つこととなる
-        GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
-        
+        //GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
+        GrowPoint growPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
+
         //悪魔を出す
         GameObject instaceObject = (GameObject)Instantiate(demon,
                                                         rootes[rootNum].transform.position + randVac,
@@ -393,6 +440,7 @@ public class Player : MonoBehaviour
         instaceObject.transform.SetParent(this.transform, false);
         instaceObject.tag = transform.gameObject.tag;    //自分のタグを設定
         instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
+        instaceObject.GetComponent<Unit>().goalObject = target; //最終目標
         //instaceObject.GetComponent<Demons>().Order = orders[Demon_TYPE.PUPU];
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
         instaceObject.GetComponent<Demons>().LoiteringPointObj = rootPointes[rootNum].ToArray();

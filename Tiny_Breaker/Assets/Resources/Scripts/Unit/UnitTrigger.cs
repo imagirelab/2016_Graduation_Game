@@ -15,10 +15,27 @@ public class UnitTrigger : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         //目標が範囲内に入ってきたとき
-        if (collider.gameObject == parent.targetObject)
+        if (collider.gameObject == parent.targetObject && collider.gameObject.tag != transform.gameObject.tag)
         {
-            hitTarget = collider.gameObject;
-            hitFlag = true;
+            //レイが通ったら当たる
+            Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
+            Ray ray = new Ray(transform.position, subTargetPosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
+            {
+                hitTarget = collider.gameObject;
+                hitFlag = true;
+            }
+        }
+
+        //何かしら入ってはいたけど目的ではなくなっていたら
+        if (hitTarget != null && parent.targetObject != null)
+        {
+            if (hitTarget.tag != parent.targetObject.tag)
+            {
+                hitTarget = null;
+                hitFlag = false;
+            }
         }
     }
 
@@ -27,8 +44,25 @@ public class UnitTrigger : MonoBehaviour
         //目標が範囲内に入っているとき
         if (collider.gameObject == parent.targetObject)
         {
-            hitTarget = collider.gameObject;
-            hitFlag = true;
+            //レイが通ったら当たる
+            Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
+            Ray ray = new Ray(transform.position, subTargetPosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
+            {
+                hitTarget = collider.gameObject;
+                hitFlag = true;
+            }
+        }
+
+        //何かしら入ってはいたけど目的ではなくなっていたら
+        if (hitTarget != null && parent.targetObject != null)
+        {
+            if (hitTarget.tag != parent.targetObject.tag)
+            {
+                hitTarget = null;
+                hitFlag = false;
+            }
         }
     }
 

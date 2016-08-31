@@ -38,6 +38,5 @@ public class SeachRange : UnitTrigger
             loseCounter = 0.0f;
             parent.IsFind = false;
         }
-
     }
 }

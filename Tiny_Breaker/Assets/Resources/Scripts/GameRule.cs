@@ -6,6 +6,7 @@ namespace StaticClass
     public class GameRule
     {
         public bool debugFlag;
+        public int playerNum = 2;
 
         static GameRule gameRule = new GameRule();
 

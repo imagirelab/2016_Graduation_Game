@@ -14,26 +14,21 @@ public class Demons : Unit
         set { growPoint = value; }
     }
 
-    //悪魔がなる魂オブジェクト
-    public GameObject spirit;
+    ////悪魔がなる魂オブジェクト
+    //[SerializeField]
+    //GameObject spirit;
 
-    //悪魔に渡される指示を出すクラス
-    private DemonsOrder order;
-    public DemonsOrder Order { set { order = value; } }
-    
-    //お城
-    GameObject castle;
+    ////悪魔に渡される指示を出すクラス
+    //private DemonsOrder order;
+    //public DemonsOrder Order { set { order = value; } }
     
     void Start()
     {
         // 作られたときにリストに追加する
-        DemonDataBase.getInstance().AddList(this.gameObject);
+        DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
 
         //死亡フラグ
         IsDead = false;
-        
-        //お城を見つける
-        castle = GameObject.Find("Castle");
         
         //巡回ルート
         if (gameObject.transform.parent == null)
@@ -51,10 +46,6 @@ public class Demons : Unit
 
     void Update()
     {
-        //EnemyOrder();
-        //CastleOrder();
-        //OrderSpirit();
-
         //終わり
         if (transform.parent.gameObject.GetComponent<Player>().target == null)
         {
@@ -65,13 +56,35 @@ public class Demons : Unit
         //攻撃対象の設定
         if (transform.parent.gameObject != null)
         {
-            targetObject = transform.parent.gameObject.GetComponent<Player>().target;
-            if (SolgierDataBase.getInstance().GetNearestObject(this.transform.position) != null)
-                if (Vector3.Distance(this.transform.position, SolgierDataBase.getInstance().GetNearestObject(this.transform.position).transform.position) <
+            //goalObject = transform.parent.gameObject.GetComponent<Player>().target;
+
+            //プレイヤーのTarget
+            targetObject = goalObject;
+
+            //悪魔
+            GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+            if (nearestObject != null)
+                if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
                         Vector3.Distance(this.transform.position, targetObject.transform.position))
-                    targetObject = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+                    targetObject = nearestObject;
+
+            //兵士
+            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+            if (nearSol != null)
+                if (nearSol.tag != transform.gameObject.tag)
+                    if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
+                            Vector3.Distance(this.transform.position, targetObject.transform.position))
+                        targetObject = nearSol;
+
+            //建物
+            GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
+            if (nearBuild != null)
+                if (nearBuild.tag != transform.gameObject.tag)
+                    if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
+                            Vector3.Distance(this.transform.position, targetObject.transform.position))
+                        targetObject = nearBuild;
         }
-        
+
         if (!IsFind)
             Loitering(loiteringPointObj);
         else
@@ -107,7 +120,7 @@ public class Demons : Unit
     void CastleOrder()
     {
         //攻撃対象の設定
-        targetObject = castle;
+        //targetObject = castle;
         
         //移動
         Move(targetObject);

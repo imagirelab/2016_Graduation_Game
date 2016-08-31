@@ -2,6 +2,16 @@
 
 public class Unit : MonoBehaviour
 {
+    //タイプ
+    public enum Type
+    {
+        Blue,
+        Red,
+        Green,
+        White
+    }
+    public Type type = Type.White;
+
     //ステータス
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
@@ -11,17 +21,17 @@ public class Unit : MonoBehaviour
 
     [HideInInspector]
     public bool IsDead;
-    
+
     //攻撃関連
-    //[HideInInspector]
+    [HideInInspector]
     public bool IsAttack;           //攻撃中フラグ
-    //[HideInInspector]
+    [HideInInspector]
     public bool IsFind;             //発見フラグ
-    //[HideInInspector]
-    //public bool IsDefenseBase;
     [HideInInspector]
     public GameObject targetObject;       //目標
-    
+    [HideInInspector]
+    public GameObject goalObject;       //ゴール
+
     [HideInInspector]
     public string targetTag;       //相手のタグ
 
@@ -38,27 +48,17 @@ public class Unit : MonoBehaviour
         if (GetComponent<NavMeshAgent>())
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.Stop();
+            agent.destination = transform.position;
         }
 
         //ターゲットがいない場合
         if (target == null)
-        {
-            ////NavMeshAgentを止める
-            //if (GetComponent<NavMeshAgent>())
-            //{
-            //    NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            //    agent.Stop();
-            //}
-
-            //IsFind = false;
             return;
-        }
 
         Vector3 targetPosition = target.transform.position;
         //目的地への方向を見る
         transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
-        
+
         if (!IsAttack)
         {
             //NavMeshAgentで動かす
@@ -75,8 +75,9 @@ public class Unit : MonoBehaviour
             //NavMeshAgentで動かす
             if (GetComponent<NavMeshAgent>())
             {
+                this.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.Stop();
+                agent.destination = transform.position;
             }
         }
     }
@@ -96,7 +97,7 @@ public class Unit : MonoBehaviour
         //目的地への方向を見る
         transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
 
-        if(!IsFind)
+        if (!IsFind)
         {
             //NavMeshAgentで動かす
             if (GetComponent<NavMeshAgent>())
