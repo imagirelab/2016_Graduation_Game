@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
     public int playerID = 1;
+    public int targetID = 2;
 
     //スマホ側に送信するのに一時的にデータをためておく場所
     List<int> costData = new List<int>();

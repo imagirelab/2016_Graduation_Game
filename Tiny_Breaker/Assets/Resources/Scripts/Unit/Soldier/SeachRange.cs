@@ -5,7 +5,7 @@ public class SeachRange : UnitTrigger
     [SerializeField, TooltipAttribute("見失うまでの時間")]
     float loseTime = 3.0f;  //見失うまでの時間
     float loseCounter = 0.0f;   //見失っている時間
-    
+
     void Start()
     {
         //親にUnitClassを継承しているスクリプトを持っていたら登録する
@@ -38,5 +38,17 @@ public class SeachRange : UnitTrigger
             loseCounter = 0.0f;
             parent.IsFind = false;
         }
+
+        //何かしら入ってはいたけど目的ではなくなっていたら
+        if (hitTarget != null && parent.targetObject != null)
+        {
+            if (hitTarget != parent.targetObject)
+            {
+                loseCounter = 0.0f;
+                parent.IsFind = false;
+            }
+        }
+
+        //Debug.Log(hitTarget);
     }
 }

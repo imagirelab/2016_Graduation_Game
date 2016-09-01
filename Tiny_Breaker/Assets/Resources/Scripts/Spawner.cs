@@ -14,9 +14,17 @@ public class Spawner : MonoBehaviour
     Player[] players = new Player[GameRule.getInstance().playerNum];
 
     int currentPlayerID = 0;
-    public int CurrentPlayerID {
+    public int CurrentPlayerID
+    {
         get { return currentPlayerID; }
         set { currentPlayerID = value; }
+    }
+
+    int currentTargetID = 0;
+    public int CurrentTargetID
+    {
+        get { return currentTargetID; }
+        set { currentTargetID = value; }
     }
 
     //兵士たち
@@ -36,6 +44,9 @@ public class Spawner : MonoBehaviour
 
     void Start ()
     {
+        currentPlayerID = 0;
+        currentTargetID = 0;
+
         timer = 0.0f;
 
         //設定し忘れたときは今いる場所を設定
@@ -113,7 +124,8 @@ public class Spawner : MonoBehaviour
         //だれかのもの
         if (currentPlayerID != 0)
         {
-            int id = currentPlayerID - 1;   //配列番号に合わせる
+            int id = currentPlayerID - 1;   //配列番号に合わせる 味方になるID
+            int targetID = currentTargetID - 1; //相手になるID
 
             //巡回ルートの再作成
             rootPointes.Clear();
@@ -121,8 +133,10 @@ public class Spawner : MonoBehaviour
             {
                 rootPointes.Add(i, new List<Transform>());
 
-                foreach (Transform child in rootes[i].transform)
+                foreach (Transform child in rootes[targetID].transform)
+                {
                     rootPointes[i].Add(child);
+                }
 
                 //プレイヤーの数以内であれば
                 if (i < players.Length)

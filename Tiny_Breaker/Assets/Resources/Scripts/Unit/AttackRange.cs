@@ -98,6 +98,7 @@ public class AttackRange : UnitTrigger
                                     child.gameObject.tag = player.transform.gameObject.tag;
                                 
                                 parent.targetObject.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
+                                parent.targetObject.GetComponent<Spawner>().CurrentTargetID = player.targetID;
                             }
 
                             if (parent.transform.root.gameObject.GetComponent<PlayerCost>())
@@ -121,5 +122,8 @@ public class AttackRange : UnitTrigger
                 hitFlag = false;
             }
         }
+        
+        //Debug.Log(hitTarget);
+        //Debug.Log(parent.targetObject);
     }
 }

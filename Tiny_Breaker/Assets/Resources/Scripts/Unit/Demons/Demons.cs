@@ -21,7 +21,7 @@ public class Demons : Unit
     ////悪魔に渡される指示を出すクラス
     //private DemonsOrder order;
     //public DemonsOrder Order { set { order = value; } }
-    
+
     void Start()
     {
         // 作られたときにリストに追加する
@@ -29,7 +29,7 @@ public class Demons : Unit
 
         //死亡フラグ
         IsDead = false;
-        
+
         //巡回ルート
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { transform };
@@ -54,7 +54,7 @@ public class Demons : Unit
         }
 
         //攻撃対象の設定
-        if (transform.parent.gameObject != null)
+        if (transform.parent != null)
         {
             //goalObject = transform.parent.gameObject.GetComponent<Player>().target;
 
@@ -115,13 +115,13 @@ public class Demons : Unit
         if (status.CurrentHP <= 0)
             Dead();
     }
-    
+
     //お城への攻撃
     void CastleOrder()
     {
         //攻撃対象の設定
         //targetObject = castle;
-        
+
         //移動
         Move(targetObject);
     }
@@ -167,14 +167,14 @@ public class Demons : Unit
             agent.destination = this.transform.position;
         }
     }
-    
+
     //死んだときの処理
     void Dead()
     {
         IsDead = true;
 
         //死んだ直後に魂を回収してみる
-        if(transform.parent.gameObject != null)
+        if (transform.parent.gameObject != null)
             transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
 
         ////スピリットの生成

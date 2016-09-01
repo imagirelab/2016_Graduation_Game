@@ -28,8 +28,8 @@ public class DefenseBase : MonoBehaviour
         {
             //文字表示
             Text.enabled = true;
-
-            Destroy(gameObject);
+            HP = 0;
+            //Destroy(gameObject);
         }
 
     }

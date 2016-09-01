@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class UnitTrigger : MonoBehaviour
 {
-
     //Unitクラスの親
     protected Unit parent;
 
@@ -14,8 +13,8 @@ public class UnitTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        //目標が範囲内に入ってきたとき
-        if (collider.gameObject == parent.targetObject && collider.gameObject.tag != transform.gameObject.tag)
+        //目標が範囲内に入っているとき
+        if (collider.gameObject == parent.targetObject)
         {
             //レイが通ったら当たる
             Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
@@ -23,18 +22,21 @@ public class UnitTrigger : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
             {
-                hitTarget = collider.gameObject;
-                hitFlag = true;
+                if (hit.collider.gameObject == parent.targetObject)
+                {
+                    hitTarget = collider.gameObject;
+                    hitFlag = true;
+                }
             }
-        }
 
-        //何かしら入ってはいたけど目的ではなくなっていたら
-        if (hitTarget != null && parent.targetObject != null)
-        {
-            if (hitTarget.tag != parent.targetObject.tag)
+            //何かしら入ってはいたけど目的ではなくなっていたら
+            if (hitTarget != null && parent.targetObject != null)
             {
-                hitTarget = null;
-                hitFlag = false;
+                if (hitTarget != parent.targetObject)
+                {
+                    hitTarget = null;
+                    hitFlag = false;
+                }
             }
         }
     }
@@ -50,15 +52,18 @@ public class UnitTrigger : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
             {
-                hitTarget = collider.gameObject;
-                hitFlag = true;
+                if (hit.collider.gameObject == parent.targetObject)
+                {
+                    hitTarget = collider.gameObject;
+                    hitFlag = true;
+                }
             }
         }
 
         //何かしら入ってはいたけど目的ではなくなっていたら
         if (hitTarget != null && parent.targetObject != null)
         {
-            if (hitTarget.tag != parent.targetObject.tag)
+            if (hitTarget != parent.targetObject)
             {
                 hitTarget = null;
                 hitFlag = false;

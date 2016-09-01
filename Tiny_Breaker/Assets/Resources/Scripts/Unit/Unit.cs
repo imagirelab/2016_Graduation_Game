@@ -40,7 +40,7 @@ public class Unit : MonoBehaviour
     public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
 
     int currentRoot = 0;
-    
+
     protected void Move(GameObject target)
     {
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -67,7 +67,7 @@ public class Unit : MonoBehaviour
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
                 agent.speed = status.CurrentSPEED;
                 agent.destination = targetPosition;
-                agent.Resume();
+                //agent.Resume();
             }
         }
         else
@@ -109,7 +109,7 @@ public class Unit : MonoBehaviour
             }
         }
 
-        if(Vector3.Distance(transform.position, targetPosition) < 5.0f)
+        if (Vector3.Distance(transform.position, targetPosition) < 5.0f)
         {
             //巡回しない方
             if (GetComponent<NavMeshAgent>())

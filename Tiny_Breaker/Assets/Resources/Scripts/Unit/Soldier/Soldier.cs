@@ -13,18 +13,18 @@ public class Soldier : Unit
         Wait
     }
     State state = State.Wait;
-    
+
     [SerializeField]
     float deadTime = 1.0f;
     float deadcount = 0.0f;
 
     public int powerUPCount = 0;
 
-    void Start ()
+    void Start()
     {
         // 作られたときにリストに追加する
         SolgierDataBase.getInstance().AddList(this.gameObject);
-        
+
         //状態の設定
         state = State.Wait;
 
@@ -44,7 +44,7 @@ public class Soldier : Unit
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 
-    void Update ()
+    void Update()
     {
         //死んだときの処理
         if (status.CurrentHP <= 0)
@@ -65,9 +65,9 @@ public class Soldier : Unit
                     state = State.Search;
             }
         }
-        
+
         //攻撃対象の設定
-        if (transform.parent.gameObject != null)
+        if (transform.parent != null)
         {
             //プレイヤーのTarget
             targetObject = goalObject;
@@ -95,6 +95,9 @@ public class Soldier : Unit
                             Vector3.Distance(this.transform.position, targetObject.transform.position))
                         targetObject = nearBuild;
         }
+
+        //Debug.Log(IsFind);
+        //Debug.Log(IsAttack);
 
         //状態ごとの処理
         switch (state)
@@ -128,7 +131,7 @@ public class Soldier : Unit
         //if (IsDefenseBase)
         //    targetObject = defenseBase;
         //else
-            //targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
+        //targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
 
         Loitering(loiteringPointObj);
     }
@@ -164,7 +167,7 @@ public class Soldier : Unit
 
             //リストから外すタイミングを死んだ条件の中に入れる
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
-            
+
             //いらない子供から消していく
             if (transform.IsChildOf(transform))
                 foreach (Transform child in transform)
@@ -199,7 +202,7 @@ public class Soldier : Unit
                     Destroy(comp);
         }
     }
-    
+
     //ステータスの設定
     void SetStatus()
     {
@@ -215,7 +218,7 @@ public class Soldier : Unit
             status.CurrentSPEED += status.GetSPEED * 0.15f;
         for (int i = 0; i < powerUPCount; i++)
             status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
-        
+
         status.MaxHP = status.CurrentHP;
     }
 }
