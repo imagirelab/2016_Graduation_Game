@@ -49,6 +49,8 @@ public class AttackRange : UnitTrigger
             //攻撃対象がいることを確認してから攻撃
             if (hitTarget != null && parent.targetObject != null)
             {
+                parent.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
                 //悪魔と兵士について
                 if (parent.targetObject.GetComponent<Unit>())
                 {
@@ -114,6 +116,7 @@ public class AttackRange : UnitTrigger
                 if (parent.targetObject.GetComponent<DefenseBase>())
                 {
                     parent.targetObject.GetComponent<DefenseBase>().HPpro -= parent.status.CurrentATK;
+                    parent.status.CurrentHP = 0;
                 }
             }
             else
