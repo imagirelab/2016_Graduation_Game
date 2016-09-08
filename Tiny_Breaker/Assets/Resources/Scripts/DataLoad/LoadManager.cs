@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.IO;
 using Loader;
+using StaticClass;
 
 public class LoadManager : MonoBehaviour
 {
@@ -145,9 +145,12 @@ public class LoadManager : MonoBehaviour
     {
         foreach (var cost in CostTable.All)
         {
-            GameObject player = GameObject.Find("Player");
-            if (player.GetComponent<PlayerCost>())
-                player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.SoldierCost, cost.HouseCost);
+            for(int i = 0; i < GameRule.getInstance().playerNum; i++)
+            {
+                GameObject player = GameObject.Find("Player" + (i + 1));
+                if (player.GetComponent<PlayerCost>())
+                    player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.SoldierCost, cost.HouseCost);
+            }
         }
     }
 }

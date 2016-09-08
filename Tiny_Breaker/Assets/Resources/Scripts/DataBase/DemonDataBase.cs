@@ -13,7 +13,7 @@ namespace StaticClass
         {
             return dataBase;
         }
-        
+
         Dictionary<GameObject, string> dictionary = new Dictionary<GameObject, string>();
 
         public void ClearList()
@@ -42,8 +42,8 @@ namespace StaticClass
         {
             List<GameObject> list = new List<GameObject>();
 
-            foreach(GameObject e in dictionary.Keys)
-                if(dictionary[e] == tag)
+            foreach (GameObject e in dictionary.Keys)
+                if (dictionary[e] == tag)
                     list.Add(e);
 
             return list;
