@@ -15,6 +15,9 @@ public class UnitTrigger : MonoBehaviour
     {
         Debug.Log(parent);
 
+        if (parent == null)
+            return;
+
         if (parent.targetObject != null)
         {
             //目標が範囲内に入っているとき
@@ -48,6 +51,8 @@ public class UnitTrigger : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
+        if (parent == null)
+            return;
 
         if (parent.targetObject != null)
         {
