@@ -13,29 +13,34 @@ public class UnitTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        //目標が範囲内に入っているとき
-        if (collider.gameObject == parent.targetObject)
-        {
-            //レイが通ったら当たる
-            Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
-            Ray ray = new Ray(transform.position, subTargetPosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
-            {
-                if (hit.collider.gameObject == parent.targetObject)
-                {
-                    hitTarget = collider.gameObject;
-                    hitFlag = true;
-                }
-            }
+        Debug.Log(parent);
 
-            //何かしら入ってはいたけど目的ではなくなっていたら
-            if (hitTarget != null && parent.targetObject != null)
+        if (parent.targetObject != null)
+        {
+            //目標が範囲内に入っているとき
+            if (collider.gameObject == parent.targetObject)
             {
-                if (hitTarget != parent.targetObject)
+                //レイが通ったら当たる
+                Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, subTargetPosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
                 {
-                    hitTarget = null;
-                    hitFlag = false;
+                    if (hit.collider.gameObject == parent.targetObject)
+                    {
+                        hitTarget = collider.gameObject;
+                        hitFlag = true;
+                    }
+                }
+
+                //何かしら入ってはいたけど目的ではなくなっていたら
+                if (hitTarget != null)
+                {
+                    if (hitTarget != parent.targetObject)
+                    {
+                        hitTarget = null;
+                        hitFlag = false;
+                    }
                 }
             }
         }
@@ -43,30 +48,34 @@ public class UnitTrigger : MonoBehaviour
 
     void OnTriggerStay(Collider collider)
     {
-        //目標が範囲内に入っているとき
-        if (collider.gameObject == parent.targetObject)
+
+        if (parent.targetObject != null)
         {
-            //レイが通ったら当たる
-            Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
-            Ray ray = new Ray(transform.position, subTargetPosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
+            //目標が範囲内に入っているとき
+            if (collider.gameObject == parent.targetObject)
             {
-                if (hit.collider.gameObject == parent.targetObject)
+                //レイが通ったら当たる
+                Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, subTargetPosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
                 {
-                    hitTarget = collider.gameObject;
-                    hitFlag = true;
+                    if (hit.collider.gameObject == parent.targetObject)
+                    {
+                        hitTarget = collider.gameObject;
+                        hitFlag = true;
+                    }
                 }
             }
-        }
 
-        //何かしら入ってはいたけど目的ではなくなっていたら
-        if (hitTarget != null && parent.targetObject != null)
-        {
-            if (hitTarget != parent.targetObject)
+            //何かしら入ってはいたけど目的ではなくなっていたら
+            if (hitTarget != null)
             {
-                hitTarget = null;
-                hitFlag = false;
+                if (hitTarget != parent.targetObject)
+                {
+                    hitTarget = null;
+                    hitFlag = false;
+                }
             }
         }
     }

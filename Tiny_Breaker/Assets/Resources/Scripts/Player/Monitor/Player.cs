@@ -31,6 +31,14 @@ public class Player : MonoBehaviour
         PIPI
     }
 
+    enum Direction_TYPE
+    {
+        Top,
+        Middle,
+        Bottom
+    }
+
+
     //スマホからのメッセージ一覧
     struct SmaphoMsg
     {
@@ -40,6 +48,7 @@ public class Player : MonoBehaviour
         public int G_ATK;
         public int G_SPD;
         public int G_ATKTime;
+        public Direction_TYPE dirType;
     };
     List<SmaphoMsg> smaphoMsgList = new List<SmaphoMsg>();
     
@@ -189,26 +198,45 @@ public class Player : MonoBehaviour
         //リストの初めのやつから処理を行う
         if (smaphoMsgList.Count > 0)
         {
-            //悪魔別指示クラス
-            DemonsOrder order = orders[smaphoMsgList[0].type];
-            switch (smaphoMsgList[0].order)
+            //方向指示召喚
+            switch (smaphoMsgList[0].dirType)
             {
-                case "Summon":
-                    SummonOrder();
+                case Direction_TYPE.Top:
+                    ChangeRoot(2);
+                    DebugSummon(demons[smaphoMsgList[0].type]);
                     break;
-                case "Atack_Castle":
-                    order.ChangeOrder(DemonsOrder.Order.Castle);
+                case Direction_TYPE.Middle:
+                    ChangeRoot(1);
+                    DebugSummon(demons[smaphoMsgList[0].type]);
                     break;
-                case "Atack_House":
-                    order.ChangeOrder(DemonsOrder.Order.Building);
+                case Direction_TYPE.Bottom:
+                    ChangeRoot(0);
+                    DebugSummon(demons[smaphoMsgList[0].type]);
                     break;
-                case "Atack_Soldier":
-                    order.ChangeOrder(DemonsOrder.Order.Enemy);
-                    break;
-                case "Get_Spirit":
-                    order.ChangeOrder(DemonsOrder.Order.Spirit);
+                default:
                     break;
             }
+            
+            ////悪魔別指示クラス
+            //DemonsOrder order = orders[smaphoMsgList[0].type];
+            //switch (smaphoMsgList[0].order)
+            //{
+            //    case "Summon":
+            //        SummonOrder();
+            //        break;
+            //    case "Atack_Castle":
+            //        order.ChangeOrder(DemonsOrder.Order.Castle);
+            //        break;
+            //    case "Atack_House":
+            //        order.ChangeOrder(DemonsOrder.Order.Building);
+            //        break;
+            //    case "Atack_Soldier":
+            //        order.ChangeOrder(DemonsOrder.Order.Enemy);
+            //        break;
+            //    case "Get_Spirit":
+            //        order.ChangeOrder(DemonsOrder.Order.Spirit);
+            //        break;
+            //}
 
             //処理したらリストから外す
             smaphoMsgList.Remove(smaphoMsgList[0]);
@@ -268,6 +296,25 @@ public class Player : MonoBehaviour
                     else
                         smaphoMsg.order = "";
 
+                    //方向
+                    Direction_TYPE dir = Direction_TYPE.Middle;
+                    switch (ncmbObj["Direction"].ToString())
+                    {
+                        case "Top":
+                            dir = Direction_TYPE.Top;
+                            break;
+                        case "Middle":
+                            dir = Direction_TYPE.Middle;
+                            break;
+                        case "Bottom":
+                            dir = Direction_TYPE.Bottom;
+                            break;
+                        default:
+                            Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
+                            break;
+                    }
+                    smaphoMsg.dirType = dir;
+                    
                     //タイプの振り分け
                     Demon_TYPE type = Demon_TYPE.POPO;
                     switch (ncmbObj["Type"].ToString())
@@ -445,7 +492,7 @@ public class Player : MonoBehaviour
         //instaceObject.GetComponent<Demons>().Order = orders[Demon_TYPE.PUPU];
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
         instaceObject.GetComponent<Demons>().LoiteringPointObj = rootPointes[rootNum].ToArray();
-
+        
         //強さに応じてスケールを変える処理
         float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
         //制限
