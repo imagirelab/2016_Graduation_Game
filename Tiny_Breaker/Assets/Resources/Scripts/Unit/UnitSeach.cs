@@ -15,10 +15,9 @@ public class UnitSeach : MonoBehaviour
         while (true)
         {
             //プレイヤーのTarget
-            unit.GetNearTargetObject();
+            unit.SetNearTargetObject();
             
-            //yield return null;
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(1.0f);
         }
     }
 

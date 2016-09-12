@@ -13,9 +13,22 @@ public class Unit : MonoBehaviour
     }
     public Type type = Type.White;
 
+    public enum State
+    {
+        Search,
+        Find,
+        Attack,
+        Dead,
+        Wait
+    }
+    public State state = State.Wait;
+
     //ステータス
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
+
+    [SerializeField]
+    public float ATKRange = 10.0f;
 
     [SerializeField]
     public float loiteringSPEED = 1.0f;
@@ -30,8 +43,7 @@ public class Unit : MonoBehaviour
     public bool IsFind;             //発見フラグ
     [HideInInspector]
     public GameObject targetObject;       //目標
-
-    //後でHideInInspectorに戻す
+    
     [SerializeField]
     public GameObject goalObject;       //ゴール
     [SerializeField]
@@ -124,7 +136,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void GetNearTargetObject()
+    public void SetNearTargetObject()
     {
         //プレイヤーのTarget
         targetObject = goalObject;
@@ -152,5 +164,19 @@ public class Unit : MonoBehaviour
                 if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
                     Vector3.Distance(this.transform.position, targetObject.transform.position))
                     targetObject = nearBuild;
+    }
+
+    //巡回ルートの座標を所得する
+    public Vector3 GetRootPosition()
+    {
+        Vector3 rootPosition = loiteringPointObj[currentRoot].transform.position;
+
+        if (Vector3.Distance(transform.position, rootPosition) < 5.0f)
+        {
+            if (currentRoot < loiteringPointObj.Length - 1)
+                currentRoot++;
+        }
+
+        return rootPosition;
     }
 }

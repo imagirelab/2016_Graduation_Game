@@ -150,9 +150,10 @@ public class LoadManager : MonoBehaviour
     void SetParm(ParamMaster param, GameObject unit)
     {
         if (unit.GetComponent<Unit>())
+        {
             unit.GetComponent<Unit>().status.SetDefault(param.HP, param.ATK, param.SPEED, param.ATKSPEED);
-        if(unit.transform.FindChild("AttackRange").gameObject.GetComponent<CapsuleCollider>())
-            unit.transform.FindChild("AttackRange").gameObject.GetComponent<CapsuleCollider>().radius = param.ATKRENGE;
+            unit.GetComponent<Unit>().ATKRange = param.ATKRENGE;
+        }
     }
 
     void SetGrow(GrowMaster grow, GameObject unit, GrowPoint.Type type)

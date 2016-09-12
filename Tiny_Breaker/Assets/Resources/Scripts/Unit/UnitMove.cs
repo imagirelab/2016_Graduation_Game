@@ -3,8 +3,6 @@ using System.Collections;
 
 public class UnitMove : MonoBehaviour
 {
-    bool canMoveing = true;
-
     Coroutine cor;
     
     IEnumerator Move()
@@ -13,32 +11,33 @@ public class UnitMove : MonoBehaviour
 
         while (true)
         {
-            //基本動く
-            canMoveing = true;
-            //攻撃中だけ立ち止まる
-            if (unit.IsAttack)
-                canMoveing = false;
-
-            if (canMoveing)
+            if (unit.targetObject != null)
             {
-                //ターゲットがいない場合
-                if (unit.targetObject != null)
+                switch (unit.state)
                 {
-                    Vector3 targetPosition = unit.targetObject.transform.position;
-                    transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
-
-                    gameObject.GetComponent<Rigidbody>().velocity = targetPosition.normalized * unit.status.CurrentSPEED;
+                    case Unit.State.Search:
+                        Vector3 rootPos = unit.GetRootPosition();
+                        Vector3 rootVrc = rootPos - transform.position;
+                        transform.LookAt(rootPos);
+                        gameObject.GetComponent<Rigidbody>().velocity = rootVrc.normalized * unit.status.CurrentSPEED;
+                        break;
+                    case Unit.State.Find:
+                        Vector3 targetVec = unit.targetObject.transform.position - transform.position;
+                        transform.LookAt(unit.targetObject.transform.position);
+                        gameObject.GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
+                        break;
+                    default:
+                        gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        break;
                 }
             }
             else
-            {
                 gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
-            
+
             yield return null;
         }
     }
-
+    
     void OnEnable()
     {
         cor = StartCoroutine(Move());

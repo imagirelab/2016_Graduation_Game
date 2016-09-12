@@ -5,15 +5,6 @@ using StaticClass;
 
 public class Soldier : Unit
 {
-    enum State
-    {
-        Dead,
-        Find,
-        Search,
-        Wait
-    }
-    State state = State.Wait;
-
     [SerializeField]
     float deadTime = 1.0f;
     float deadcount = 0.0f;
@@ -26,7 +17,7 @@ public class Soldier : Unit
         SolgierDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
 
         //状態の設定
-        state = State.Wait;
+        //state = State.Wait;
 
         //ステータスの設定
         SetStatus();
@@ -39,75 +30,75 @@ public class Soldier : Unit
 
     void Update()
     {
-        //死んだときの処理
-        if (status.CurrentHP <= 0)
-            Dead();
+        //    死んだときの処理
+        //    if (status.CurrentHP <= 0)
+        //        Dead();
 
-        //状態の変更条件
-        if (IsDead)
-            state = State.Dead;
-        else
-        {
-            if (goalObject == null)
-                state = State.Wait;
-            else
-            {
-                if (IsFind)
-                    state = State.Find;
-                else
-                    state = State.Search;
-            }
-        }
+        //    状態の変更条件
+        //    if (IsDead)
+        //        state = State.Dead;
+        //    else
+        //    {
+        //        if (goalObject == null)
+        //            state = State.Wait;
+        //        else
+        //        {
+        //            if (IsFind)
+        //                state = State.Find;
+        //            else
+        //                state = State.Search;
+        //        }
+        //    }
 
-        //攻撃対象の設定
-        if (transform.parent != null)
-        {
-            //プレイヤーのTarget
-            targetObject = goalObject;
+        //    攻撃対象の設定
+        //    if (transform.parent != null)
+        //    {
+        //        プレイヤーのTarget
+        //        targetObject = goalObject;
 
-            //悪魔
-            GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-            if (nearestObject != null)
-                if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
-                        Vector3.Distance(this.transform.position, targetObject.transform.position))
-                    targetObject = nearestObject;
+        //        悪魔
+        //        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+        //        if (nearestObject != null)
+        //            if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
+        //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+        //                targetObject = nearestObject;
 
-            //兵士
-            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-            if (nearSol != null)
-                if (nearSol.tag != transform.gameObject.tag)
-                    if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
-                            Vector3.Distance(this.transform.position, targetObject.transform.position))
-                        targetObject = nearSol;
+        //        兵士
+        //        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+        //        if (nearSol != null)
+        //            if (nearSol.tag != transform.gameObject.tag)
+        //                if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
+        //                        Vector3.Distance(this.transform.position, targetObject.transform.position))
+        //                    targetObject = nearSol;
 
-            //建物
-            GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-            if (nearBuild != null)
-                if (nearBuild.tag != transform.gameObject.tag)
-                    if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
-                            Vector3.Distance(this.transform.position, targetObject.transform.position))
-                        targetObject = nearBuild;
-        }
+        //        建物
+        //        GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
+        //        if (nearBuild != null)
+        //            if (nearBuild.tag != transform.gameObject.tag)
+        //                if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
+        //                        Vector3.Distance(this.transform.position, targetObject.transform.position))
+        //                    targetObject = nearBuild;
+        //    }
 
-        //Debug.Log(IsFind);
-        //Debug.Log(IsAttack);
+        //    Debug.Log(IsFind);
+        //    Debug.Log(IsAttack);
 
-        //状態ごとの処理
-        switch (state)
-        {
-            case State.Dead:
-                Dying();
-                break;
-            case State.Find:
-                Find();
-                break;
-            case State.Search:
-                Search();
-                break;
-            default:
-                Wait();
-                break;
-        }
+        //    状態ごとの処理
+        //    switch (state)
+        //    {
+        //        case State.Dead:
+        //            Dying();
+        //            break;
+        //        case State.Find:
+        //            Find();
+        //            break;
+        //        case State.Search:
+        //            Search();
+        //            break;
+        //        default:
+        //            Wait();
+        //            break;
+        //    }
     }
 
     //発見時処理

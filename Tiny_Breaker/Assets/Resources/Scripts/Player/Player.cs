@@ -442,6 +442,9 @@ public class Player : MonoBehaviour
                                                         rootes[rootNum].transform.position + randVac,
                                                         Quaternion.identity);
         instaceObject.transform.SetParent(this.transform, false);
+        Vector3 summonVec = (rootPointes[rootNum].ToArray()[0].position - rootes[rootNum].transform.position).normalized;   //初めの向き
+        Quaternion rotation = Quaternion.LookRotation(summonVec);
+        instaceObject.transform.rotation = rotation;
         instaceObject.tag = transform.gameObject.tag;    //自分のタグを設定
         instaceObject.layer = transform.gameObject.layer;    //レイヤーを設定
         instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
@@ -449,9 +452,9 @@ public class Player : MonoBehaviour
         //instaceObject.GetComponent<Demons>().Order = orders[Demon_TYPE.PUPU];
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
         instaceObject.GetComponent<Demons>().LoiteringPointObj = rootPointes[rootNum].ToArray();
-        
+
         //強さに応じてスケールを変える処理
-        float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
+        float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
         //制限
         if (growScale >= 4.0f)
             growScale = 4.0f;

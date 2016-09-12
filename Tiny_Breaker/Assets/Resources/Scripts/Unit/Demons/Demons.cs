@@ -38,87 +38,44 @@ public class Demons : Unit
         //    Wait();
         //    return;
         //}
-
-
-        //見つける
+        
         if (targetObject != null)
         {
+            //発見
+            IsFind = false;
             if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
             {
                 IsFind = true;
-            }
-            else
-            {
-                IsFind = false;
+                state = State.Find;
             }
 
             //攻撃
-            if (Vector3.Distance(transform.position, targetObject.transform.position) < 10.0f)
+            IsAttack = false;
+            if (Vector3.Distance(transform.position, targetObject.transform.position) < ATKRange * transform.localScale.x + 1.0f)  //攻撃範囲
             {
                 IsAttack = true;
                 gameObject.GetComponent<UnitAttack>().enabled = true;
-                gameObject.GetComponent<UnitMove>().enabled = false;
+                state = State.Attack;
             }
-            else
+
+            //徘徊
+            if(!IsFind && !IsAttack)
             {
-                IsAttack = false;
                 gameObject.GetComponent<UnitAttack>().enabled = false;
-                gameObject.GetComponent<UnitMove>().enabled = true;
+                state = State.Search;
             }
         }
-
-            //プレイヤーのTarget
-            //targetObject = GetNearTargetObject();
-
-            ////攻撃対象の設定
-            //if (transform.parent != null)
-            //{
-            //    //プレイヤーのTarget
-            //    targetObject = goalObject;
-
-            //    //悪魔
-            //    GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-            //    if (nearestObject != null)
-            //        if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
-            //                Vector3.Distance(this.transform.position, targetObject.transform.position))
-            //            targetObject = nearestObject;
-
-            //    //兵士
-            //    GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
-            //    if (nearSol != null)
-            //        if (nearSol.tag != transform.gameObject.tag)
-            //            if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
-            //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
-            //                targetObject = nearSol;
-
-            //    //建物
-            //    GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-            //    if (nearBuild != null)
-            //        if (nearBuild.tag != transform.gameObject.tag)
-            //            if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
-            //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
-            //                targetObject = nearBuild;
-            //}
-
-            ////見つける距離
-            //if ((transform.position - targetObject.transform.position).sqrMagnitude < 40.0f * 40.0f)  //40.0f = Collider.Radius * LocalScale
-            //{
-            //    Debug.Log("Find");
-            //}
-            ////攻撃する距離
-            //if (Vector3.Distance(transform.position, targetObject.transform.position) < 8.0f)
-            //{
-            //    Debug.Log("Attack");
-            //}
-
-            //if (!IsFind)
-            //    Loitering(loiteringPointObj);
-            //else
-            //Move(targetObject);
-
-            //死亡処理
-            if (status.CurrentHP <= 0)
-            Dead();
+        else
+        {
+            IsFind = false;
+            IsAttack = false;
+            gameObject.GetComponent<UnitAttack>().enabled = false;
+            state = State.Wait;
+        }
+        
+        //死亡処理
+        if (status.CurrentHP <= 0)
+        Dead();
     }
     
     //待機指示
