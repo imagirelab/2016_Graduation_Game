@@ -23,7 +23,7 @@ public class Soldier : Unit
     void Start()
     {
         // 作られたときにリストに追加する
-        SolgierDataBase.getInstance().AddList(this.gameObject);
+        SolgierDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
 
         //状態の設定
         state = State.Wait;
@@ -35,13 +35,6 @@ public class Soldier : Unit
 
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { transform };
-    }
-
-    //破壊されたときにリストから外す
-    void OnDisable()
-    {
-        if (!IsDead)
-            SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 
     void Update()
@@ -80,7 +73,7 @@ public class Soldier : Unit
                     targetObject = nearestObject;
 
             //兵士
-            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
             if (nearSol != null)
                 if (nearSol.tag != transform.gameObject.tag)
                     if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
@@ -221,4 +214,12 @@ public class Soldier : Unit
 
         status.MaxHP = status.CurrentHP;
     }
+
+    //破壊されたときにリストから外す
+    void OnDisable()
+    {
+        if (!IsDead)
+            SolgierDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
 }

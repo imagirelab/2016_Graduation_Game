@@ -16,26 +16,47 @@ namespace StaticClass
             return dataBase;
         }
 
-        List<GameObject> list = new List<GameObject>();
+        Dictionary<GameObject, string> dictionary = new Dictionary<GameObject, string>();
 
         public void ClearList()
         {
-            list.Clear();
+            dictionary.Clear();
         }
 
-        public void AddList(GameObject item)
+        public void AddList(GameObject key, string value)
         {
-            list.Add(item);
+            dictionary.Add(key, value);
         }
 
-        public void RemoveList(GameObject item)
+        public void RemoveList(GameObject key)
         {
-            list.Remove(item);
+            dictionary.Remove(key);
         }
 
-        //一番近い魂を返す
-        public GameObject GetNearestObject(Vector3 center)
+        //辞書にある数の取得
+        public int GetCount()
         {
+            return dictionary.Count;
+        }
+
+        //指定したvalueの要素だけを取得
+        public List<GameObject> GetListToTag(string tag)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            foreach (GameObject e in dictionary.Keys)
+                if (dictionary[e] == tag)
+                    list.Add(e);
+
+            return list;
+        }
+
+        //一番近い悪魔を返す
+        public GameObject GetNearestObject(string tag, Vector3 center)
+        {
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
+
             if (list.Count == 0)
                 return null;
 

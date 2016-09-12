@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using StaticClass;
 
 public class Unit : MonoBehaviour
 {
@@ -29,10 +30,11 @@ public class Unit : MonoBehaviour
     public bool IsFind;             //発見フラグ
     [HideInInspector]
     public GameObject targetObject;       //目標
-    [HideInInspector]
-    public GameObject goalObject;       //ゴール
 
-    [HideInInspector]
+    //後でHideInInspectorに戻す
+    [SerializeField]
+    public GameObject goalObject;       //ゴール
+    [SerializeField]
     public string targetTag;       //相手のタグ
 
     //巡回地点
@@ -67,7 +69,6 @@ public class Unit : MonoBehaviour
                 NavMeshAgent agent = GetComponent<NavMeshAgent>();
                 agent.speed = status.CurrentSPEED;
                 agent.destination = targetPosition;
-                //agent.Resume();
             }
         }
         else
@@ -121,5 +122,35 @@ public class Unit : MonoBehaviour
                 currentRoot++;
             //currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
         }
+    }
+
+    public void GetNearTargetObject()
+    {
+        //プレイヤーのTarget
+        targetObject = goalObject;
+
+        //悪魔
+        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+        GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
+
+
+        if (nearestObject != null && targetObject != null)
+            if (nearestObject.tag != transform.gameObject.tag)
+                if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
+                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+                    targetObject = nearestObject;
+
+        if (nearSol != null && targetObject != null)
+            if (nearSol.tag != transform.gameObject.tag)
+                if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
+                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+                    targetObject = nearSol;
+
+        if (nearBuild != null && targetObject != null)
+            if (nearBuild.tag != transform.gameObject.tag)
+                if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
+                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+                    targetObject = nearBuild;
     }
 }

@@ -13,11 +13,9 @@ public class UnitTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log(parent);
-
         if (parent == null)
             return;
-
+        
         if (parent.targetObject != null)
         {
             //目標が範囲内に入っているとき
@@ -27,7 +25,7 @@ public class UnitTrigger : MonoBehaviour
                 Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
                 Ray ray = new Ray(transform.position, subTargetPosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
+                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude))
                 {
                     if (hit.collider.gameObject == parent.targetObject)
                     {
@@ -63,7 +61,7 @@ public class UnitTrigger : MonoBehaviour
                 Vector3 subTargetPosition = parent.targetObject.transform.position - transform.position;
                 Ray ray = new Ray(transform.position, subTargetPosition);
                 RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude + 10.0f))
+                if (Physics.Raycast(ray, out hit, subTargetPosition.magnitude))
                 {
                     if (hit.collider.gameObject == parent.targetObject)
                     {

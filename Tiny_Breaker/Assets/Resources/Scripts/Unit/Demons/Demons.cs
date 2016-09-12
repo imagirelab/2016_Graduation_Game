@@ -14,14 +14,6 @@ public class Demons : Unit
         set { growPoint = value; }
     }
 
-    ////悪魔がなる魂オブジェクト
-    //[SerializeField]
-    //GameObject spirit;
-
-    ////悪魔に渡される指示を出すクラス
-    //private DemonsOrder order;
-    //public DemonsOrder Order { set { order = value; } }
-
     void Start()
     {
         // 作られたときにリストに追加する
@@ -38,125 +30,99 @@ public class Demons : Unit
         SetStatus();
     }
 
-    //破壊されたときにリストから外す
-    void OnDisable()
-    {
-        DemonDataBase.getInstance().RemoveList(this.gameObject);
-    }
-
     void Update()
     {
         //終わり
-        if (transform.parent.gameObject.GetComponent<Player>().target == null)
-        {
-            OrderWait();
-            return;
-        }
+        //if (transform.parent.gameObject.GetComponent<Player>().target == null)
+        //{
+        //    Wait();
+        //    return;
+        //}
 
-        //攻撃対象の設定
-        if (transform.parent != null)
+
+        //見つける
+        if (targetObject != null)
         {
-            //goalObject = transform.parent.gameObject.GetComponent<Player>().target;
+            if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
+            {
+                IsFind = true;
+            }
+            else
+            {
+                IsFind = false;
+            }
+
+            //攻撃
+            if (Vector3.Distance(transform.position, targetObject.transform.position) < 10.0f)
+            {
+                IsAttack = true;
+                gameObject.GetComponent<UnitAttack>().enabled = true;
+                gameObject.GetComponent<UnitMove>().enabled = false;
+            }
+            else
+            {
+                IsAttack = false;
+                gameObject.GetComponent<UnitAttack>().enabled = false;
+                gameObject.GetComponent<UnitMove>().enabled = true;
+            }
+        }
 
             //プレイヤーのTarget
-            targetObject = goalObject;
+            //targetObject = GetNearTargetObject();
 
-            //悪魔
-            GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-            if (nearestObject != null)
-                if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
-                        Vector3.Distance(this.transform.position, targetObject.transform.position))
-                    targetObject = nearestObject;
+            ////攻撃対象の設定
+            //if (transform.parent != null)
+            //{
+            //    //プレイヤーのTarget
+            //    targetObject = goalObject;
 
-            //兵士
-            GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
-            if (nearSol != null)
-                if (nearSol.tag != transform.gameObject.tag)
-                    if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
-                            Vector3.Distance(this.transform.position, targetObject.transform.position))
-                        targetObject = nearSol;
+            //    //悪魔
+            //    GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+            //    if (nearestObject != null)
+            //        if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
+            //                Vector3.Distance(this.transform.position, targetObject.transform.position))
+            //            targetObject = nearestObject;
 
-            //建物
-            GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-            if (nearBuild != null)
-                if (nearBuild.tag != transform.gameObject.tag)
-                    if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
-                            Vector3.Distance(this.transform.position, targetObject.transform.position))
-                        targetObject = nearBuild;
-        }
+            //    //兵士
+            //    GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
+            //    if (nearSol != null)
+            //        if (nearSol.tag != transform.gameObject.tag)
+            //            if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
+            //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+            //                targetObject = nearSol;
 
-        if (!IsFind)
-            Loitering(loiteringPointObj);
-        else
-            Move(targetObject);
+            //    //建物
+            //    GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
+            //    if (nearBuild != null)
+            //        if (nearBuild.tag != transform.gameObject.tag)
+            //            if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
+            //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
+            //                targetObject = nearBuild;
+            //}
 
-        ////オーダークラスがちゃんと設定されていれば処理する
-        //if (order != null)
-        //    switch (order.CurrentOrder)
-        //    {
-        //        case DemonsOrder.Order.Castle:
-        //            CastleOrder();
-        //            break;
-        //        case DemonsOrder.Order.Enemy:
-        //            EnemyOrder();
-        //            break;
-        //        case DemonsOrder.Order.Building:
-        //            BuildingOrder();
-        //            break;
-        //        case DemonsOrder.Order.Spirit:
-        //            OrderSpirit();
-        //            break;
-        //        default:    //待機
-        //            OrderWait();
-        //            break;
-        //    }
+            ////見つける距離
+            //if ((transform.position - targetObject.transform.position).sqrMagnitude < 40.0f * 40.0f)  //40.0f = Collider.Radius * LocalScale
+            //{
+            //    Debug.Log("Find");
+            //}
+            ////攻撃する距離
+            //if (Vector3.Distance(transform.position, targetObject.transform.position) < 8.0f)
+            //{
+            //    Debug.Log("Attack");
+            //}
 
-        //死亡処理
-        if (status.CurrentHP <= 0)
+            //if (!IsFind)
+            //    Loitering(loiteringPointObj);
+            //else
+            //Move(targetObject);
+
+            //死亡処理
+            if (status.CurrentHP <= 0)
             Dead();
     }
-
-    //お城への攻撃
-    void CastleOrder()
-    {
-        //攻撃対象の設定
-        //targetObject = castle;
-
-        //移動
-        Move(targetObject);
-    }
-
-    // 敵に攻撃する命令の処理
-    void EnemyOrder()
-    {
-        //攻撃対象の設定
-        targetObject = SolgierDataBase.getInstance().GetNearestObject(this.transform.position);
-
-        //移動
-        Move(targetObject);
-    }
-
-    // 建造物に向かい攻撃する命令の処理
-    void BuildingOrder()
-    {
-        //攻撃対象の設定
-        targetObject = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-
-        //移動
-        Move(targetObject);
-    }
-
-    //魂の回収指示
-    void OrderSpirit()
-    {
-        targetObject = SpiritDataBase.getInstance().GetNearestObject(this.transform.position);
-
-        //移動
-        Move(targetObject);
-    }
-
+    
     //待機指示
-    void OrderWait()
+    void Wait()
     {
         this.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
@@ -174,13 +140,9 @@ public class Demons : Unit
         IsDead = true;
 
         //死んだ直後に魂を回収してみる
-        if (transform.parent.gameObject != null)
+        if (transform.parent != null)
             transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
-
-        ////スピリットの生成
-        //GameObject instacespirit = (GameObject)Instantiate(spirit, this.gameObject.transform.position, this.gameObject.transform.rotation);
-        //instacespirit.GetComponent<Spirits>().GrowPoint = growPoint;
-
+        
         Destroy(gameObject);
     }
 
@@ -214,4 +176,11 @@ public class Demons : Unit
 
         loiteringSPEED = status.CurrentSPEED;
     }
+
+    //破壊されたときにリストから外す
+    void OnDisable()
+    {
+        DemonDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
 }
