@@ -9,6 +9,9 @@ public class UnitMove : MonoBehaviour
     {
         Unit unit = gameObject.GetComponent<Unit>();
 
+        //動くときには回れるように
+        gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+
         while (true)
         {
             if (unit.targetObject != null)
@@ -24,7 +27,7 @@ public class UnitMove : MonoBehaviour
                     case Unit.State.Find:
                         Vector3 targetVec = unit.targetObject.transform.position - transform.position;
                         transform.LookAt(unit.targetObject.transform.position);
-                        gameObject.GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
+                        gameObject.GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.loiteringSPEED;
                         break;
                     default:
                         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;

@@ -51,11 +51,25 @@ namespace StaticClass
             return list;
         }
 
+        //指定したvalueの要素だけを取得
+        public List<GameObject> GetListToTagExc(string tag)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            foreach (GameObject e in dictionary.Keys)
+                if (dictionary[e] != tag)
+                    list.Add(e);
+
+            return list;
+        }
+
         //一番近い悪魔を返す
         public GameObject GetNearestObject(string tag, Vector3 center)
         {
             //指定したタグの中で一番近いものとする
-            List<GameObject> list = GetListToTag(tag);
+            //List<GameObject> list = GetListToTag(tag);
+            //指定したタグ以外で一番近いものとする
+            List<GameObject> list = GetListToTagExc(tag);
 
             if (list.Count == 0)
                 return null;

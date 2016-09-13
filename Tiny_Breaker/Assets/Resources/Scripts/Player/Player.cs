@@ -453,6 +453,9 @@ public class Player : MonoBehaviour
         instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
         instaceObject.GetComponent<Demons>().LoiteringPointObj = rootPointes[rootNum].ToArray();
 
+        //出るとき重なる瞬間は回らないように
+        instaceObject.GetComponent<Rigidbody>().freezeRotation = true;
+
         //強さに応じてスケールを変える処理
         float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
         //制限

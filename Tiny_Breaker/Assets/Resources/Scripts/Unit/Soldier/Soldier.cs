@@ -15,124 +15,66 @@ public class Soldier : Unit
     {
         // 作られたときにリストに追加する
         SolgierDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-
-        //状態の設定
-        //state = State.Wait;
-
-        //ステータスの設定
-        SetStatus();
-
+        
         deadcount = 0.0f;
 
+        //死亡フラグ
+        IsDead = false;
+
+        //巡回ルート
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { transform };
+
+        //ステータスの決定
+        SetStatus();
     }
 
     void Update()
     {
-        //    死んだときの処理
-        //    if (status.CurrentHP <= 0)
-        //        Dead();
+        //死亡処理
+        if (status.CurrentHP <= 0)
+            Dead();
 
-        //    状態の変更条件
-        //    if (IsDead)
-        //        state = State.Dead;
-        //    else
-        //    {
-        //        if (goalObject == null)
-        //            state = State.Wait;
-        //        else
-        //        {
-        //            if (IsFind)
-        //                state = State.Find;
-        //            else
-        //                state = State.Search;
-        //        }
-        //    }
-
-        //    攻撃対象の設定
-        //    if (transform.parent != null)
-        //    {
-        //        プレイヤーのTarget
-        //        targetObject = goalObject;
-
-        //        悪魔
-        //        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-        //        if (nearestObject != null)
-        //            if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
-        //                    Vector3.Distance(this.transform.position, targetObject.transform.position))
-        //                targetObject = nearestObject;
-
-        //        兵士
-        //        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-        //        if (nearSol != null)
-        //            if (nearSol.tag != transform.gameObject.tag)
-        //                if (Vector3.Distance(this.transform.position, nearSol.transform.position) <
-        //                        Vector3.Distance(this.transform.position, targetObject.transform.position))
-        //                    targetObject = nearSol;
-
-        //        建物
-        //        GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-        //        if (nearBuild != null)
-        //            if (nearBuild.tag != transform.gameObject.tag)
-        //                if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
-        //                        Vector3.Distance(this.transform.position, targetObject.transform.position))
-        //                    targetObject = nearBuild;
-        //    }
-
-        //    Debug.Log(IsFind);
-        //    Debug.Log(IsAttack);
-
-        //    状態ごとの処理
-        //    switch (state)
-        //    {
-        //        case State.Dead:
-        //            Dying();
-        //            break;
-        //        case State.Find:
-        //            Find();
-        //            break;
-        //        case State.Search:
-        //            Search();
-        //            break;
-        //        default:
-        //            Wait();
-        //            break;
-        //    }
-    }
-
-    //発見時処理
-    void Find()
-    {
-        //移動
-        Move(targetObject);
-    }
-
-    //索敵処理
-    void Search()
-    {
-        ////見つけたいもの
-        //if (IsDefenseBase)
-        //    targetObject = defenseBase;
-        //else
-        //targetObject = DemonDataBase.getInstance().GetNearestObject(transform.position);
-
-        Loitering(loiteringPointObj);
-    }
-
-    //待機処理　一応
-    void Wait()
-    {
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        //NavMeshAgentを止める
-        if (GetComponent<NavMeshAgent>())
+        if (IsDead)
+            Dying();
+        else
         {
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.destination = transform.position;
+            if (targetObject != null)
+            {
+                //発見
+                IsFind = false;
+                if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
+                {
+                    IsFind = true;
+                    state = State.Find;
+                }
+
+                //攻撃
+                IsAttack = false;
+                if (Vector3.Distance(transform.position, targetObject.transform.position) < ATKRange * transform.localScale.x + 1.0f)  //攻撃範囲
+                {
+                    IsAttack = true;
+                    gameObject.GetComponent<UnitAttack>().enabled = true;
+                    state = State.Attack;
+                }
+
+                //徘徊
+                if (!IsFind && !IsAttack)
+                {
+                    gameObject.GetComponent<UnitAttack>().enabled = false;
+                    state = State.Search;
+                }
+            }
+            else
+            {
+                IsFind = false;
+                IsAttack = false;
+                gameObject.GetComponent<UnitAttack>().enabled = false;
+                state = State.Wait;
+            }
         }
     }
-
+    
     //死にかけている時の処理
     void Dying()
     {
@@ -212,5 +154,4 @@ public class Soldier : Unit
         if (!IsDead)
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
-
 }

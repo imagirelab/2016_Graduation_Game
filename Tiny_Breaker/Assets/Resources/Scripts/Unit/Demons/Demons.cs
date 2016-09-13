@@ -32,13 +32,6 @@ public class Demons : Unit
 
     void Update()
     {
-        //終わり
-        //if (transform.parent.gameObject.GetComponent<Player>().target == null)
-        //{
-        //    Wait();
-        //    return;
-        //}
-        
         if (targetObject != null)
         {
             //発見
@@ -77,19 +70,6 @@ public class Demons : Unit
         if (status.CurrentHP <= 0)
         Dead();
     }
-    
-    //待機指示
-    void Wait()
-    {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        //NavMeshAgentを止める
-        if (GetComponent<NavMeshAgent>())
-        {
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.destination = this.transform.position;
-        }
-    }
 
     //死んだときの処理
     void Dead()
@@ -111,9 +91,9 @@ public class Demons : Unit
 
         //今のステータスを算出する
         for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
-            status.CurrentHP += (int)(status.GetHP * 0.5f);
+            status.CurrentHP += (int)(status.GetHP * 0.1f);
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
-            status.CurrentATK += (int)(status.GetATK * 0.5f);
+            status.CurrentATK += (int)(status.GetATK * 0.1f);
         for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
             status.CurrentSPEED += status.GetSPEED * 0.15f;
         for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)

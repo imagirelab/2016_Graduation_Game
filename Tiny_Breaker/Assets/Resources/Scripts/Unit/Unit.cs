@@ -44,9 +44,9 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public GameObject targetObject;       //目標
     
-    [SerializeField]
+    [HideInInspector]
     public GameObject goalObject;       //ゴール
-    [SerializeField]
+    [HideInInspector]
     public string targetTag;       //相手のタグ
 
     //巡回地点
@@ -143,7 +143,7 @@ public class Unit : MonoBehaviour
 
         //悪魔
         GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
+        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position);
         GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
 
 
@@ -170,7 +170,7 @@ public class Unit : MonoBehaviour
     public Vector3 GetRootPosition()
     {
         Vector3 rootPosition = loiteringPointObj[currentRoot].transform.position;
-
+        
         if (Vector3.Distance(transform.position, rootPosition) < 5.0f)
         {
             if (currentRoot < loiteringPointObj.Length - 1)
