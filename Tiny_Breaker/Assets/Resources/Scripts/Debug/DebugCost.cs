@@ -29,7 +29,7 @@ public class DebugCost : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.GetComponent<Text>().text = "Cost:" + playerCost.GetComponent<PlayerCost>().CurrentCost + "/" + playerCost.GetComponent<PlayerCost>().GetMaxCost + "\n" +
+        this.GetComponent<Text>().text = playerCost.name.ToString() + ":" + playerCost.GetComponent<PlayerCost>().CurrentCost + "/" + playerCost.GetComponent<PlayerCost>().GetMaxCost + "\n" +
                                             "HouseCost:" + playerCost.GetComponent<PlayerCost>().GetHouseCost + "\n" +
                                             "SoldierCost:" + playerCost.GetComponent<PlayerCost>().GetSoldierCost + "\n" +
                                             "POPOCost:" + playerCost.GetComponent<PlayerCost>().GetDemonCost * POPO.GetComponent<Demons>().GrowPoint.GetCost() + "\n" +
