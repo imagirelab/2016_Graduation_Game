@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class HPGauge : MonoBehaviour {
+public class HPGauge : MonoBehaviour
+{
 
     [SerializeField]
     Unit unit;
 
     Slider hpGauge;
 
-    void Start ()
+    void Start()
     {
         if (unit == null)
         {
@@ -19,8 +20,8 @@ public class HPGauge : MonoBehaviour {
         if (GetComponent<Slider>() != null)
             hpGauge = GetComponent<Slider>();
     }
-	
-	void Update ()
+
+    void Update()
     {
         float HPRate = (float)unit.status.CurrentHP / (float)unit.status.MaxHP;
         hpGauge.value = HPRate * 100;

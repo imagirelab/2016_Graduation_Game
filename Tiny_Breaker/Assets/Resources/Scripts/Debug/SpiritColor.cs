@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class SpiritColor : MonoBehaviour {
+public class SpiritColor : MonoBehaviour
+{
 
     [SerializeField]
     GameObject player;
@@ -15,8 +16,9 @@ public class SpiritColor : MonoBehaviour {
         if (player == null)
             player = new GameObject();
     }
-	
-	void Update () {
+
+    void Update()
+    {
         GrowPoint firstSpirit = player.GetComponent<Player>().GetFirstSpirit();
 
         if (firstSpirit != null)

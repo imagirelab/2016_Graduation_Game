@@ -22,12 +22,12 @@ public class UnitMove : MonoBehaviour
                         Vector3 rootPos = unit.GetRootPosition();
                         Vector3 rootVrc = rootPos - transform.position;
                         transform.LookAt(rootPos);
-                        gameObject.GetComponent<Rigidbody>().velocity = rootVrc.normalized * unit.status.CurrentSPEED;
+                        gameObject.GetComponent<Rigidbody>().velocity = rootVrc.normalized * unit.loiteringSPEED;
                         break;
                     case Unit.State.Find:
                         Vector3 targetVec = unit.targetObject.transform.position - transform.position;
                         transform.LookAt(unit.targetObject.transform.position);
-                        gameObject.GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.loiteringSPEED;
+                        gameObject.GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
                         break;
                     default:
                         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;

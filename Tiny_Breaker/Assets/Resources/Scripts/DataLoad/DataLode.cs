@@ -11,7 +11,7 @@ namespace Loader
     {
         protected List<T> masters;
         public List<T> All { get { return masters; } }
-        
+
         public void Load(string text)
         {
             text = text.Trim().Replace("\r", "") + "\n";
@@ -20,7 +20,7 @@ namespace Loader
             // header
             string[] headerElements = lines[0].Split(',');
             lines.RemoveAt(0); // header部分を削除
-            
+
             // body
             masters = new List<T>();
             foreach (var line in lines) ParseLine(line, headerElements);
@@ -55,7 +55,7 @@ namespace Loader
         private void SetField(string key, string value)
         {
             PropertyInfo propertyInfo = this.GetType().GetProperty(key, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            
+
             if (propertyInfo.PropertyType == typeof(string)) propertyInfo.SetValue(this, value, null);
             else if (propertyInfo.PropertyType == typeof(int)) propertyInfo.SetValue(this, int.Parse(value), null);
             else if (propertyInfo.PropertyType == typeof(float)) propertyInfo.SetValue(this, float.Parse(value), null);

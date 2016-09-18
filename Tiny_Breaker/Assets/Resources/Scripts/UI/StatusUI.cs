@@ -7,6 +7,6 @@ public class StatusUI : MonoBehaviour
     {
         //デバッグによってオンオフ切り替え
         foreach (Transform child in transform)
-                child.gameObject.SetActive(!GameRule.getInstance().debugFlag);
+            child.gameObject.SetActive(!GameRule.getInstance().debugFlag);
     }
 }

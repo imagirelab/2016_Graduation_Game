@@ -1,14 +1,16 @@
 ﻿using UnityEngine;
 using StaticClass;
 
-public class WireFrame : MonoBehaviour {
+public class WireFrame : MonoBehaviour
+{
 
     [SerializeField]
     Color color = new Color(1.0f, 1.0f, 1.0f);
 
     MeshRenderer mr;
-    
-    void Start () {
+
+    void Start()
+    {
     }
 
     void Update()

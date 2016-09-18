@@ -2,16 +2,17 @@
 
 using UnityEngine;
 
-public class LookAtCamera : MonoBehaviour {
-    
+public class LookAtCamera : MonoBehaviour
+{
+
     Camera _MainCamera;
 
-    void Start ()
+    void Start()
     {
         _MainCamera = Camera.main;
     }
-	
-	void Update ()
+
+    void Update()
     {
         transform.forward = _MainCamera.transform.forward;
     }

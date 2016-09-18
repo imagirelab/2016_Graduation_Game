@@ -2,8 +2,9 @@
 using UnityEngine.UI;
 using StaticClass;
 
-public class PlayerColor : MonoBehaviour {
-    
+public class PlayerColor : MonoBehaviour
+{
+
     [SerializeField]
     SpriteRenderer barSprite = new SpriteRenderer();
 
@@ -12,14 +13,14 @@ public class PlayerColor : MonoBehaviour {
 
     [SerializeField]
     Sprite[] sprites = new Sprite[GameRule.getInstance().playerNum + 1];
-    
+
     [SerializeField]
     Color[] colors = new Color[GameRule.getInstance().playerNum + 1];
 
     //表示する色のプレイヤーID
     int playerID = 0;
-    
-    void Start ()
+
+    void Start()
     {
         playerID = 0;
 
@@ -34,8 +35,8 @@ public class PlayerColor : MonoBehaviour {
             fillImage = GetComponent<Image>();
         }
     }
-	
-	void Update ()
+
+    void Update()
     {
         //根底がスポナーの時playerIDの取得
         GameObject rootObject = transform.root.gameObject;

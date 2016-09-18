@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 
-public class WireCapsule : MonoBehaviour {
-    
-	void Start () {
-	
-	}
-	
-	void Update () {
+public class WireCapsule : MonoBehaviour
+{
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
         GameObject parent = this.transform.parent.gameObject;
 
         //ポジション
         Vector3 colliderCenter = parent.GetComponent<CapsuleCollider>().center;
         transform.localPosition = colliderCenter;
         //ローテーション
-        switch(parent.GetComponent<CapsuleCollider>().direction)
+        switch (parent.GetComponent<CapsuleCollider>().direction)
         {
             case 0: //X軸
                 transform.localRotation.Set(

@@ -16,6 +16,10 @@ public class PlayerCost : MonoBehaviour {
     int DemonCost = 0;
     public int GetDemonCost { get { return DemonCost; } }
 
+    [SerializeField, TooltipAttribute("悪魔召喚コストの増加率")]
+    float DemonCostRate = 0.5f;
+    public float GetDemonCostRate { get { return DemonCostRate; } }
+
     [SerializeField, TooltipAttribute("兵士の撃破獲得コスト")]
     int SoldierCost = 0;
     public int GetSoldierCost { get { return SoldierCost; } }
@@ -73,12 +77,23 @@ public class PlayerCost : MonoBehaviour {
             return false;
     }
 
-    public void SetDefault(int max, int state, int costparsecond, int demon, int soldier, int house)
+    //渡されてきた値から召喚コストを計算して返す
+    public int GetCurrentDemonCost(int level)
+    {
+        int growcount = level - 1;
+        if (growcount < 0) growcount = 0;
+
+        return GetDemonCost +                                           //基礎値
+            (int)((float)GetDemonCost * GetDemonCostRate) * growcount;   //成長によって増やす値
+    }
+
+    public void SetDefault(int max, int state, int costparsecond, int demon, float demonRate, int soldier, int house)
     {
         MaxCost = max;
         StateCost = state;
         CostParSecond = costparsecond;
         DemonCost = demon;
+        DemonCostRate = demonRate;
         SoldierCost = soldier;
         HouseCost = house;
 

@@ -66,7 +66,9 @@ public class Player : MonoBehaviour
         {GrowPoint.Type.PUPU, null},
         {GrowPoint.Type.PIPI, null}
     };
-    
+    public GrowPoint PlayerGrowPoint(GrowPoint.Type type) { return growPoints[type]; }
+
+
     [SerializeField, TooltipAttribute("出撃位置")]
     Transform spawnPoint;
     public Transform SpawnPoint { get { return spawnPoint; } }
@@ -407,13 +409,13 @@ public class Player : MonoBehaviour
         GrowPoint demonPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
         GrowPoint spiritPoint = spiritsDataCopy[0];
 
-        //成長値の足し方
-        demonPoint.CurrentHP_GrowPoint += demonPoint.GetHP_GrowPoint + spiritPoint.GetHP_GrowPoint;
-        demonPoint.CurrentATK_GrowPoint += demonPoint.GetATK_GrowPoint + spiritPoint.GetATK_GrowPoint;
-        demonPoint.CurrentSPEED_GrowPoint += demonPoint.GetSPEED_GrowPoint + spiritPoint.GetSPEED_GrowPoint;
-        demonPoint.CurrentAtackTime_GrowPoint += demonPoint.GetAtackTime_GrowPoint + spiritPoint.GetAtackTime_GrowPoint;
+        demonPoint.AddGrowPoint(spiritPoint);
+        //demonPoint.CurrentHP_GrowPoint += demonPoint.GetHP_GrowPoint + spiritPoint.GetHP_GrowPoint;
+        //demonPoint.CurrentATK_GrowPoint += demonPoint.GetATK_GrowPoint + spiritPoint.GetATK_GrowPoint;
+        //demonPoint.CurrentSPEED_GrowPoint += demonPoint.GetSPEED_GrowPoint + spiritPoint.GetSPEED_GrowPoint;
+        //demonPoint.CurrentAtackTime_GrowPoint += demonPoint.GetAtackTime_GrowPoint + spiritPoint.GetAtackTime_GrowPoint;
 
-        //demon.GetComponent<Demons>().GrowPoint = demonPoint;
+        demon.GetComponent<Demons>().GrowPoint = demonPoint;
 
         //ステータスの代入  あってもなくてもいい　デバック用の表示更新用
         //demon.GetComponent<Demons>().SetStatus();
@@ -437,7 +439,10 @@ public class Player : MonoBehaviour
         //GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
         GrowPoint growPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
 
-        if (GetComponent<PlayerCost>().UseableCost(50 + demon.GetComponent<Demons>().GrowPoint.GetCost() * 50))
+        //召喚コストの計算
+        int demonCost = GetComponent<PlayerCost>().GetCurrentDemonCost(demon.GetComponent<Demons>().GrowPoint.Level);
+        
+        if (GetComponent<PlayerCost>().UseableCost(demonCost))
         {
             //悪魔を出す
             GameObject instaceObject = (GameObject)Instantiate(demon,
@@ -459,11 +464,11 @@ public class Player : MonoBehaviour
             instaceObject.GetComponent<Rigidbody>().freezeRotation = true;
 
             //強さに応じてスケールを変える処理
-            float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
-            //制限
-            if (growScale >= 4.0f)
-                growScale = 4.0f;
-            instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
+            //float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
+            ////制限
+            //if (growScale >= 4.0f)
+            //    growScale = 4.0f;
+            //instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
         }
     }
 

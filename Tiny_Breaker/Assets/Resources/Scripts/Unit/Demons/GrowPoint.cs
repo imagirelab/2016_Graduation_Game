@@ -34,6 +34,7 @@ public class GrowPoint
     private int currentATK_GrowPoint;
     private int currentSPEED_GrowPoint;
     private int currentAtackTime_GrowPoint;
+    private int level = 1;
 
     public int CurrentHP_GrowPoint
     {
@@ -55,6 +56,10 @@ public class GrowPoint
         get { return currentAtackTime_GrowPoint; }
         set { currentAtackTime_GrowPoint = value; }
     }
+    public int Level
+    {
+        get { return level; }
+    }
 
     public GrowPoint()
     {
@@ -68,11 +73,28 @@ public class GrowPoint
         currentATK_GrowPoint = ATK_GrowPoint;
         currentSPEED_GrowPoint = SPEED_GrowPoint;
         currentAtackTime_GrowPoint = AtackTime_GrowPoint;
+
+        //レベル初期化
+        level = 1;
     }
 
+    //成長値の合計値の取得
     public int GetCost()
     {
         return currentHP_GrowPoint + currentATK_GrowPoint + currentSPEED_GrowPoint;
+    }
+
+    //成長値を足す
+    public void AddGrowPoint(GrowPoint addPoint)
+    {
+        //成長値の足し方
+        currentHP_GrowPoint += HP_GrowPoint + addPoint.GetHP_GrowPoint;
+        currentATK_GrowPoint += ATK_GrowPoint + addPoint.GetATK_GrowPoint;
+        currentSPEED_GrowPoint += SPEED_GrowPoint + addPoint.GetSPEED_GrowPoint;
+        currentAtackTime_GrowPoint += AtackTime_GrowPoint + addPoint.GetAtackTime_GrowPoint;
+
+        //レベルアップ
+        level++;
     }
     
     //基準を変えたいときに呼び出す
