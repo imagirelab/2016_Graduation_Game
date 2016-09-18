@@ -55,44 +55,41 @@ public class Unit : MonoBehaviour
 
     int currentRoot = 0;
 
-    protected void Move(GameObject target)
+    public void Move(Vector3 target, float speed)
     {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //NavMeshAgentを止める
+        //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        ////NavMeshAgentを止める
+        //if (GetComponent<NavMeshAgent>())
+        //{
+        //    NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        //    agent.destination = transform.position;
+        //}
+
+        //Vector3 targetPosition = target;
+        //目的地への方向を見る
+        //        transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
+
+        //NavMeshAgentで動かす
         if (GetComponent<NavMeshAgent>())
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.destination = transform.position;
+            agent.updateRotation = false;
+            agent.speed = speed;
+            agent.destination = target;
         }
-
-        //ターゲットがいない場合
-        if (target == null)
-            return;
-
-        Vector3 targetPosition = target.transform.position;
-        //目的地への方向を見る
-        transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
-
-        if (!IsAttack)
-        {
-            //NavMeshAgentで動かす
-            if (GetComponent<NavMeshAgent>())
-            {
-                NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.speed = status.CurrentSPEED;
-                agent.destination = targetPosition;
-            }
-        }
-        else
-        {
-            //NavMeshAgentで動かす
-            if (GetComponent<NavMeshAgent>())
-            {
-                this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.destination = transform.position;
-            }
-        }
+        //if (!IsAttack)
+        //{
+        //}
+        //else
+        //{
+        //    //NavMeshAgentで動かす
+        //    if (GetComponent<NavMeshAgent>())
+        //    {
+        //        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        //        NavMeshAgent agent = GetComponent<NavMeshAgent>();
+        //        agent.destination = transform.position;
+        //    }
+        //}
     }
 
     //徘徊命令

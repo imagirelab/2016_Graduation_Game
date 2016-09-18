@@ -38,17 +38,35 @@ public class Demons : Unit
             IsFind = false;
             if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
             {
-                IsFind = true;
-                state = State.Find;
+                RaycastHit hit;
+                Vector3 vec = targetObject.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, vec);
+                if (Physics.Raycast(ray, out hit, 40.0f))
+                {
+                    if(hit.collider.gameObject == targetObject)
+                    {
+                        IsFind = true;
+                        state = State.Find;
+                    }
+                }
             }
 
             //攻撃
             IsAttack = false;
             if (Vector3.Distance(transform.position, targetObject.transform.position) < ATKRange * transform.localScale.x + 1.0f)  //攻撃範囲
             {
-                IsAttack = true;
-                gameObject.GetComponent<UnitAttack>().enabled = true;
-                state = State.Attack;
+                RaycastHit hit;
+                Vector3 vec = targetObject.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, vec);
+                if (Physics.Raycast(ray, out hit, ATKRange * transform.localScale.x + 1.0f))
+                {
+                    if (hit.collider.gameObject == targetObject)
+                    {
+                        IsAttack = true;
+                        gameObject.GetComponent<UnitAttack>().enabled = true;
+                        state = State.Attack;
+                    }
+                }
             }
 
             //徘徊

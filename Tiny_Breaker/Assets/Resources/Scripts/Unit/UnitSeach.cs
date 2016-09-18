@@ -17,6 +17,7 @@ public class UnitSeach : MonoBehaviour
             //プレイヤーのTarget
             unit.SetNearTargetObject();
             
+            //yield return new WaitForSeconds(1.0f);
             yield return null;
         }
     }

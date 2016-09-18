@@ -152,6 +152,7 @@ public class Spawner : MonoBehaviour
                                     rootes[j].transform.position,
                                     soldiers[solNum].transform.rotation);
                     instance.transform.parent = gameObject.transform;       //親
+                    instance.layer = players[id].transform.gameObject.layer;    //兵士には仲間側のレイヤー情報を渡す
                     instance.tag = players[id].transform.gameObject.tag;    //自分のタグを設定
                     instance.GetComponent<Unit>().targetTag = players[id].TergetTag;   //相手のタグを設定
                     instance.GetComponent<Unit>().LoiteringPointObj = rootPointes[id].ToArray();    //徘徊ルート

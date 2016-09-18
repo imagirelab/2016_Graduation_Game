@@ -19,6 +19,8 @@ public class UnitAttack : MonoBehaviour
             //攻撃対象がいることを確認してから攻撃
             if (unit.targetObject != null)
             {
+                transform.LookAt(unit.targetObject.transform.position);
+
                 //悪魔と兵士について
                 if (unit.targetObject.GetComponent<Unit>())
                 {
