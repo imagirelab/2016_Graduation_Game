@@ -9,8 +9,12 @@ public class Soldier : Unit
     float deadTime = 1.0f;
     float deadcount = 0.0f;
 
-    public int powerUPCount = 0;
+    [SerializeField]
+    float findTime = 1.0f;
+    float findcount = 0;
 
+    public int powerUPCount = 0;
+    
     void Start()
     {
         // 作られたときにリストに追加する
@@ -39,21 +43,28 @@ public class Soldier : Unit
             Dying();
         else
         {
+            findcount += Time.deltaTime;
+
             if (targetObject != null)
             {
-                //発見
-                IsFind = false;
-                if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
+                if (findcount >= findTime)
                 {
-                    RaycastHit hit;
-                    Vector3 vec = targetObject.transform.position - transform.position;
-                    Ray ray = new Ray(transform.position, vec);
-                    if (Physics.Raycast(ray, out hit, 40.0f))
+                    findcount = 0;
+
+                    //発見
+                    IsFind = false;
+                    if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
                     {
-                        if (hit.collider.gameObject == targetObject)
+                        RaycastHit hit;
+                        Vector3 vec = targetObject.transform.position - transform.position;
+                        Ray ray = new Ray(transform.position, vec);
+                        if (Physics.Raycast(ray, out hit, 40.0f))
                         {
-                            IsFind = true;
-                            state = State.Find;
+                            if (hit.collider.gameObject == targetObject)
+                            {
+                                IsFind = true;
+                                state = State.Find;
+                            }
                         }
                     }
                 }

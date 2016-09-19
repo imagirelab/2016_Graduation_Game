@@ -14,6 +14,10 @@ public class Demons : Unit
         set { growPoint = value; }
     }
 
+    [SerializeField]
+    float findTime = 1.0f;
+    float findcount = 0;
+
     void Start()
     {
         // 作られたときにリストに追加する
@@ -32,21 +36,28 @@ public class Demons : Unit
 
     void Update()
     {
+        findcount += Time.deltaTime;
+
         if (targetObject != null)
         {
-            //発見
-            IsFind = false;
-            if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
+            if (findcount >= findTime)
             {
-                RaycastHit hit;
-                Vector3 vec = targetObject.transform.position - transform.position;
-                Ray ray = new Ray(transform.position, vec);
-                if (Physics.Raycast(ray, out hit, 40.0f))
+                findcount = 0;
+
+                //発見
+                IsFind = false;
+                if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
                 {
-                    if(hit.collider.gameObject == targetObject)
+                    RaycastHit hit;
+                    Vector3 vec = targetObject.transform.position - transform.position;
+                    Ray ray = new Ray(transform.position, vec);
+                    if (Physics.SphereCast(ray, 3.0f, out hit, 40.0f))
                     {
-                        IsFind = true;
-                        state = State.Find;
+                        if (hit.collider.gameObject == targetObject)
+                        {
+                            IsFind = true;
+                            state = State.Find;
+                        }
                     }
                 }
             }
@@ -58,7 +69,7 @@ public class Demons : Unit
                 RaycastHit hit;
                 Vector3 vec = targetObject.transform.position - transform.position;
                 Ray ray = new Ray(transform.position, vec);
-                if (Physics.Raycast(ray, out hit, ATKRange * transform.localScale.x + 1.0f))
+                if (Physics.SphereCast(ray, 3.0f, out hit, ATKRange * transform.localScale.x + 1.0f))
                 {
                     if (hit.collider.gameObject == targetObject)
                     {

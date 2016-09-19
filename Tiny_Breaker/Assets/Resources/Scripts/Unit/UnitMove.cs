@@ -28,7 +28,7 @@ public class UnitMove : MonoBehaviour
 
                         //サーチ中止まってたら何かに引っかかってる可能性
                         Ray raySearch = new Ray(transform.position, rootVec);
-                        if (Physics.Raycast(raySearch, out hit, 5.0f))
+                        if (Physics.SphereCast(raySearch, 2.0f, out hit, 5.0f))
                         {
                             //ナビゲーションは最低限で用いる
                             gameObject.GetComponent<NavMeshAgent>().enabled = true;
@@ -47,7 +47,7 @@ public class UnitMove : MonoBehaviour
 
                         //サーチ中止まってたら何かに引っかかってる可能性
                         Ray rayFind = new Ray(transform.position, targetVec);
-                        if (Physics.Raycast(rayFind, out hit, 5.0f))
+                        if (Physics.SphereCast(rayFind, 2.0f, out hit, 5.0f))
                         {
                             //ナビゲーションは最低限で用いる
                             gameObject.GetComponent<NavMeshAgent>().enabled = true;
@@ -60,6 +60,7 @@ public class UnitMove : MonoBehaviour
                         }
                         break;
                     default:
+                        gameObject.GetComponent<NavMeshAgent>().enabled = false;
                         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                         break;
                 }
