@@ -26,7 +26,7 @@ public class UnitMove : MonoBehaviour
                         Vector3 rootVec = rootPos - transform.position;
                         transform.LookAt(transform.position + rootVec);
 
-                        //サーチ中止まってたら何かに引っかかってる可能性
+                        //サーチ中、止まってたら何かに引っかかってる可能性
                         Ray raySearch = new Ray(transform.position, rootVec);
                         if (Physics.SphereCast(raySearch, 2.0f, out hit, 5.0f))
                         {
@@ -45,7 +45,7 @@ public class UnitMove : MonoBehaviour
                         Vector3 targetVec = unit.targetObject.transform.position - transform.position;
                         transform.LookAt(transform.position + targetVec);
 
-                        //サーチ中止まってたら何かに引っかかってる可能性
+                        //サーチ中、止まってたら何かに引っかかってる可能性
                         Ray rayFind = new Ray(transform.position, targetVec);
                         if (Physics.SphereCast(rayFind, 2.0f, out hit, 5.0f))
                         {
