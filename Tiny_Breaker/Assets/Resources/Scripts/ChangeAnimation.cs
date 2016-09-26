@@ -22,9 +22,9 @@ public class ChangeAnimation : MonoBehaviour {
             foreach (AnimatorControllerParameter param in parameters)
             {
                 if(param.name == "IsAttack")
-                    GetComponent<Animator>().SetBool("IsAttack", unit.GetComponent<Unit>().IsAttack);
+                    GetComponent<Animator>().SetBool("IsAttack", unit.GetComponent<UnitAttack>().IsAttack);
                 if (param.name == "IsFind")
-                    GetComponent<Animator>().SetBool("IsFind", unit.GetComponent<Unit>().IsFind);
+                    GetComponent<Animator>().SetBool("IsFind", unit.GetComponent<UnitSeach>().IsFind);
             }
         }
     }

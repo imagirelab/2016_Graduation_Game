@@ -51,7 +51,7 @@ namespace StaticClass
             return list;
         }
 
-        //指定したvalueの要素だけを取得
+        //指定したvalue以外の要素だけを取得
         public List<GameObject> GetListToTagExc(string tag)
         {
             List<GameObject> list = new List<GameObject>();
@@ -63,13 +63,53 @@ namespace StaticClass
             return list;
         }
 
+        //リストの中から同じルート番号のものを見つけてリストを再構成
+        List<GameObject> GetListToRoot(List<GameObject> chacklist, int rootNum)
+        {
+            List<GameObject> list = new List<GameObject>();
+
+            foreach (GameObject e in chacklist)
+                if (e.GetComponent<Unit>())
+                    if (e.GetComponent<Unit>().rootNum == rootNum)
+                        list.Add(e);
+
+            return list;
+        }
+
         //一番近い悪魔を返す
         public GameObject GetNearestObject(string tag, Vector3 center)
         {
-            //指定したタグの中で一番近いものとする
-            //List<GameObject> list = GetListToTag(tag);
             //指定したタグ以外で一番近いものとする
             List<GameObject> list = GetListToTagExc(tag);
+
+            if (list.Count == 0)
+                return null;
+
+            GameObject nearestObject = list[0];
+
+            foreach (var e in list)
+            {
+                if (Vector3.Distance(center, e.gameObject.transform.position) < Vector3.Distance(center, nearestObject.gameObject.transform.position))
+                    nearestObject = e;
+            }
+
+            return nearestObject;
+        }
+
+        /// <summary>
+        /// 指定したルートの中で一番近い兵士を返す
+        /// </summary>
+        /// <param name="tag">検索しないタグ名</param>
+        /// <param name="center">中心点</param>
+        /// <param name="rootNum">ルート番号</param>
+        /// <returns>一番近い兵士</returns>
+        public GameObject GetNearestObject(string tag, Vector3 center, int rootNum)
+        {
+            //指定したタグ以外で一番近いものとする
+            List<GameObject> list = GetListToTagExc(tag);
+
+            //ルート番号か同じものだけを抽出する
+            list = GetListToRoot(list, rootNum);
 
             if (list.Count == 0)
                 return null;

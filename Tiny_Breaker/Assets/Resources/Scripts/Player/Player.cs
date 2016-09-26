@@ -457,8 +457,10 @@ public class Player : MonoBehaviour
             instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
             instaceObject.GetComponent<Unit>().goalObject = target; //最終目標
                                                                     //instaceObject.GetComponent<Demons>().Order = orders[Demon_TYPE.PUPU];
+            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootNum].ToArray();
             instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
-            instaceObject.GetComponent<Demons>().LoiteringPointObj = rootPointes[rootNum].ToArray();
+
+            instaceObject.GetComponent<Unit>().rootNum = rootNum;
 
             //出るとき重なる瞬間は回らないように
             instaceObject.GetComponent<Rigidbody>().freezeRotation = true;

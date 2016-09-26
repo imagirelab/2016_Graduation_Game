@@ -42,6 +42,9 @@ public class Spawner : MonoBehaviour
     //生成する兵士の番号
     int solNum = 0;
 
+    [SerializeField]
+    int rootNum = 0;
+
     void Start ()
     {
         currentPlayerID = 0;
@@ -117,6 +120,7 @@ public class Spawner : MonoBehaviour
                     instance.GetComponent<Unit>().targetTag = players[j].tag;   //相手のタグを設定
                     instance.GetComponent<Unit>().LoiteringPointObj = rootPointes[j].ToArray();     //巡回ルート
                     instance.GetComponent<Unit>().goalObject = players[j].SpawnPoint.gameObject;    //最終目標
+                    instance.GetComponent<Unit>().rootNum = rootNum;    //ルート番号を継承
                 }
             }
         }
@@ -157,6 +161,7 @@ public class Spawner : MonoBehaviour
                     instance.GetComponent<Unit>().targetTag = players[id].TergetTag;   //相手のタグを設定
                     instance.GetComponent<Unit>().LoiteringPointObj = rootPointes[id].ToArray();    //徘徊ルート
                     instance.GetComponent<Unit>().goalObject = players[id].target;  //最終目標
+                    instance.GetComponent<Unit>().rootNum = rootNum;    //ルート番号を継承
                 }
             }
         }

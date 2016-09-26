@@ -3,95 +3,170 @@ using System.Collections;
 
 public class UnitAttack : MonoBehaviour
 {
+    [SerializeField]    //Unity側から見たいとき用
+    //[HideInInspector]
+    bool isAttack = false;
+    public bool IsAttack { get { return isAttack; } }
+
     [SerializeField]
     Unit.Type adType = Unit.Type.White;
     [SerializeField]
+    float admag = 1.5f;
+    [SerializeField]
     Unit.Type unadType = Unit.Type.White;
+    [SerializeField]
+    float unadmag = 0.5f;
+
+    //攻撃範囲
+    [SerializeField]
+    float atkRange = 2.0f;
+    public float AtkRange { set { atkRange = value; } }
+
+    //攻撃間隔
+    [SerializeField]
+    float atkTime = 1.0f;
+    public float AtkTime { set { atkTime = value; } }
+
+    //攻撃実行対象
+    public GameObject target = null;
+
+    Unit unit;
 
     Coroutine cor;
 
     IEnumerator Attack()
     {
-        Unit unit = gameObject.GetComponent<Unit>();
+        unit = gameObject.GetComponent<Unit>();
 
         while (true)
         {
-            //攻撃対象がいることを確認してから攻撃
-            if (unit.targetObject != null)
+            if (!isAttack)
             {
-                transform.LookAt(unit.targetObject.transform.position);
-
-                //悪魔と兵士について
-                if (unit.targetObject.GetComponent<Unit>())
+                if (unit.targetObject != null)
                 {
-                    //倍率
-                    float mag = 1.0f;
-
-                    //倍率計算
-                    if (unit.targetObject.GetComponent<Unit>().type == adType)
-                        mag = 1.5f;
-                    if (unit.targetObject.GetComponent<Unit>().type == unadType)
-                        mag = 0.5f;
-
-                    unit.targetObject.GetComponent<Unit>().status.CurrentHP -= Mathf.RoundToInt(unit.status.CurrentATK * mag);  //四捨五入
-
-                    //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (unit.targetObject.GetComponent<Unit>().status.CurrentHP <= 0)
+                    RaycastHit hit;
+                    Vector3 vec = unit.targetObject.transform.position - transform.position;
+                    Ray ray = new Ray(transform.position, vec);
+                    int layerMask = ~(1 << transform.gameObject.layer);  //自身のレイヤー番号以外にヒットするようにしたビット演算
+                    if (Physics.SphereCast(ray, 3.0f, out hit, atkRange + transform.localScale.x, layerMask))
                     {
-                        if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+                        if (hit.collider.gameObject == unit.targetObject)
                         {
-                            PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
-                            Player player = unit.transform.root.gameObject.GetComponent<Player>();
+                            isAttack = true;
 
-                            //parent.transform.root は　悪魔のRootつまりプレイヤー
-                            player.AddCostList(playerCost.GetSoldierCost);
-                        }
-                    }
-                }
-                //建物への攻撃はこっち
-                if (unit.targetObject.GetComponent<House>())
-                {
-                    unit.targetObject.GetComponent<House>().HPpro -= unit.status.CurrentATK;
-
-                    //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-                    if (unit.targetObject.GetComponent<House>().HPpro <= 0)
-                    {
-                        if (unit.transform.root.gameObject.GetComponent<Player>() != null)
-                        {
-                            Player player = unit.transform.root.gameObject.GetComponent<Player>();
-
-                            //スポナーがあるときPlayerIDを登録
-                            if (unit.targetObject.GetComponent<Spawner>() != null)
+                            //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
+                            if (target == null)
                             {
-                                //倒した奴のタグにする
-                                unit.targetObject.tag = player.transform.gameObject.tag;
-                                //子供も一緒に
-                                foreach (Transform child in unit.targetObject.transform)
-                                    child.gameObject.tag = player.transform.gameObject.tag;
-
-                                unit.targetObject.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
-                                unit.targetObject.GetComponent<Spawner>().CurrentTargetID = player.targetID;
-                            }
-
-                            if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
-                            {
-                                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
-
-                                player.AddCostList(playerCost.GetSoldierCost);
+                                target = unit.targetObject;
                             }
                         }
+                        else
+                            isAttack = false;
                     }
                 }
-                //城への攻撃はこっち
-                if (unit.targetObject.GetComponent<DefenseBase>())
+                yield return null;
+            }
+            else
+            {
+                //攻撃対象がいることを確認してから攻撃
+                if (target != null)
                 {
-                    unit.targetObject.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
-                    //unit.status.CurrentHP = 0;
+                    transform.LookAt(target.transform.position);
+
+                    if (target.GetComponent<Unit>())
+                        AttackUnit();
+                    else if (target.GetComponent<House>())
+                        AttackHouse();
+                    else if (target.GetComponent<DefenseBase>())
+                        AttackDefenseBase();
+                }
+
+                //対象の体力がなくなったらフラグを一旦戻す
+                if (target == null)
+                {
+                    isAttack = false;
+                    yield return null;
+                }
+                else
+                    yield return new WaitForSeconds(atkTime);
+            }
+        }
+    }
+
+    void AttackUnit()
+    {
+        //悪魔と兵士について
+        //倍率
+        float mag = 1.0f;
+
+        //倍率計算
+        if (target.GetComponent<Unit>().type == adType)
+            mag = admag;
+        if (target.GetComponent<Unit>().type == unadType)
+            mag = unadmag;
+
+        target.GetComponent<Unit>().status.CurrentHP -= Mathf.RoundToInt(unit.status.CurrentATK * mag);  //四捨五入
+
+        //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
+        if (target.GetComponent<Unit>().status.CurrentHP <= 0)
+        {
+            if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+            {
+                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+                Player player = unit.transform.root.gameObject.GetComponent<Player>();
+
+                //parent.transform.root は　悪魔のRootつまりプレイヤー
+                player.AddCostList(playerCost.GetSoldierCost);
+            }
+
+            //攻撃実行対象を戻す
+            target = null;
+        }
+    }
+
+    void AttackHouse()
+    {
+        //建物への攻撃はこっち
+        target.GetComponent<House>().HPpro -= unit.status.CurrentATK;
+
+        //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
+        if (target.GetComponent<House>().HPpro <= 0)
+        {
+            if (unit.transform.root.gameObject.GetComponent<Player>() != null)
+            {
+                Player player = unit.transform.root.gameObject.GetComponent<Player>();
+
+                //スポナーがあるときPlayerIDを登録
+                if (target.GetComponent<Spawner>() != null)
+                {
+                    //倒した奴のタグにする
+                    target.tag = player.transform.gameObject.tag;
+                    //子供も一緒に
+                    foreach (Transform child in target.transform)
+                        child.gameObject.tag = player.transform.gameObject.tag;
+
+                    target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
+                    target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
+                }
+
+                if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+                {
+                    PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+
+                    player.AddCostList(playerCost.GetSoldierCost);
                 }
             }
 
-            yield return new WaitForSeconds(unit.status.CurrentAtackTime);  //攻撃間隔
+            //攻撃実行対象を戻す
+            target = null;
         }
+    }
+
+    void AttackDefenseBase()
+    {
+        //城への攻撃はこっち
+        if (target.GetComponent<DefenseBase>())
+            target.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
     }
 
     void OnEnable()
