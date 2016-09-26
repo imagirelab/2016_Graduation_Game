@@ -25,12 +25,13 @@ public class UnitEffect : MonoBehaviour
 	void Update ()
     {
         //ユニットが攻撃判定かつエフェクト再生されてなかった場合に呼び出し
-        if(parentDemon.IsAttack && !_particle.isPlaying)
+        if(parentDemon.state == Unit.State.Attack && !_particle.isPlaying)
         {
+            _particle.time = 0;
             _particle.playbackSpeed = myplayBackSpeed;
             _particle.Play();
         }
-        else if(!parentDemon.IsAttack)
+        else if(parentDemon.state != Unit.State.Attack)
         {
             _particle.Stop();
             _particle.time = 0;

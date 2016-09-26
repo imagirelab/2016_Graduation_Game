@@ -73,6 +73,10 @@ public class Soldier : Unit
         {
             IsDead = true;
 
+            //脂肪エフェクト出現
+            Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+            Instantiate(deadSE);
+
             //リストから外すタイミングを死んだ条件の中に入れる
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
 

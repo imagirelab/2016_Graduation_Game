@@ -40,6 +40,11 @@ public class Unit : MonoBehaviour
     public GameObject goalObject;       //ゴール
     //[HideInInspector]
     public GameObject targetObject;       //目標
+
+    public GameObject deadEffect;       //死亡エフェクト
+
+    public GameObject deadSE;           //遊び
+
     //[HideInInspector]
     public string targetTag;       //相手のタグ
 

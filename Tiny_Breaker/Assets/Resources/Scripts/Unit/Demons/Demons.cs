@@ -18,7 +18,7 @@ public class Demons : Unit
     {
         // 作られたときにリストに追加する
         DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-
+       
         //死亡フラグ
         IsDead = false;
 
@@ -61,6 +61,9 @@ public class Demons : Unit
         //死んだ直後に魂を回収してみる
         if (transform.parent != null)
             transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
+
+        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+        Instantiate(deadSE);
 
         Destroy(gameObject);
     }
