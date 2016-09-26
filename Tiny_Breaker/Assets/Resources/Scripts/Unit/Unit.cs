@@ -35,40 +35,24 @@ public class Unit : MonoBehaviour
 
     [HideInInspector]
     public bool IsDead;
-
-    //攻撃関連
-    [HideInInspector]
-    public bool IsAttack;           //攻撃中フラグ
-    [HideInInspector]
-    public bool IsFind;             //発見フラグ
-    [HideInInspector]
-    public GameObject targetObject;       //目標
     
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject goalObject;       //ゴール
-    [HideInInspector]
+    //[HideInInspector]
+    public GameObject targetObject;       //目標
+    //[HideInInspector]
     public string targetTag;       //相手のタグ
 
     //巡回地点
     protected Transform[] loiteringPointObj;
     public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
 
-    int currentRoot = 0;
+    int currentRootPoint = 0;
+    //[HideInInspector]
+    public int rootNum = 0;
 
     public void Move(Vector3 target, float speed)
     {
-        //this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        ////NavMeshAgentを止める
-        //if (GetComponent<NavMeshAgent>())
-        //{
-        //    NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        //    agent.destination = transform.position;
-        //}
-
-        //Vector3 targetPosition = target;
-        //目的地への方向を見る
-        //        transform.LookAt(new Vector3(target.x, transform.position.y, target.z));
-
         //NavMeshAgentで動かす
         if (GetComponent<NavMeshAgent>())
         {
@@ -77,70 +61,16 @@ public class Unit : MonoBehaviour
             agent.speed = speed;
             agent.destination = target;
         }
-        //if (!IsAttack)
-        //{
-        //}
-        //else
-        //{
-        //    //NavMeshAgentで動かす
-        //    if (GetComponent<NavMeshAgent>())
-        //    {
-        //        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //        NavMeshAgent agent = GetComponent<NavMeshAgent>();
-        //        agent.destination = transform.position;
-        //    }
-        //}
     }
-
-    //徘徊命令
-    protected void Loitering(Transform[] LoiteringPos)
-    {
-        this.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //NavMeshAgentを止める
-        if (GetComponent<NavMeshAgent>())
-        {
-            NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.Stop();
-        }
-
-        Vector3 targetPosition = LoiteringPos[currentRoot].transform.position;
-        //目的地への方向を見る
-        transform.LookAt(new Vector3(targetPosition.x, transform.position.y, targetPosition.z));
-
-        if (!IsFind)
-        {
-            //NavMeshAgentで動かす
-            if (GetComponent<NavMeshAgent>())
-            {
-                NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.speed = loiteringSPEED;
-                agent.destination = targetPosition;
-                agent.Resume();
-            }
-        }
-
-        if (Vector3.Distance(transform.position, targetPosition) < 5.0f)
-        {
-            //巡回しない方
-            if (GetComponent<NavMeshAgent>())
-            {
-                NavMeshAgent agent = GetComponent<NavMeshAgent>();
-                agent.destination = transform.position;
-            }
-            if (currentRoot < LoiteringPos.Length - 1)
-                currentRoot++;
-            //currentRoot = (currentRoot < LoiteringPos.Length - 1) ? currentRoot + 1 : 0;
-        }
-    }
-
+    
     public void SetNearTargetObject()
     {
         //プレイヤーのTarget
         targetObject = goalObject;
 
         //悪魔
-        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position);
-        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position);
+        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position, rootNum);
+        GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position, rootNum);
         GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
 
 
@@ -166,12 +96,12 @@ public class Unit : MonoBehaviour
     //巡回ルートの座標を所得する
     public Vector3 GetRootPosition()
     {
-        Vector3 rootPosition = loiteringPointObj[currentRoot].transform.position;
+        Vector3 rootPosition = loiteringPointObj[currentRootPoint].transform.position;
         
         if (Vector3.Distance(transform.position, rootPosition) < 5.0f)
         {
-            if (currentRoot < loiteringPointObj.Length - 1)
-                currentRoot++;
+            if (currentRootPoint < loiteringPointObj.Length - 1)
+                currentRootPoint++;
         }
 
         return rootPosition;

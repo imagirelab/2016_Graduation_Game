@@ -5,17 +5,19 @@ using UnityEngine;
 public class LookAtCamera : MonoBehaviour
 {
     [SerializeField]
-    Camera camera;
+    Camera cam;
 
     void Start()
     {
-        if (camera == null)
-            camera = Camera.main;
+        cam = new Camera();
+
+        if (cam == null)
+            cam = Camera.main;
     }
 
     void Update()
     {
-        transform.forward = camera.transform.forward;
+        transform.forward = cam.transform.forward;
     }
 
     void Disable()

@@ -8,11 +8,7 @@ public class Soldier : Unit
     [SerializeField]
     float deadTime = 1.0f;
     float deadcount = 0.0f;
-
-    [SerializeField]
-    float findTime = 1.0f;
-    float findcount = 0;
-
+    
     public int powerUPCount = 0;
     
     void Start()
@@ -31,6 +27,10 @@ public class Soldier : Unit
 
         //ステータスの決定
         SetStatus();
+
+        //攻撃に関する設定
+        GetComponent<UnitAttack>().AtkRange = ATKRange;
+        GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
     }
 
     void Update()
@@ -43,64 +43,17 @@ public class Soldier : Unit
             Dying();
         else
         {
-            findcount += Time.deltaTime;
+            //一番近くの敵を狙う
+            SetNearTargetObject();
 
-            if (targetObject != null)
-            {
-                if (findcount >= findTime)
-                {
-                    findcount = 0;
-
-                    //発見
-                    IsFind = false;
-                    if (Vector3.Distance(transform.position, targetObject.transform.position) < 40.0f)  //40.0f = Collider.Radius * LocalScale
-                    {
-                        RaycastHit hit;
-                        Vector3 vec = targetObject.transform.position - transform.position;
-                        Ray ray = new Ray(transform.position, vec);
-                        if (Physics.Raycast(ray, out hit, 40.0f))
-                        {
-                            if (hit.collider.gameObject == targetObject)
-                            {
-                                IsFind = true;
-                                state = State.Find;
-                            }
-                        }
-                    }
-                }
-
-                //攻撃
-                IsAttack = false;
-                if (Vector3.Distance(transform.position, targetObject.transform.position) < ATKRange * transform.localScale.x + 1.0f)  //攻撃範囲
-                {
-                    RaycastHit hit;
-                    Vector3 vec = targetObject.transform.position - transform.position;
-                    Ray ray = new Ray(transform.position, vec);
-                    if (Physics.Raycast(ray, out hit, ATKRange * transform.localScale.x + 1.0f))
-                    {
-                        if (hit.collider.gameObject == targetObject)
-                        {
-                            IsAttack = true;
-                            gameObject.GetComponent<UnitAttack>().enabled = true;
-                            state = State.Attack;
-                        }
-                    }
-                }
-
-                //徘徊
-                if (!IsFind && !IsAttack)
-                {
-                    gameObject.GetComponent<UnitAttack>().enabled = false;
-                    state = State.Search;
-                }
-            }
+            //状態の切り替え
+            if (GetComponent<UnitSeach>().IsFind)
+                state = State.Find;
             else
-            {
-                IsFind = false;
-                IsAttack = false;
-                gameObject.GetComponent<UnitAttack>().enabled = false;
-                state = State.Wait;
-            }
+                state = State.Search;
+
+            if (GetComponent<UnitAttack>().IsAttack)
+                state = State.Attack;
         }
     }
     
