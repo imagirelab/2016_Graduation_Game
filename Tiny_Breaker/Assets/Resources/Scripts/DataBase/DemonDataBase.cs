@@ -77,7 +77,7 @@ namespace StaticClass
         /// <summary>
         /// 一番近い悪魔を返す
         /// </summary>
-        /// <param name="tag">検索しないタグ名</param>
+        /// <param name="tag">検索したいタグ名</param>
         /// <param name="center">中心点</param>
         /// <returns>一番近い悪魔</returns>
         public GameObject GetNearestObject(string tag, Vector3 center)
@@ -108,8 +108,11 @@ namespace StaticClass
         /// <returns>一番近い悪魔</returns>
         public GameObject GetNearestObject(string tag, Vector3 center, int rootNum)
         {
-            //指定したタグ以外で一番近いものとする
-            List<GameObject> list = GetListToTagExc(tag);
+            ////指定したタグ以外で一番近いものとする
+            //List<GameObject> list = GetListToTagExc(tag);
+
+            //指定したタグの中で一番近いものとする
+            List<GameObject> list = GetListToTag(tag);
 
             //ルート番号か同じものだけを抽出する
             list = GetListToRoot(list, rootNum);

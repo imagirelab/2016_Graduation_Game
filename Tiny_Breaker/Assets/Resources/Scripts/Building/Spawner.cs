@@ -81,11 +81,6 @@ public class Spawner : MonoBehaviour
 	
 	void Update ()
     {
-        //プレイヤーのどちらかが倒されていたら更新しない
-        foreach (Player e in players)
-            if (e.SpawnPoint.gameObject == null)
-                return;
-
         timer += Time.deltaTime;
 
         //生成時間に達しているか確認
@@ -138,9 +133,7 @@ public class Spawner : MonoBehaviour
                 rootPointes.Add(i, new List<Transform>());
 
                 foreach (Transform child in rootes[targetID].transform)
-                {
                     rootPointes[i].Add(child);
-                }
 
                 //プレイヤーの数以内であれば
                 if (i < players.Length)

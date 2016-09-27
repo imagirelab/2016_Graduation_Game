@@ -74,11 +74,10 @@ public class Unit : MonoBehaviour
         targetObject = goalObject;
 
         //悪魔
-        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position, rootNum);
+        GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position, rootNum);
         GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position, rootNum);
         GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-
-
+        
         if (nearestObject != null && targetObject != null)
             if (nearestObject.tag != transform.gameObject.tag)
                 if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <

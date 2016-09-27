@@ -73,7 +73,7 @@ public class Soldier : Unit
         {
             IsDead = true;
 
-            //脂肪エフェクト出現
+            //死亡エフェクト出現
             Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
             Instantiate(deadSE);
 

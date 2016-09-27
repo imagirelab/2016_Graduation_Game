@@ -68,6 +68,16 @@ public class UnitAttack : MonoBehaviour
             }
             else
             {
+                //対象物が同じタグだったら仲間だから攻撃しない
+                if (target != null)
+                {
+                    if (target.tag == transform.gameObject.tag)
+                    {
+                        //攻撃実行対象を戻す
+                        target = null;
+                    }
+                }
+
                 //攻撃対象がいることを確認してから攻撃
                 if (target != null)
                 {
@@ -83,12 +93,9 @@ public class UnitAttack : MonoBehaviour
 
                 //対象の体力がなくなったらフラグを一旦戻す
                 if (target == null)
-                {
                     isAttack = false;
-                    yield return null;
-                }
-                else
-                    yield return new WaitForSeconds(atkTime);
+
+                yield return new WaitForSeconds(atkTime);
             }
         }
     }

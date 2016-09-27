@@ -41,6 +41,13 @@ public class House : MonoBehaviour {
         {
             //HPリセット
             currentHP = HP;
+            
+            //一旦出ていた兵士は全員殺す
+            foreach (Transform child in transform)
+            {
+                if (child.gameObject.GetComponent<Unit>())
+                    child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
+            }
         }
     }
 }
