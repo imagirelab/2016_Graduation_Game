@@ -37,7 +37,7 @@ public class UnitSeach : MonoBehaviour
         RaycastHit hit;
         Vector3 vec = unit.targetObject.transform.position - transform.position;
         Ray ray = new Ray(transform.position, vec);
-        int layerMask = ~(1 << transform.gameObject.layer);  //自身のレイヤー番号以外にヒットするようにしたビット演算
+        int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
         if (Physics.SphereCast(ray, 3.0f, out hit, findRange + transform.localScale.x, layerMask))
         {
             if (hit.collider.gameObject == unit.targetObject)
