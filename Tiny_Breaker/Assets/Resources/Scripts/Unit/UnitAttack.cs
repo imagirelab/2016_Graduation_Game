@@ -95,6 +95,7 @@ public class UnitAttack : MonoBehaviour
                 if (target == null)
                     isAttack = false;
 
+                yield return null;
                 yield return new WaitForSeconds(atkTime);
             }
         }
