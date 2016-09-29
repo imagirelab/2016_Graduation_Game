@@ -54,6 +54,9 @@ public class Soldier : Unit
 
             if (GetComponent<UnitAttack>().IsAttack)
                 state = State.Attack;
+
+            //ダメージを受けたかの確認
+            DamageCheck(status.CurrentHP);
         }
     }
     

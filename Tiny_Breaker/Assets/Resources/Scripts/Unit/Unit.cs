@@ -35,7 +35,10 @@ public class Unit : MonoBehaviour
 
     [HideInInspector]
     public bool IsDead;
-    
+    [HideInInspector]
+    public bool IsDamage;   //ダメージ確認
+    protected int oldHP = 0;    //直前の体力確認用
+
     //[HideInInspector]
     public GameObject goalObject;       //ゴール
     //[HideInInspector]
@@ -95,6 +98,20 @@ public class Unit : MonoBehaviour
                 if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
                     Vector3.Distance(this.transform.position, targetObject.transform.position))
                     targetObject = nearBuild;
+    }
+
+    //ダメージを受けたか確認する
+    public void DamageCheck(int nowHP)
+    {
+        if(nowHP < oldHP)
+        {
+            IsDamage = true;
+        }
+        else
+        {
+            IsDamage = false;
+        }
+        oldHP = nowHP;
     }
 
     //巡回ルートの座標を所得する

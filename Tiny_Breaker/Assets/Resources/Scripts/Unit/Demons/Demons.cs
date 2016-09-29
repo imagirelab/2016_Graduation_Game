@@ -47,10 +47,13 @@ public class Demons : Unit
 
         if(GetComponent<UnitAttack>().IsAttack)
             state = State.Attack;
-        
+
+        //ダメージを受けたかの確認
+        DamageCheck(status.CurrentHP);
+
         //死亡処理
         if (status.CurrentHP <= 0)
-            Dead();
+            Dead();        
     }
 
     //死んだときの処理
