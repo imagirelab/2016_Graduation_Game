@@ -6,7 +6,9 @@ public class UnitEffect : MonoBehaviour
     public enum TYPE
     {
         Demon,
-        Soldier
+        Soldier,
+        House,
+        Base
     }
     public TYPE unitType = TYPE.Demon;
 
@@ -14,6 +16,10 @@ public class UnitEffect : MonoBehaviour
     private Demons parentDemon;
     //1個上のソルジャーを取得するための置物
     private Soldier parentSoldier;
+    //１個上のハウスを取得するための置物
+    private House parentHouse;
+    //１個上の拠点を取得するための置物
+    private DefenseBase parentBase;
 
     //何回も使うので呼び出しを軽くするために
     private ParticleSystem _particle;
@@ -31,8 +37,18 @@ public class UnitEffect : MonoBehaviour
         }
         else if(unitType == TYPE.Soldier)
         {
-            //親の方へ向かって最初のDemonsが入ってるオブジェクトを取得
+            //親の方へ向かって最初のSoldierが入ってるオブジェクトを取得
             parentSoldier = this.gameObject.GetComponentInParent<Soldier>();
+        }
+        else if(unitType == TYPE.House)
+        {
+            //親の方へ向かって最初のHouseが入ってるオブジェクトを取得
+            parentHouse = this.gameObject.GetComponentInParent<House>();
+        }
+        else if (unitType == TYPE.Base)
+        {
+            //親の方へ向かって最初のHouseが入ってるオブジェクトを取得
+            parentBase = this.gameObject.GetComponentInParent<DefenseBase>();
         }
 
         _particle = this.gameObject.GetComponent<ParticleSystem>();
@@ -41,34 +57,41 @@ public class UnitEffect : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
+        //それぞれコンポーネントの取得先が違うので別々に
         if (unitType == TYPE.Demon)
         {
-            //ユニットが攻撃判定かつエフェクト再生されてなかった場合に呼び出し
-            if (parentDemon.state == Unit.State.Attack && !_particle.isPlaying)
+            if (parentDemon.IsDamage && !_particle.isPlaying)
             {
                 _particle.time = 0;
                 _particle.playbackSpeed = myplayBackSpeed;
                 _particle.Play();
-            }
-            else if (parentDemon.state != Unit.State.Attack)
-            {
-                _particle.Stop();
-                _particle.time = 0;
             }
         }
         else if (unitType == TYPE.Soldier)
         {
-            //ユニットが攻撃判定かつエフェクト再生されてなかった場合に呼び出し
-            if (parentSoldier.state == Unit.State.Attack && !_particle.isPlaying)
+            if (parentSoldier.IsDamage && !_particle.isPlaying)
             {
                 _particle.time = 0;
                 _particle.playbackSpeed = myplayBackSpeed;
                 _particle.Play();
             }
-            else if (parentSoldier.state != Unit.State.Attack)
+        }
+        else if (unitType == TYPE.House)
+        {
+            if (parentHouse.IsDamage && !_particle.isPlaying)
             {
-                _particle.Stop();
                 _particle.time = 0;
+                _particle.playbackSpeed = myplayBackSpeed;
+                _particle.Play();
+            }
+        }
+        else if (unitType == TYPE.Base)
+        {
+            if (parentBase.IsDamage && !_particle.isPlaying)
+            {
+                _particle.time = 0;
+                _particle.playbackSpeed = myplayBackSpeed;
+                _particle.Play();
             }
         }
     }

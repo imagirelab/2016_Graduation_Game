@@ -15,6 +15,11 @@ public class House : MonoBehaviour {
     public int HPpro { get { return currentHP; } set { currentHP = value; } }
 
     bool IsDead = false;
+
+    [HideInInspector]
+    public bool IsDamage = false;
+
+    int oldHP = 0;
     
     void Start ()
     {
@@ -37,6 +42,8 @@ public class House : MonoBehaviour {
     {
         HP_UI.GetComponent<TextMesh>().text = "HP: " + currentHP.ToString();
 
+        DmageCheck(currentHP);
+
         if(currentHP <= 0)
         {
             //HPリセット
@@ -49,5 +56,18 @@ public class House : MonoBehaviour {
                     child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
             }
         }
+    }
+
+    public void DmageCheck(int nowHP)
+    {
+        if (nowHP < oldHP)
+        {
+            IsDamage = true;
+        }
+        else
+        {
+            IsDamage = false;
+        }
+        oldHP = nowHP;
     }
 }

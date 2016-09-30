@@ -15,6 +15,11 @@ public class DefenseBase : MonoBehaviour
     [SerializeField]
     Text Text = null;
 
+    [HideInInspector]
+    public bool IsDamage = false;
+
+    int oldHP = 0;
+
     void Start()
     {
         HP_UI = transform.FindChild("HP").gameObject;
@@ -32,5 +37,19 @@ public class DefenseBase : MonoBehaviour
             //Destroy(gameObject);
         }
 
+        DmageCheck(HP);
+    }
+
+    public void DmageCheck(int nowHP)
+    {
+        if (nowHP < oldHP)
+        {
+            IsDamage = true;
+        }
+        else
+        {
+            IsDamage = false;
+        }
+        oldHP = nowHP;
     }
 }
