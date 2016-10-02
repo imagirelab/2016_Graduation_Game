@@ -9,8 +9,6 @@ public class LookAtCamera : MonoBehaviour
 
     void Start()
     {
-        cam = new Camera();
-
         if (cam == null)
             cam = Camera.main;
     }

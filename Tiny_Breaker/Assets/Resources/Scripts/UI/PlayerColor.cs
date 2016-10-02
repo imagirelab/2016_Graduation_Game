@@ -4,19 +4,22 @@ using StaticClass;
 
 public class PlayerColor : MonoBehaviour
 {
-
+    //枠画像
     [SerializeField]
-    SpriteRenderer barSprite = new SpriteRenderer();
-
+    Image frame;
+    
+    //差し替える枠画像
     [SerializeField]
-    Image fillImage;
+    Sprite[] frameSprites = new Sprite[GameRule.getInstance().playerNum + 1];
 
+    //体力になる画像
     [SerializeField]
-    Sprite[] sprites = new Sprite[GameRule.getInstance().playerNum + 1];
+    Image HP;
 
+    //差し替える体力になる画像
     [SerializeField]
-    Color[] colors = new Color[GameRule.getInstance().playerNum + 1];
-
+    Sprite[] HPSprites = new Sprite[GameRule.getInstance().playerNum + 1];
+    
     //表示する色のプレイヤーID
     int playerID = 0;
 
@@ -29,11 +32,10 @@ public class PlayerColor : MonoBehaviour
         if (rootObject.GetComponent<Player>() != null)
             playerID = rootObject.GetComponent<Player>().playerID;
 
-        if (fillImage == null)
-        {
-            gameObject.AddComponent<Image>();
-            fillImage = GetComponent<Image>();
-        }
+        if (frame == null)
+            frame = null;
+        if (HP == null)
+            HP = null;
     }
 
     void Update()
@@ -44,7 +46,7 @@ public class PlayerColor : MonoBehaviour
             playerID = rootObject.GetComponent<Spawner>().CurrentPlayerID;
 
         //バーとスライダーの色変化
-        barSprite.sprite = sprites[playerID];
-        fillImage.color = colors[playerID];
+        frame.sprite = frameSprites[playerID];
+        HP.sprite = HPSprites[playerID];
     }
 }
