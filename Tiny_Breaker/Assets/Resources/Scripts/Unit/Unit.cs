@@ -119,12 +119,16 @@ public class Unit : MonoBehaviour
     {
         Vector3 rootPosition = loiteringPointObj[currentRootPoint].transform.position;
         
-        if (Vector3.Distance(transform.position, rootPosition) < 5.0f)
+        return rootPosition;
+    }
+
+    //ポイントを通過するための更新
+    public void UpdataRootPoint(float distance)
+    {
+        if (Vector3.Distance(transform.position, loiteringPointObj[currentRootPoint].transform.position) < distance)
         {
             if (currentRootPoint < loiteringPointObj.Length - 1)
                 currentRootPoint++;
         }
-
-        return rootPosition;
     }
 }

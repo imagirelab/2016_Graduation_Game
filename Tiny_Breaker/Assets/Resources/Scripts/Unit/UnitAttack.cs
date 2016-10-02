@@ -44,24 +44,37 @@ public class UnitAttack : MonoBehaviour
             {
                 if (unit.targetObject != null)
                 {
-                    RaycastHit hit;
-                    Vector3 vec = unit.targetObject.transform.position - transform.position;
-                    Ray ray = new Ray(transform.position, vec);
-                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
-                    if (Physics.SphereCast(ray, 3.0f, out hit, atkRange + transform.localScale.x, layerMask))
+                    if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
                     {
-                        if (hit.collider.gameObject == unit.targetObject)
-                        {
-                            isAttack = true;
+                        isAttack = true;
 
-                            //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
-                            if (target == null)
-                            {
-                                target = unit.targetObject;
-                            }
+                        //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
+                        if (target == null)
+                        {
+                            target = unit.targetObject;
                         }
-                        else
-                            isAttack = false;
+                    }
+                    else
+                    {
+                        RaycastHit hit;
+                        Vector3 vec = unit.targetObject.transform.position - transform.position;
+                        Ray ray = new Ray(transform.position, vec);
+                        int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
+                        if (Physics.SphereCast(ray, 3.0f, out hit, atkRange + transform.localScale.x, layerMask))
+                        {
+                            if (hit.collider.gameObject == unit.targetObject)
+                            {
+                                isAttack = true;
+
+                                //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
+                                if (target == null)
+                                {
+                                    target = unit.targetObject;
+                                }
+                            }
+                            else
+                                isAttack = false;
+                        }
                     }
                 }
                 yield return null;

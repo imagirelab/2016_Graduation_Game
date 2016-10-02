@@ -22,6 +22,8 @@ public class UnitMove : MonoBehaviour
                 switch (unit.state)
                 {
                     case Unit.State.Search:
+                        unit.UpdataRootPoint(3.0f);
+
                         Vector3 rootPos = unit.GetRootPosition();
                         Vector3 rootVec = rootPos - transform.position;
                         transform.LookAt(transform.position + rootVec);
@@ -30,7 +32,7 @@ public class UnitMove : MonoBehaviour
                         Ray raySearch = new Ray(transform.position, rootVec);
                         if (Physics.SphereCast(raySearch, 3.0f, out hit, 5.0f, layerMask))
                         {
-                            if (hit.collider.gameObject.tag == "Ground")
+                            if (hit.collider.gameObject.tag == "Ground" || hit.collider.gameObject.layer == 9)
                             {
                                 //ナビゲーションは最低限で用いる
                                 GetComponent<NavMeshAgent>().enabled = true;
@@ -49,29 +51,39 @@ public class UnitMove : MonoBehaviour
                         }
                         break;
                     case Unit.State.Find:
-                        Vector3 targetVec = unit.targetObject.transform.position - transform.position;
-                        transform.LookAt(transform.position + targetVec);
-
-                        //サーチ中止まってたら何かに引っかかってる可能性
-                        Ray rayFind = new Ray(transform.position, targetVec);
-                        if (Physics.SphereCast(rayFind, 3.0f, out hit, 5.0f, layerMask))
+                        unit.UpdataRootPoint(15.0f);
+                        //重なっている
+                        if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
                         {
-                            if (hit.collider.gameObject.tag == "Ground")
+                            GetComponent<NavMeshAgent>().enabled = false;
+                            GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        }
+                        else
+                        { 
+                            Vector3 targetVec = unit.targetObject.transform.position - transform.position;
+                            transform.LookAt(transform.position + targetVec);
+
+                            //サーチ中止まってたら何かに引っかかってる可能性
+                            Ray rayFind = new Ray(transform.position, targetVec);
+                            if (Physics.SphereCast(rayFind, 3.0f, out hit, 5.0f, layerMask))
                             {
-                                //ナビゲーションは最低限で用いる
-                                GetComponent<NavMeshAgent>().enabled = true;
-                                unit.Move(unit.targetObject.transform.position, unit.status.CurrentSPEED);
+                                if (hit.collider.gameObject.tag == "Ground" || hit.collider.gameObject.layer == 9)
+                                {
+                                    //ナビゲーションは最低限で用いる
+                                    GetComponent<NavMeshAgent>().enabled = true;
+                                    unit.Move(unit.targetObject.transform.position, unit.status.CurrentSPEED);
+                                }
+                                else
+                                {
+                                    GetComponent<NavMeshAgent>().enabled = false;
+                                    GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
+                                }
                             }
                             else
                             {
                                 GetComponent<NavMeshAgent>().enabled = false;
                                 GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
                             }
-                        }
-                        else
-                        {
-                            GetComponent<NavMeshAgent>().enabled = false;
-                            GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
                         }
                         break;
                     default:
