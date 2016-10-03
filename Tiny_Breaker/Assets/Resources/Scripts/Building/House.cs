@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿//小屋
+//HPは取り合う量
+
+using UnityEngine;
 using StaticClass;
 
 public class House : MonoBehaviour {
@@ -7,18 +10,20 @@ public class House : MonoBehaviour {
     [SerializeField, TooltipAttribute("体力")]
     int HP = 1000;
     int currentHP = 0;
+    [SerializeField, TooltipAttribute("自動回復量")]
+    int regene = 0;
 
     //このクラス内で使う変数
-    private GameObject HP_UI;           //HPのUI
+    //private GameObject HP_UI;           //HPのUI
 
     //外から見れる変数
     public int HPpro { get { return currentHP; } set { currentHP = value; } }
+    public int GetHP { get { return HP; } }
 
     bool IsDead = false;
 
     [HideInInspector]
     public bool IsDamage = false;
-
     int oldHP = 0;
     
     void Start ()
@@ -26,9 +31,9 @@ public class House : MonoBehaviour {
         // 作られたときにリストに追加する
         BuildingDataBase.getInstance().AddList(this.gameObject);
 
-        currentHP = HP;
+        currentHP = 0;
 
-        HP_UI = transform.FindChild("HP").gameObject;
+        //HP_UI = transform.FindChild("DebugHP").gameObject;
     }
 
     //破壊されたときにリストから外す
@@ -40,25 +45,32 @@ public class House : MonoBehaviour {
 
     void Update ()
     {
-        HP_UI.GetComponent<TextMesh>().text = "HP: " + currentHP.ToString();
+        //HP_UI.GetComponent<TextMesh>().text = "HP: " + currentHP.ToString();
 
         DmageCheck(currentHP);
 
-        if(currentHP <= 0)
+        switch (transform.gameObject.tag)
         {
-            //HPリセット
-            currentHP = HP;
-            
-            //一旦出ていた兵士は全員殺す
-            foreach (Transform child in transform)
-            {
-                if (child.gameObject.GetComponent<Unit>())
-                    child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
-            }
+            case "Player1":
+                //自動回復
+                currentHP += regene;
+                //HPリセット
+                if (currentHP >= HP)
+                    currentHP = HP;
+                break;
+            case "Player2":
+                //自動回復
+                currentHP -= regene;
+                //HPリセット
+                if (currentHP <= -HP)
+                    currentHP = -HP;
+                break;
+            default:
+                break;
         }
     }
 
-    public void DmageCheck(int nowHP)
+    void DmageCheck(int nowHP)
     {
         if (nowHP < oldHP)
         {

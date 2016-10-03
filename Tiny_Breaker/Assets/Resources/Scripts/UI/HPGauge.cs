@@ -2,7 +2,6 @@
 
 public class HPGauge : MonoBehaviour
 {
-
     [SerializeField]
     Unit unit;
 
@@ -10,7 +9,7 @@ public class HPGauge : MonoBehaviour
     [SerializeField]
     RectTransform HP = new RectTransform();
 
-    //体力になる画像
+    //体力の下地になる画像
     [SerializeField]
     RectTransform HPBase = new RectTransform();
 

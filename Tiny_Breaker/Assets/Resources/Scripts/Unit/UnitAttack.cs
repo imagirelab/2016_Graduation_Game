@@ -131,7 +131,7 @@ public class UnitAttack : MonoBehaviour
         //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
         if (target.GetComponent<Unit>().status.CurrentHP <= 0)
         {
-            if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+            if (target.GetComponent<Soldier>() && unit.transform.root.gameObject.GetComponent<PlayerCost>())
             {
                 PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
                 Player player = unit.transform.root.gameObject.GetComponent<Player>();
@@ -145,17 +145,30 @@ public class UnitAttack : MonoBehaviour
         }
     }
 
+    //建物への攻撃はこっち
     void AttackHouse()
     {
-        //建物への攻撃はこっち
-        target.GetComponent<House>().HPpro -= unit.status.CurrentATK;
+        GameObject rootObject = unit.transform.root.gameObject;
 
-        //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
-        if (target.GetComponent<House>().HPpro <= 0)
+        switch(rootObject.tag)
         {
-            if (unit.transform.root.gameObject.GetComponent<Player>() != null)
+            case "Player1":
+                target.GetComponent<House>().HPpro += unit.status.CurrentATK;
+                break;
+            case "Player2":
+                target.GetComponent<House>().HPpro -= unit.status.CurrentATK;
+                break;
+            default:
+                break;
+        }
+
+        //親が小屋クラスを持っている(プレイヤー)場合のコスト処理
+        if (target.GetComponent<House>().HPpro <= -target.GetComponent<House>().GetHP ||
+            target.GetComponent<House>().HPpro >=  target.GetComponent<House>().GetHP)
+        {
+            if (rootObject.GetComponent<Player>() != null)
             {
-                Player player = unit.transform.root.gameObject.GetComponent<Player>();
+                Player player = rootObject.GetComponent<Player>();
 
                 //スポナーがあるときPlayerIDを登録
                 if (target.GetComponent<Spawner>() != null)
@@ -168,13 +181,19 @@ public class UnitAttack : MonoBehaviour
 
                     target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
                     target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
+
+                    //一旦出ていた兵士は全員殺す
+                    foreach (Transform child in target.transform)
+                        if (child.gameObject.GetComponent<Unit>())
+                            child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
                 }
 
+                //コストの計算
                 if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
                 {
                     PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
 
-                    player.AddCostList(playerCost.GetSoldierCost);
+                    player.AddCostList(playerCost.GetHouseCost);
                 }
             }
 
