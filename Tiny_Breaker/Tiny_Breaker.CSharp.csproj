@@ -121,6 +121,7 @@
     <Compile Include="Assets\Resources\Scripts\DataLoad\ParamData.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugControl.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugCost.cs" />
+    <Compile Include="Assets\Resources\Scripts\Debug\DebugDefenseBase.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugHouse.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugMeshSwitch.cs" />
     <Compile Include="Assets\Resources\Scripts\Debug\DebugStatusUI.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Assets\Resources\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\PlayerCost.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DebugSwitchChild.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\DefenseBaseGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\GainGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\HPGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\LookAtCamera.cs" />

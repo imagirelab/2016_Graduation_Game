@@ -4,7 +4,8 @@
 using UnityEngine;
 using StaticClass;
 
-public class House : MonoBehaviour {
+public class House : MonoBehaviour
+{
 
     //家のステータス
     [SerializeField, TooltipAttribute("体力")]
@@ -25,8 +26,8 @@ public class House : MonoBehaviour {
     [HideInInspector]
     public bool IsDamage = false;
     int oldHP = 0;
-    
-    void Start ()
+
+    void Start()
     {
         // 作られたときにリストに追加する
         BuildingDataBase.getInstance().AddList(this.gameObject);
@@ -39,11 +40,11 @@ public class House : MonoBehaviour {
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if(!IsDead)
+        if (!IsDead)
             BuildingDataBase.getInstance().RemoveList(this.gameObject);
     }
 
-    void Update ()
+    void Update()
     {
         //HP_UI.GetComponent<TextMesh>().text = "HP: " + currentHP.ToString();
 

@@ -4,17 +4,17 @@ using StaticClass;
 public class DebugHouse : MonoBehaviour
 {
     House house;
-    
+
     void Start()
     {
-        if (transform.root.gameObject.GetComponent<House>())
-            house = transform.root.gameObject.GetComponent<House>();
+        if (transform.parent.gameObject.GetComponent<House>())
+            house = transform.parent.gameObject.GetComponent<House>();
         else
             house = new House();
     }
 
-    void Update ()
-	{
+    void Update()
+    {
         if (GameRule.getInstance().debugFlag)
         {
             if (GetComponent<TextMesh>() != null)
