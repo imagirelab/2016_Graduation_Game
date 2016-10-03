@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class UnitSeach : MonoBehaviour
 {
-    [SerializeField]    //Unity側から見たいとき用
-    //[HideInInspector]
+    //[SerializeField]    //Unity側から見たいとき用
+    [HideInInspector]
     bool isFind = false;
     public bool IsFind { get { return isFind; } }
 

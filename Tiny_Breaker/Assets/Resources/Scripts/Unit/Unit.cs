@@ -39,16 +39,16 @@ public class Unit : MonoBehaviour
     public bool IsDamage;   //ダメージ確認
     protected int oldHP = 0;    //直前の体力確認用
 
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject goalObject;       //ゴール
-    //[HideInInspector]
+    [HideInInspector]
     public GameObject targetObject;       //目標
 
     public GameObject deadEffect;       //死亡エフェクト
 
     public GameObject deadSE;           //遊び
 
-    //[HideInInspector]
+    [HideInInspector]
     public string targetTag;       //相手のタグ
 
     //巡回地点
@@ -56,8 +56,15 @@ public class Unit : MonoBehaviour
     public Transform[] LoiteringPointObj { set { loiteringPointObj = value; } }
 
     int currentRootPoint = 0;
-    //[HideInInspector]
+    [HideInInspector]
     public int rootNum = 0;
+
+    [SerializeField]
+    protected float deadMoveSpeed = 0.0f;    //死んだときに動くならその値
+    [SerializeField]
+    protected float deadTime = 1.0f;
+    protected float deadcount = 0.0f;
+    
 
     public void Move(Vector3 target, float speed)
     {

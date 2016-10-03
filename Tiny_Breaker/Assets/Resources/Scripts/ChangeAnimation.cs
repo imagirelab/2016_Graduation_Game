@@ -16,15 +16,17 @@ public class ChangeAnimation : MonoBehaviour {
     }
 	
 	void Update () {
-        if (GetComponent<Animator>() && unit.GetComponent<Unit>())
+        if (GetComponent<Animator>())
         {
             AnimatorControllerParameter[] parameters = GetComponent<Animator>().parameters;
             foreach (AnimatorControllerParameter param in parameters)
             {
-                if(param.name == "IsAttack")
+                if(param.name == "IsAttack" && unit.GetComponent<UnitAttack>())
                     GetComponent<Animator>().SetBool("IsAttack", unit.GetComponent<UnitAttack>().IsAttack);
-                if (param.name == "IsFind")
+                if (param.name == "IsFind" && unit.GetComponent<UnitSeach>())
                     GetComponent<Animator>().SetBool("IsFind", unit.GetComponent<UnitSeach>().IsFind);
+                if (param.name == "IsDead" && unit.GetComponent<Unit>())
+                    GetComponent<Animator>().SetBool("IsDead", unit.GetComponent<Unit>().IsDead);
             }
         }
     }

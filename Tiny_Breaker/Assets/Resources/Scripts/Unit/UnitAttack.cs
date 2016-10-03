@@ -3,8 +3,8 @@ using System.Collections;
 
 public class UnitAttack : MonoBehaviour
 {
-    [SerializeField]    //Unity側から見たいとき用
-    //[HideInInspector]
+    //[SerializeField]    //Unity側から見たいとき用
+    [HideInInspector]
     bool isAttack = false;
     public bool IsAttack { get { return isAttack; } }
 

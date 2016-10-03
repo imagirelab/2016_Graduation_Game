@@ -5,10 +5,6 @@ using StaticClass;
 
 public class Soldier : Unit
 {
-    [SerializeField]
-    float deadTime = 1.0f;
-    float deadcount = 0.0f;
-    
     public int powerUPCount = 0;
     
     void Start()
@@ -35,14 +31,14 @@ public class Soldier : Unit
 
     void Update()
     {
-        //死亡処理
-        if (status.CurrentHP <= 0)
-            Dead();
-
         if (IsDead)
             Dying();
         else
         {
+            //死亡処理
+            if (status.CurrentHP <= 0)
+                Dead();
+
             //一番近くの敵を狙う
             SetNearTargetObject();
 
@@ -60,7 +56,7 @@ public class Soldier : Unit
         }
     }
     
-    //死にかけている時の処理
+    //死んでいる時の処理
     void Dying()
     {
         deadcount += Time.deltaTime;
@@ -87,19 +83,26 @@ public class Soldier : Unit
             if (transform.IsChildOf(transform))
                 foreach (Transform child in transform)
                 {
+                    //Modelsの中の削除処理
                     if (child.name == "Models")
                     {
+                        //トランスフォーム以外のコンポーネント
                         foreach (Component comp in child.GetComponents<Component>())
                             if (comp != child.GetComponent<Transform>())
                                 Destroy(comp);
 
+                        //孫の削除処理
                         foreach (Transform grandson in child)
+                        {
+                            //兵士用
                             if (grandson.name == "Model")
                             {
+                                //トランスフォーム以外のコンポーネント
                                 foreach (Component comp in grandson.GetComponents<Component>())
                                     if (comp != grandson.GetComponent<Transform>())
                                         Destroy(comp);
 
+                                //コライダーがついているものをONにする
                                 foreach (GameObject e in GetAllChildren.GetAll(grandson.gameObject))
                                     if (e.GetComponent<Collider>())
                                     {
@@ -107,11 +110,17 @@ public class Soldier : Unit
                                         e.AddComponent<Rigidbody>();
                                     }
                             }
+                            //Modelではなく、パーティクルでもないもの以外は消す
+                            else if(!grandson.gameObject.GetComponent<ParticleSystem>())
+                                Destroy(grandson.gameObject);
+                        }
+                      
                     }
                     else
                         Destroy(child.gameObject);
                 }
 
+            //自分のコンポーネントの削除
             foreach (Component comp in this.GetComponents<Component>())
                 if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())
                     Destroy(comp);

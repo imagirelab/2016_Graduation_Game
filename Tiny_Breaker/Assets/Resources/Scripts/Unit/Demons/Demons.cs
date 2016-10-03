@@ -36,39 +36,82 @@ public class Demons : Unit
 
     void Update()
     {
-        //一番近くの敵を狙う
-        SetNearTargetObject();
-
-        //状態の切り替え
-        if (GetComponent<UnitSeach>().IsFind)
-            state = State.Find;
+        if(IsDead)
+        {
+            Dying();
+        }
         else
-            state = State.Search;
+        {
+            //死亡処理
+            if (status.CurrentHP <= 0)
+                Dead();
 
-        if(GetComponent<UnitAttack>().IsAttack)
-            state = State.Attack;
+            //一番近くの敵を狙う
+            SetNearTargetObject();
 
-        //ダメージを受けたかの確認
-        DamageCheck(status.CurrentHP);
+            //状態の切り替え
+            if (GetComponent<UnitSeach>().IsFind)
+                state = State.Find;
+            else
+                state = State.Search;
 
-        //死亡処理
-        if (status.CurrentHP <= 0)
-            Dead();        
+            if (GetComponent<UnitAttack>().IsAttack)
+                state = State.Attack;
+
+            //ダメージを受けたかの確認
+            DamageCheck(status.CurrentHP);
+        }
+    }
+
+    //死んでいる時の処理
+    void Dying()
+    {
+        deadcount += Time.deltaTime;
+
+        GetComponent<Rigidbody>().velocity = transform.forward * -1 * deadMoveSpeed;
+
+        if (deadcount > deadTime)
+            Destroy(gameObject);
     }
 
     //死んだときの処理
     void Dead()
     {
-        IsDead = true;
+        if(!IsDead)
+        {
+            IsDead = true;
 
-        //死んだ直後に魂を回収してみる
-        if (transform.parent != null)
-            transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
+            DemonDataBase.getInstance().RemoveList(this.gameObject);
 
-        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
-        Instantiate(deadSE);
+            //死んだ直後に魂を回収してみる
+            if (transform.parent != null)
+                transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
 
-        Destroy(gameObject);
+            Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+            Instantiate(deadSE);
+
+            //いらない子供から消していく
+            if (transform.IsChildOf(transform))
+                foreach (Transform child in transform)
+                {
+                    //Modelsの中の削除処理
+                    if (child.name == "Models")
+                    {
+                        //トランスフォーム以外のコンポーネント
+                        foreach (Component comp in child.GetComponents<Component>())
+                            if (comp != child.GetComponent<Transform>())
+                                Destroy(comp);
+                    }
+                    else
+                        Destroy(child.gameObject);
+                }
+
+            //自分のコンポーネントの削除
+            foreach (Component comp in this.GetComponents<Component>())
+                if (comp != GetComponent<Transform>() && comp != GetComponent<Demons>() && comp != GetComponent<Rigidbody>())
+                    Destroy(comp);
+        }
+        //Destroy(gameObject);
     }
 
     //ステータスの設定
@@ -105,6 +148,7 @@ public class Demons : Unit
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        DemonDataBase.getInstance().RemoveList(this.gameObject);
+        if (!IsDead)
+            DemonDataBase.getInstance().RemoveList(this.gameObject);
     }
 }
