@@ -19,19 +19,19 @@ public class shootEffect : MonoBehaviour
         //    this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, Vector3.Distance(this.transform.position, _unitAttack.target.transform.position) / animationTime);
         //}
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         _unitAttack = GetComponentInParent<UnitAttack>();
 
-        if (_unitAttack.target != null)
+        if (GetComponentInParent<UnitAttack>() != null)
         {
-            Vector3 vec = (_unitAttack.target.transform.position - this.transform.position).normalized * 30;
-            //this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, Vector3.Distance(this.transform.position, _unitAttack.target.transform.position) / animationTime);
-            this.GetComponent<Rigidbody>().velocity = vec / animationTime;
-
-            Debug.Log(this.GetComponent<Rigidbody>().velocity);
+            if (_unitAttack.target != null)
+            {
+                Vector3 vec = (_unitAttack.target.transform.position - this.transform.position).normalized * 30;
+                this.GetComponent<Rigidbody>().velocity = vec / animationTime;
+            }
         }
 
         _time += Time.deltaTime;
