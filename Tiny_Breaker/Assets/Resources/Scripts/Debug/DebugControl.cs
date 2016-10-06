@@ -10,7 +10,9 @@ public class DebugControl : MonoBehaviour
     [SerializeField]
     List<GameObject> DebugObject = new List<GameObject>();
     [SerializeField]
-    GameObject player;
+    GameObject player1;
+    [SerializeField]
+    GameObject player2;
 
     [SerializeField]
     GameObject POPO;
@@ -21,9 +23,11 @@ public class DebugControl : MonoBehaviour
 
     void Start()
     {
-        if (player == null)
-            player = new GameObject();
-        
+        if (player1 == null)
+            player1 = new GameObject();
+        if (player2 == null)
+            player2 = new GameObject();
+
         if (POPO == null)
             POPO = new GameObject();
         if (PUPU == null)
@@ -46,9 +50,9 @@ public class DebugControl : MonoBehaviour
         }
 
         //Player1の方の操作
-        if (player.GetComponent<Player>() != null)
+        if (player1.GetComponent<Player>() != null)
         {
-            Player playerComp = player.GetComponent<Player>();
+            Player playerComp = player1.GetComponent<Player>();
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.Q))
@@ -104,6 +108,71 @@ public class DebugControl : MonoBehaviour
                 playerComp.DebugSummon(POPO);
             }
             if (Input.GetKeyDown(KeyCode.V))
+            {
+                playerComp.ChangeRoot(0);
+                playerComp.DebugSummon(POPO);
+            }
+        }
+
+        //Player2の方の操作
+        if (player2.GetComponent<Player>() != null)
+        {
+            Player playerComp = player2.GetComponent<Player>();
+
+            //パワーアップ
+            if (Input.GetKeyDown(KeyCode.LeftBracket))
+                playerComp.DebugPowerUP(PUPU);
+            if (Input.GetKeyDown(KeyCode.Colon))
+                playerComp.DebugPowerUP(POPO);
+            if (Input.GetKeyDown(KeyCode.Slash))
+                playerComp.DebugPowerUP(PIPI);
+
+            //PIPI召喚
+            if (Input.GetKeyDown(KeyCode.At))
+            {
+                playerComp.ChangeRoot(2);
+                playerComp.DebugSummon(PIPI);
+            }
+            if (Input.GetKeyDown(KeyCode.Semicolon))
+            {
+                playerComp.ChangeRoot(1);
+                playerComp.DebugSummon(PIPI);
+            }
+            if (Input.GetKeyDown(KeyCode.Period))
+            {
+                playerComp.ChangeRoot(0);
+                playerComp.DebugSummon(PIPI);
+            }
+
+            //PUPU召喚
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                playerComp.ChangeRoot(2);
+                playerComp.DebugSummon(PUPU);
+            }
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                playerComp.ChangeRoot(1);
+                playerComp.DebugSummon(PUPU);
+            }
+            if (Input.GetKeyDown(KeyCode.Comma))
+            {
+                playerComp.ChangeRoot(0);
+                playerComp.DebugSummon(PUPU);
+            }
+
+            //POPO召喚
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                playerComp.ChangeRoot(2);
+                playerComp.DebugSummon(POPO);
+            }
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                playerComp.ChangeRoot(1);
+                playerComp.DebugSummon(POPO);
+            }
+            if (Input.GetKeyDown(KeyCode.M))
             {
                 playerComp.ChangeRoot(0);
                 playerComp.DebugSummon(POPO);

@@ -53,34 +53,47 @@ public class ShotEffect : MonoBehaviour
         switch (unitType)
         {
             case TYPE.Demon:
-            if (!_particle.isPlaying && parentDemon.state == Unit.State.Attack)
-            {
-                _particle.time = 0;
-                _particle.playbackSpeed = myplayBackSpeed;
-                _particle.Play();
-            }
+                if (!_particle.isPlaying && parentDemon.state == Unit.State.Attack && !parentDemon.IsCharge)
+                {
+                    _particle.time = 0;
+                    _particle.playbackSpeed = myplayBackSpeed;
+                    _particle.Play();
+                }
 
-            if (_particle.isPlaying)
-                playtime += Time.deltaTime;
+                if (_particle.isPlaying)
+                    playtime += Time.deltaTime;
 
-            if (playtime > _particle.startLifetime + _particle.duration && _particle.isPlaying)
-            {
-                playtime = 0;
-                GameObject obj = (GameObject)Instantiate(shotObj, parentDemon.transform.position + offset, parentDemon.transform.rotation);
-                obj.transform.parent = parentDemon.transform;
-                parentDemon.IsCharge = true;
-            }
+                if (playtime > _particle.startLifetime + _particle.duration && _particle.isPlaying)
+                {
+                    playtime = 0;
+                    _particle.Stop();
+                    GameObject obj = (GameObject)Instantiate(shotObj, parentDemon.transform.position + offset, parentDemon.transform.rotation);
+                    obj.transform.parent = parentDemon.transform;
+                    parentDemon.IsCharge = true;
+                }
 
             break;
 
             case TYPE.Soldier:
-            if (!_particle.isPlaying)
-            {
-                _particle.time = 0;
-                _particle.playbackSpeed = myplayBackSpeed;
-                _particle.Play();
-            }
-            break;
+                if (!_particle.isPlaying && parentSoldier.state == Unit.State.Attack && !parentSoldier.IsCharge)
+                {
+                    _particle.time = 0;
+                    _particle.playbackSpeed = myplayBackSpeed;
+                    _particle.Play();
+                }
+
+                if (_particle.isPlaying)
+                    playtime += Time.deltaTime;
+
+                if (playtime > _particle.startLifetime + _particle.duration && _particle.isPlaying)
+                {
+                    playtime = 0;
+                    _particle.Stop();
+                    GameObject obj = (GameObject)Instantiate(shotObj, parentSoldier.transform.position + offset, parentSoldier.transform.rotation);
+                    obj.transform.parent = parentSoldier.transform;
+                    parentSoldier.IsCharge = true;
+                }
+                break;
 
             default:
             break;
