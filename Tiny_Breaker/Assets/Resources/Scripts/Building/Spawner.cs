@@ -31,11 +31,14 @@ public class Spawner : MonoBehaviour
     GameObject[] soldiers;
     
     //同時生成数
-    [SerializeField, Range(1, 5)]
+    [SerializeField]
     int spawnNum = 1;
+    //最大部隊数
+    [SerializeField]
+    int spawnMax = 10;
     //生成間隔
     [SerializeField]
-    float spawnCount = 10.0f;
+    float spawnTime = 10.0f;
 
     float timer = 0.0f;
 
@@ -84,16 +87,26 @@ public class Spawner : MonoBehaviour
         timer += Time.deltaTime;
 
         //生成時間に達しているか確認
-        if (timer > spawnCount)
+        if (timer > spawnTime)
         {
             //時間をリセット
             timer = 0;
 
-            //兵士の生成
-            Spawn();
+            //生成した兵士の数のカウント
+            int childSolCount = 0;
+            foreach (Transform child in transform)
+                if (child.GetComponent<Soldier>())
+                    childSolCount++;
 
-            //兵士番号を進める
-            SolCountUP();
+            //最大生成数以下なら作る
+            if(childSolCount < spawnMax * 2)
+            {
+                //兵士の生成
+                Spawn();
+
+                //兵士番号を進める
+                SolCountUP();
+            }
         }
     }
 
@@ -166,5 +179,14 @@ public class Spawner : MonoBehaviour
 
         if (solNum >= soldiers.Length)
             solNum = 0;
+    }
+
+    public void SetDefault(int num, int max, float time)
+    {
+        spawnNum = num;
+        spawnMax = max;
+        spawnTime = time;
+
+        timer = 0.0f;
     }
 }

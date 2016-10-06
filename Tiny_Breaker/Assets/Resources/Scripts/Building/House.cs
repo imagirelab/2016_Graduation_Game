@@ -13,6 +13,9 @@ public class House : MonoBehaviour
     int currentHP = 0;
     [SerializeField, TooltipAttribute("自動回復量")]
     int regene = 0;
+    [SerializeField, TooltipAttribute("自動回復時間")]
+    float regeneTime = 0.0f;
+    float regeneCount = 0;
 
     //このクラス内で使う変数
     //private GameObject HP_UI;           //HPのUI
@@ -33,8 +36,7 @@ public class House : MonoBehaviour
         BuildingDataBase.getInstance().AddList(this.gameObject);
 
         currentHP = 0;
-
-        //HP_UI = transform.FindChild("DebugHP").gameObject;
+        regeneCount = 0;
     }
 
     //破壊されたときにリストから外す
@@ -46,28 +48,33 @@ public class House : MonoBehaviour
 
     void Update()
     {
-        //HP_UI.GetComponent<TextMesh>().text = "HP: " + currentHP.ToString();
-
         DmageCheck(currentHP);
 
-        switch (transform.gameObject.tag)
+        regeneCount += Time.deltaTime;
+
+        if(regeneCount >= regeneTime)
         {
-            case "Player1":
-                //自動回復
-                currentHP += regene;
-                //HPリセット
-                if (currentHP >= HP)
-                    currentHP = HP;
-                break;
-            case "Player2":
-                //自動回復
-                currentHP -= regene;
-                //HPリセット
-                if (currentHP <= -HP)
-                    currentHP = -HP;
-                break;
-            default:
-                break;
+            regeneCount = 0;
+
+            switch (transform.gameObject.tag)
+            {
+                case "Player1":
+                    //自動回復
+                    currentHP += regene;
+                    //HPリセット
+                    if (currentHP >= HP)
+                        currentHP = HP;
+                    break;
+                case "Player2":
+                    //自動回復
+                    currentHP -= regene;
+                    //HPリセット
+                    if (currentHP <= -HP)
+                        currentHP = -HP;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -82,5 +89,15 @@ public class House : MonoBehaviour
             IsDamage = false;
         }
         oldHP = nowHP;
+    }
+
+    public void SetDefault(int hp, int regene, float regeneTime)
+    {
+        this.HP = hp;
+        this.regene = regene;
+        this.regeneTime = regeneTime;
+
+        currentHP = 0;
+        regeneCount = 0;
     }
 }
