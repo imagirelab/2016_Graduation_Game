@@ -121,24 +121,29 @@ public class DebugControl : MonoBehaviour
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.LeftBracket))
+            {
                 playerComp.DebugPowerUP(PUPU);
+            }
             if (Input.GetKeyDown(KeyCode.Colon))
+            {
                 playerComp.DebugPowerUP(POPO);
+            }
             if (Input.GetKeyDown(KeyCode.Slash))
+            {
                 playerComp.DebugPowerUP(PIPI);
-
+            }
             //PIPI召喚
-            if (Input.GetKeyDown(KeyCode.At))
+            if (Input.GetKeyDown(KeyCode.I))
             {
                 playerComp.ChangeRoot(2);
                 playerComp.DebugSummon(PIPI);
             }
-            if (Input.GetKeyDown(KeyCode.Semicolon))
+            if (Input.GetKeyDown(KeyCode.J))
             {
                 playerComp.ChangeRoot(1);
                 playerComp.DebugSummon(PIPI);
             }
-            if (Input.GetKeyDown(KeyCode.Period))
+            if (Input.GetKeyDown(KeyCode.N))
             {
                 playerComp.ChangeRoot(0);
                 playerComp.DebugSummon(PIPI);
