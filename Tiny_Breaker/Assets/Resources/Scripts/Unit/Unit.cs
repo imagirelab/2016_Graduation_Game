@@ -37,8 +37,6 @@ public class Unit : MonoBehaviour
     public bool IsDead;
     [HideInInspector]
     public bool IsDamage;   //ダメージ確認
-    [HideInInspector]
-    public bool IsCharge;   //遠距離兵のチャージ用
     protected int oldHP = 0;    //直前の体力確認用
 
     [HideInInspector]

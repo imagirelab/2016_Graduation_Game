@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour
 
     //兵士たち
     GameObject[] soldiers;
-    
+
     //同時生成数
     [SerializeField]
     int spawnNum = 1;
@@ -48,7 +48,7 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     int rootNum = 0;
 
-    void Start ()
+    void Start()
     {
         currentPlayerID = 0;
         currentTargetID = 0;
@@ -68,7 +68,7 @@ public class Spawner : MonoBehaviour
                 rootPointes[i].Add(child);
 
             //プレイヤーの数以内であれば
-            if(i < players.Length)
+            if (i < players.Length)
                 rootPointes[i].Add(players[i].SpawnPoint); //最後に最終目的地
         }
 
@@ -80,9 +80,10 @@ public class Spawner : MonoBehaviour
         Shield.GetComponent<Unit>().status.SetStatus();
 
         soldiers = new GameObject[] { Ax, Gun, Shield };
+        //soldiers = new GameObject[] { Shield, Shield, Shield };
     }
-	
-	void Update ()
+
+    void Update()
     {
         timer += Time.deltaTime;
 
@@ -99,7 +100,7 @@ public class Spawner : MonoBehaviour
                     childSolCount++;
 
             //最大生成数以下なら作る
-            if(childSolCount < spawnMax * 2)
+            if (childSolCount < spawnMax * 2)
             {
                 //兵士の生成
                 Spawn();
@@ -119,7 +120,7 @@ public class Spawner : MonoBehaviour
             for (int i = 0; i < spawnNum; i++)
             {
                 //プレイヤー達の方向にそれぞれ進ませる
-                for(int j = 0; j < rootes.Length; j++)
+                for (int j = 0; j < rootes.Length; j++)
                 {
                     GameObject instance = (GameObject)Instantiate(soldiers[solNum],
                                         rootes[j].transform.position,

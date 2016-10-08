@@ -1,102 +1,86 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ShotEffect : MonoBehaviour
 {
-    public enum TYPE
-    {
-        Demon,
-        Soldier,
-        House,
-        Base
-    }
-    public TYPE unitType = TYPE.Demon;
+    Unit parentUnit;
 
-    //１個上のデーモンを取得するための置物
-    private Demons parentDemon;
-    //1個上のソルジャーを取得するための置物
-    private Soldier parentSoldier;
-
-    //何回も使うので呼び出しを軽くするために
-    private ParticleSystem _particle;
+    ParticleSystem _particle;
 
     //再生速度
-    public float myplayBackSpeed = 1.0f;
+    public float playBackSpeed = 1.0f;
 
+    [SerializeField]
     public GameObject shotObj;
 
-    public Vector3 offset = new Vector3(0,1.0f,0);
+    [SerializeField]
+    Vector3 offset = new Vector3(0, 1.0f, 0);
 
-    private float playtime;
 
-    // Use this for initialization
-    void Start ()
+    [SerializeField, TooltipAttribute("構え時間")]
+    float setDelayTime = 0.0f;
+    float setCount = 0.0f;
+
+    [SerializeField, Range(0, 1.0f)]
+    float shotTimeRate = 0.5f;
+    float atkTime = 1.0f;
+    float atkCount = 0.0f;
+
+    bool IsShot = false;
+
+    void Start()
     {
-        if (unitType == TYPE.Demon)
-        {
-            //親の方へ向かって最初のDemonsが入ってるオブジェクトを取得
-            parentDemon = this.gameObject.GetComponentInParent<Demons>();
-        }
-        else if (unitType == TYPE.Soldier)
-        {
-            //親の方へ向かって最初のSoldierが入ってるオブジェクトを取得
-            parentSoldier = this.gameObject.GetComponentInParent<Soldier>();
-        }
+        //親の方へ向かって最初のDemonsが入ってるオブジェクトを取得
+        parentUnit = this.gameObject.GetComponentInParent<Unit>();
 
         _particle = this.gameObject.GetComponent<ParticleSystem>();
+
+        setCount = setDelayTime;
+
+        atkTime = parentUnit.status.CurrentAtackTime;
+        atkCount = atkTime;
+
+        IsShot = false;
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    void Update()
     {
-        //それぞれコンポーネントの取得先が違うので別々に
-        switch (unitType)
+        if (parentUnit.state == Unit.State.Attack)
         {
-            case TYPE.Demon:
-                if (!_particle.isPlaying && parentDemon.state == Unit.State.Attack && !parentDemon.IsCharge)
+            if (setCount > 0)
+                setCount -= Time.deltaTime;
+            else
+            {
+                atkCount += Time.deltaTime;
+
+                //チャージエフェクトのリセット
+                if (atkCount >= atkTime)
                 {
+                    IsShot = false;
+
+                    atkCount = 0.0f;
+                    if (_particle.isPlaying)
+                        _particle.Stop();
                     _particle.time = 0;
-                    _particle.playbackSpeed = myplayBackSpeed;
+                    _particle.playbackSpeed = playBackSpeed;
                     _particle.Play();
                 }
 
-                if (_particle.isPlaying)
-                    playtime += Time.deltaTime;
-
-                if (playtime > _particle.startLifetime + _particle.duration && _particle.isPlaying)
+                //ショットエフェクトの生成
+                if (atkCount >= atkTime * shotTimeRate && !IsShot)
                 {
-                    playtime = 0;
-                    _particle.Stop();
-                    GameObject obj = (GameObject)Instantiate(shotObj, parentDemon.transform.position + offset, parentDemon.transform.rotation);
-                    obj.transform.parent = parentDemon.transform;
-                    parentDemon.IsCharge = true;
+                    IsShot = true;
+
+                    GameObject obj = (GameObject)Instantiate(shotObj, parentUnit.transform.position + offset, parentUnit.transform.rotation);
+                    obj.transform.parent = parentUnit.transform;
+                    obj.layer = parentUnit.transform.gameObject.layer;
+                    if (obj.GetComponent<shootEffect>())
+                        obj.GetComponent<shootEffect>().Offset = offset;
                 }
-
-            break;
-
-            case TYPE.Soldier:
-                if (!_particle.isPlaying && parentSoldier.state == Unit.State.Attack && !parentSoldier.IsCharge)
-                {
-                    _particle.time = 0;
-                    _particle.playbackSpeed = myplayBackSpeed;
-                    _particle.Play();
-                }
-
-                if (_particle.isPlaying)
-                    playtime += Time.deltaTime;
-
-                if (playtime > _particle.startLifetime + _particle.duration && _particle.isPlaying)
-                {
-                    playtime = 0;
-                    _particle.Stop();
-                    GameObject obj = (GameObject)Instantiate(shotObj, parentSoldier.transform.position + offset, parentSoldier.transform.rotation);
-                    obj.transform.parent = parentSoldier.transform;
-                    parentSoldier.IsCharge = true;
-                }
-                break;
-
-            default:
-            break;
+            }
+        }
+        else
+        {
+            setCount = setDelayTime;
         }
     }
 }

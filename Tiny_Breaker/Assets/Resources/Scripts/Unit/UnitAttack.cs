@@ -27,6 +27,15 @@ public class UnitAttack : MonoBehaviour
     float atkTime = 1.0f;
     public float AtkTime { set { atkTime = value; } }
 
+    //攻撃を実際に計算するときの攻撃時間全体を見てどのあたりで計算を行うかの割合
+    //攻撃間隔　２秒　atkDamageDelayRate　0.4fの場合
+    //0.8秒の時に計算を行う
+    [SerializeField, Range(0, 1.0f), TooltipAttribute("ダメージ計算を行うタイミングの割合")]
+    float atkDamageDelayRate = 0.0f;
+
+    [SerializeField, TooltipAttribute("構え時間")]
+    float setDelayTime = 0.0f;
+
     //攻撃実行対象
     public GameObject target = null;
 
@@ -78,9 +87,12 @@ public class UnitAttack : MonoBehaviour
                     }
                 }
                 yield return null;
+                yield return new WaitForSeconds(setDelayTime);
             }
             else
             {
+                yield return new WaitForSeconds(atkTime * atkDamageDelayRate);
+
                 //対象物が同じタグだったら仲間だから攻撃しない
                 if (target != null)
                 {
@@ -109,7 +121,7 @@ public class UnitAttack : MonoBehaviour
                     isAttack = false;
 
                 yield return null;
-                yield return new WaitForSeconds(atkTime);
+                yield return new WaitForSeconds(atkTime - (atkTime * atkDamageDelayRate));
             }
         }
     }
@@ -150,7 +162,7 @@ public class UnitAttack : MonoBehaviour
     {
         GameObject rootObject = unit.transform.root.gameObject;
 
-        switch(rootObject.tag)
+        switch (rootObject.tag)
         {
             case "Player1":
                 target.GetComponent<House>().HPpro += unit.status.CurrentATK;
@@ -164,7 +176,7 @@ public class UnitAttack : MonoBehaviour
 
         //親が小屋クラスを持っている(プレイヤー)場合のコスト処理
         if (target.GetComponent<House>().HPpro <= -target.GetComponent<House>().GetHP ||
-            target.GetComponent<House>().HPpro >=  target.GetComponent<House>().GetHP)
+            target.GetComponent<House>().HPpro >= target.GetComponent<House>().GetHP)
         {
             if (rootObject.GetComponent<Player>() != null)
             {

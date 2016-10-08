@@ -1,53 +1,58 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class shootEffect : MonoBehaviour
 {
-    public float animationTime = 0.5f;
+    //ショットの速さ
+    [SerializeField]
+    float shotSpeed = 1.0f;
 
-    private UnitAttack _unitAttack;
+    GameObject target;
+    Vector3 offset = Vector3.zero;
+    public Vector3 Offset { set { offset = value; } }
 
-    private Unit _parentUnit;
-
-    private float _time;
-
-	// Use this for initialization
-	void Start ()
+    void Start()
     {
-        //if (_unitAttack != null)
-        //{
-        //    _unitAttack = GetComponentInParent<UnitAttack>();
-
-        //    this.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, Vector3.Distance(this.transform.position, _unitAttack.target.transform.position) / animationTime);
-        //}
-
-        _unitAttack = GetComponentInParent<UnitAttack>();
-        _parentUnit = GetComponentInParent<Unit>();
+        UnitAttack _unitAttack = GetComponentInParent<UnitAttack>();
 
         if (GetComponentInParent<UnitAttack>() != null)
         {
             if (_unitAttack.target != null)
             {
-                //Vector3 vec = (_unitAttack.target.transform.position - this.transform.position).normalized * 30;
-                //this.GetComponent<Rigidbody>().velocity = vec / animationTime;
+                target = _unitAttack.target;
 
-                this.GetComponent<Rigidbody>().velocity = new Vector3((_unitAttack.target.transform.position.x - this.transform.position.x)
-                    , 0
-                    , (_unitAttack.target.transform.position.z - this.transform.position.z)) / animationTime;
+                this.GetComponent<Rigidbody>().velocity = new Vector3(target.transform.position.x - this.transform.position.x,
+                    target.transform.position.y + offset.y - this.transform.position.y,
+                    target.transform.position.z - this.transform.position.z);
+                //this.GetComponent<Rigidbody>().velocity = target.transform.position - this.transform.position;
+                this.GetComponent<Rigidbody>().velocity = this.GetComponent<Rigidbody>().velocity.normalized * shotSpeed;
             }
         }
+    }
+
+    void Update()
+    {
+        //ホーミングして必ず当たる
+        if (target != null)
+        {
+            this.GetComponent<Rigidbody>().velocity = new Vector3(target.transform.position.x - this.transform.position.x,
+                target.transform.position.y + offset.y - this.transform.position.y,
+                target.transform.position.z - this.transform.position.z);
+            //this.GetComponent<Rigidbody>().velocity = target.transform.position - this.transform.position;
+            this.GetComponent<Rigidbody>().velocity = this.GetComponent<Rigidbody>().velocity.normalized * shotSpeed;
+        }
+        else
+            Destroy(this.gameObject);
+
+        //死んでいたら消える
+        if (GetComponentInParent<Unit>().state == Unit.State.Dead)
+            Destroy(this.gameObject);
 
     }
 
-    // Update is called once per frame
-    void Update()
+    //ぶつかったら消える
+    void OnTriggerEnter(Collider collider)
     {
-        _time += Time.deltaTime;
-
-        if(_time > animationTime)
-        {
-            _parentUnit.IsCharge = false;
+        if (target == collider.gameObject)
             Destroy(this.gameObject);
-        }
-	}
+    }
 }

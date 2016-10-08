@@ -39,17 +39,17 @@ public class TimeLimit : MonoBehaviour
                 currentTime = 0.0f;
                 IsCounting = false;
             }
-
-            int hundredsNum = (Mathf.FloorToInt(currentTime) % 1000) / 100;
-            int tensNum = (Mathf.FloorToInt(currentTime) % 100) / 10;
-            int onesNum = Mathf.FloorToInt(currentTime) % 10;
-            
-            if (hundredsNum < 10)
-                hundreds.sprite = numbars[hundredsNum];
-            if (tensNum < 10)
-                tens.sprite = numbars[tensNum];
-            if (onesNum < 10)
-                ones.sprite = numbars[onesNum];
         }
-	}
+
+        int hundredsNum = (Mathf.FloorToInt(currentTime) % 1000) / 100;
+        int tensNum = (Mathf.FloorToInt(currentTime) % 100) / 10;
+        int onesNum = Mathf.FloorToInt(currentTime) % 10;
+
+        if (hundredsNum < 10)
+            hundreds.sprite = numbars[hundredsNum];
+        if (tensNum < 10)
+            tens.sprite = numbars[tensNum];
+        if (onesNum < 10)
+            ones.sprite = numbars[onesNum];
+    }
 }

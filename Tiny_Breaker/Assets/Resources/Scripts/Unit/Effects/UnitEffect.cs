@@ -25,8 +25,7 @@ public class UnitEffect : MonoBehaviour
 
     //再生速度
     public float myplayBackSpeed = 3.0f;
-
-	// Use this for initialization
+    
 	void Start ()
     {
         if (unitType == TYPE.Demon)
@@ -53,7 +52,6 @@ public class UnitEffect : MonoBehaviour
         _particle = this.gameObject.GetComponent<ParticleSystem>();
 	}
 	
-	// Update is called once per frame
 	void Update ()
     {
         //それぞれコンポーネントの取得先が違うので別々に

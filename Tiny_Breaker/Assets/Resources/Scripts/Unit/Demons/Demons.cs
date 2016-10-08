@@ -38,6 +38,7 @@ public class Demons : Unit
     {
         if(IsDead)
         {
+            state = State.Dead;
             Dying();
         }
         else

@@ -32,7 +32,10 @@ public class Soldier : Unit
     void Update()
     {
         if (IsDead)
+        {
+            state = State.Dead;
             Dying();
+        }
         else
         {
             //死亡処理
