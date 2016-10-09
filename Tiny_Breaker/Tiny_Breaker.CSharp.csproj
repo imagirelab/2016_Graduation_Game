@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -116,6 +110,7 @@
     <Compile Include="Assets\Resources\Scripts\Building\House.cs" />
     <Compile Include="Assets\Resources\Scripts\Building\Spawner.cs" />
     <Compile Include="Assets\Resources\Scripts\ChangeAnimation.cs" />
+    <Compile Include="Assets\Resources\Scripts\CustomProfiler.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\BuildingDataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\DemonDataBase.cs" />
     <Compile Include="Assets\Resources\Scripts\DataBase\SolgierDataBase.cs" />
@@ -141,10 +136,14 @@
     <Compile Include="Assets\Resources\Scripts\LoadData\ParamData.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\PlayerCost.cs" />
+    <Compile Include="Assets\Resources\Scripts\SceneManager\Title.cs" />
     <Compile Include="Assets\Resources\Scripts\TimeLimit.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DebugSwitchChild.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DefenseBaseGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DefenseBaseIcon.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\FadeIn.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\FadeOut.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\Flash.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\GainGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\HPGauge.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\LookAtCamera.cs" />

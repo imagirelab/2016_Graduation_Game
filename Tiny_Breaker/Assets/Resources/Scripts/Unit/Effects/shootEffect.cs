@@ -23,7 +23,6 @@ public class shootEffect : MonoBehaviour
                 this.GetComponent<Rigidbody>().velocity = new Vector3(target.transform.position.x - this.transform.position.x,
                     target.transform.position.y + offset.y - this.transform.position.y,
                     target.transform.position.z - this.transform.position.z);
-                //this.GetComponent<Rigidbody>().velocity = target.transform.position - this.transform.position;
                 this.GetComponent<Rigidbody>().velocity = this.GetComponent<Rigidbody>().velocity.normalized * shotSpeed;
             }
         }
@@ -34,10 +33,13 @@ public class shootEffect : MonoBehaviour
         //ホーミングして必ず当たる
         if (target != null)
         {
+            //ある程度近くても消える
+            if (Vector3.Distance(this.transform.position, target.transform.position) < 10.0f)
+                Destroy(this.gameObject);
+
             this.GetComponent<Rigidbody>().velocity = new Vector3(target.transform.position.x - this.transform.position.x,
                 target.transform.position.y + offset.y - this.transform.position.y,
                 target.transform.position.z - this.transform.position.z);
-            //this.GetComponent<Rigidbody>().velocity = target.transform.position - this.transform.position;
             this.GetComponent<Rigidbody>().velocity = this.GetComponent<Rigidbody>().velocity.normalized * shotSpeed;
         }
         else
@@ -46,7 +48,6 @@ public class shootEffect : MonoBehaviour
         //死んでいたら消える
         if (GetComponentInParent<Unit>().state == Unit.State.Dead)
             Destroy(this.gameObject);
-
     }
 
     //ぶつかったら消える
