@@ -136,6 +136,8 @@
     <Compile Include="Assets\Resources\Scripts\LoadData\ParamData.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Resources\Scripts\Player\PlayerCost.cs" />
+    <Compile Include="Assets\Resources\Scripts\SceneManager\Main.cs" />
+    <Compile Include="Assets\Resources\Scripts\SceneManager\Result.cs" />
     <Compile Include="Assets\Resources\Scripts\SceneManager\Title.cs" />
     <Compile Include="Assets\Resources\Scripts\TimeLimit.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DebugSwitchChild.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Assets\Resources\Scripts\UI\LookAtCamera.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\MoveGainBar.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\PlayerColor.cs" />
+    <Compile Include="Assets\Resources\Scripts\UI\ResultText.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\SoldierColor.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\StatusUI.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\AttackRange.cs" />

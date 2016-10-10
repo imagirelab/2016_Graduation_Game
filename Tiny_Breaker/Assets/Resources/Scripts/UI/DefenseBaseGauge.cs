@@ -20,7 +20,9 @@ public class DefenseBaseGauge : MonoBehaviour
 
     void Update()
     {
-        float HPRate = (float)player.HPpro / (float)player.GetHP;
+        float HPRate = 0;
+        if (player.HPpro != 0)
+            HPRate = (float)player.HPpro / (float)player.GetHP;
 
         PlayerHP.localScale = new Vector3(HPRate, PlayerHP.localScale.y, PlayerHP.localScale.z);
     }

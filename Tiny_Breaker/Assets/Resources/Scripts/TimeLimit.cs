@@ -19,9 +19,14 @@ public class TimeLimit : MonoBehaviour
 
     bool IsCounting = false;
 
+    bool end = false;
+    public bool End { get { return end; } }
+
     void Start ()
     {
-        if(!IsCounting)
+        end = false;
+
+        if (!IsCounting)
         {
             IsCounting = true;
             currentTime = (float)stateTime;
@@ -36,6 +41,8 @@ public class TimeLimit : MonoBehaviour
 
             if (currentTime <= 0)
             {
+                end = true;
+
                 currentTime = 0.0f;
                 IsCounting = false;
             }

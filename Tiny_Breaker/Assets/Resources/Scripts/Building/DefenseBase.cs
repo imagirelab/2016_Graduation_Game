@@ -19,7 +19,7 @@ public class DefenseBase : MonoBehaviour
     public bool IsDamage = false;
 
     int oldHP = 0;
-
+    
     void Start()
     {
         currentHP = HP;
