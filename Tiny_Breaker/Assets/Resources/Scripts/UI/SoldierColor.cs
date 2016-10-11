@@ -7,7 +7,7 @@ public class SoldierColor : MonoBehaviour
     TextMesh text;
 
     [SerializeField]
-    Color[] colors = new Color[GameRule.getInstance().playerNum + 1];
+    Color[] colors = new Color[GameRule.playerNum + 1];
 
     void Start()
     {

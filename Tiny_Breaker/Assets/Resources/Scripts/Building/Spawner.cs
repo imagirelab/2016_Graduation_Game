@@ -11,7 +11,7 @@ public class Spawner : MonoBehaviour
 
     //プレイヤー達
     [SerializeField]
-    Player[] players = new Player[GameRule.getInstance().playerNum];
+    Player[] players = new Player[GameRule.playerNum];
 
     int currentPlayerID = 0;
     public int CurrentPlayerID

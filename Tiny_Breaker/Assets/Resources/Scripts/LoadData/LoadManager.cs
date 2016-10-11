@@ -186,7 +186,7 @@ public class LoadManager : MonoBehaviour
     {
         foreach (var cost in CostTable.All)
         {
-            for(int i = 0; i < GameRule.getInstance().playerNum; i++)
+            for(int i = 0; i < GameRule.playerNum; i++)
             {
                 GameObject player = GameObject.Find("Player" + (i + 1));
                 if (player.GetComponent<PlayerCost>())
