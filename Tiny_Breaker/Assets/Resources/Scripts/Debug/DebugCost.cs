@@ -17,14 +17,17 @@ public class DebugCost : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.GetComponent<Text>().text = player.name.ToString() + ":" + player.GetComponent<PlayerCost>().CurrentCost + "/" + player.GetComponent<PlayerCost>().GetMaxCost + "\n" +
-                                            "HouseCost:" + player.GetComponent<PlayerCost>().GetHouseCost + "\n" +
-                                            "SoldierCost:" + player.GetComponent<PlayerCost>().GetSoldierCost + "\n" +
-                                            "POPOCost:" +
-                                            player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.POPO).Level) + "\n" +
-                                            "PUPUCost:" +
-                                            player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PUPU).Level) + "\n" +
-                                            "PIPICost:" +
-                                            player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PIPI).Level);
+        if (player.GetComponent<PlayerCost>())
+        {
+            this.GetComponent<Text>().text = player.name.ToString() + ":" + player.GetComponent<PlayerCost>().CurrentCost + "/" + player.GetComponent<PlayerCost>().GetMaxCost + "\n" +
+                                                "HouseCost:" + player.GetComponent<PlayerCost>().GetHouseCost + "\n" +
+                                                "SoldierCost:" + player.GetComponent<PlayerCost>().GetSoldierCost + "\n" +
+                                                "POPOCost:" +
+                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.POPO).Level) + "\n" +
+                                                "PUPUCost:" +
+                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PUPU).Level) + "\n" +
+                                                "PIPICost:" +
+                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PIPI).Level);
+        }
     }
 }
