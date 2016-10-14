@@ -2,15 +2,27 @@
 
 public class BGM : MonoBehaviour
 {
-    public float loopStarttime;
-    public float loopEndttime;
+    public float beatType = 4;
+
+    public float BPM;
+
+    public float loopStartMeasure;
+    public float loopEndtMeasure;
 
     AudioSource _auido;
+
+    private float Oneminuts = 60;
+
+    private float oneBeatTime;
 
 	// Use this for initialization
 	void Start ()
     {
+        oneBeatTime = Oneminuts / BPM;
+
         _auido = GetComponent<AudioSource>();
+
+        _auido.Play();
 	}
 	
 	// Update is called once per frame
@@ -18,13 +30,13 @@ public class BGM : MonoBehaviour
     {
 	    if(!_auido.isPlaying)
         {
-            _auido.time = loopStarttime;
+            _auido.time = oneBeatTime * loopStartMeasure * beatType;
             _auido.Play();
         }
 
-        if(_auido.time > loopEndttime && _auido.isPlaying)
+        if(_auido.time > oneBeatTime * (loopEndtMeasure + 1) * beatType && _auido.isPlaying)
         {
-            _auido.time = loopStarttime;
+            _auido.time = oneBeatTime * loopStartMeasure * beatType;
             _auido.Play();
         }
 	}
