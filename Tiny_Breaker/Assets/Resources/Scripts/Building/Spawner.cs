@@ -102,11 +102,11 @@ public class Spawner : MonoBehaviour
             //最大生成数以下なら作る
             if (childSolCount < spawnMax * 2)
             {
-                //兵士の生成
-                Spawn();
-
                 //兵士番号を進める
                 SolCountUP();
+
+                //兵士の生成
+                Spawn();
             }
         }
     }
@@ -176,10 +176,14 @@ public class Spawner : MonoBehaviour
 
     void SolCountUP()
     {
-        solNum++;
+        int rnd = Random.Range(0, soldiers.Length);
 
-        if (solNum >= soldiers.Length)
-            solNum = 0;
+        solNum = rnd;
+
+        //solNum++;
+
+        //if (solNum >= soldiers.Length)
+        //    solNum = 0;
     }
 
     public void SetDefault(int num, int max, float time)

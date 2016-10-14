@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using StaticClass;
 
 public class Title : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Title : MonoBehaviour
 
     void Start()
     {
+        GameRule.getInstance().Reset();
+
         //オブジェクトの設定し忘れ
         if (fade == null)
             fade = new GameObject();
