@@ -20,8 +20,6 @@ public class Main : MonoBehaviour
     //スタート準備物
     [SerializeField]
     TimeLimit time;
-    //[SerializeField]
-    //GameObject bgm;
     [SerializeField]
     GameObject debugcontrol;
     [SerializeField]
@@ -33,7 +31,22 @@ public class Main : MonoBehaviour
 	{
         startCount = 0.0f;
 
-
+        if (P1Base == null)
+            P1Base = new DefenseBase();
+        if (P2Base == null)
+            P2Base = new DefenseBase();
+        if (StartUI == null)
+            StartUI = null;
+        if (time == null)
+            time = new TimeLimit();
+        if (debugcontrol == null)
+            debugcontrol = new GameObject();
+        for(int i = 0; i < player.Length; i++)
+            if (player[i] == null)
+                player[i] = new GameObject();
+        for (int i = 0; i < spawer.Length; i++)
+            if (spawer[i] == null)
+                spawer[i] = new Spawner();
     }
 	
 	void Update ()

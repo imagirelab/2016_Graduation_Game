@@ -4,7 +4,17 @@ using System.Collections;
 public class UnitMove : MonoBehaviour
 {
     Coroutine cor;
-    
+
+    [SerializeField]
+    float spawnMoveTime = 0.0f;
+    [SerializeField]
+    float spawnStopTime = 0.0f;
+
+    void Start()
+    {
+        cor = StartCoroutine(Move());
+    }
+
     IEnumerator Move()
     {
         Unit unit = gameObject.GetComponent<Unit>();
@@ -15,6 +25,28 @@ public class UnitMove : MonoBehaviour
         //動くときには回れるように
         gameObject.GetComponent<Rigidbody>().freezeRotation = false;
 
+        //召喚時の動き
+        bool spawnEnd = false;
+        Vector3 startPosition = transform.position;
+        Vector3 subVec = unit.spawnTargetPosition - startPosition;
+        float time = 0.0f;
+        while (spawnEnd == false)
+        {
+            time += Time.deltaTime;
+            if (time >= spawnMoveTime)
+            {
+                spawnEnd = true;
+                time = spawnMoveTime;
+            }
+            float rate = time / spawnMoveTime;
+            Vector3 rateVec = subVec * rate;
+            transform.position = startPosition + rateVec;
+            GetComponent<NavMeshAgent>().enabled = false;
+            yield return null;
+        }
+        yield return new WaitForSeconds(spawnStopTime);
+
+        //通常の時の動き
         while (true)
         {
             if (unit.targetObject != null)
@@ -101,7 +133,7 @@ public class UnitMove : MonoBehaviour
     
     void OnEnable()
     {
-        cor = StartCoroutine(Move());
+        //cor = StartCoroutine(Move());
     }
 
     void OnDisable()

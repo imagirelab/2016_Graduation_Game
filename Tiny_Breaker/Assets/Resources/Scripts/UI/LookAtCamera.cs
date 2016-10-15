@@ -1,25 +1,35 @@
 ﻿//UIをカメラの方に向かせるクラス
 
 using UnityEngine;
+using System.Collections;
 
 public class LookAtCamera : MonoBehaviour
 {
+    Coroutine cor;
+
     [SerializeField]
     Camera cam;
-
-    void Start()
+    
+    IEnumerator LookCamera()
     {
         if (cam == null)
             cam = Camera.main;
+
+        while (true)
+        {
+            transform.forward = cam.transform.forward;
+            yield return null;
+        }
+    }
+    
+    void OnEnable()
+    {
+        cor = StartCoroutine(LookCamera());
     }
 
-    void Update()
+    void OnDisable()
     {
-        transform.forward = cam.transform.forward;
-    }
-
-    void Disable()
-    {
+        StopCoroutine(cor);
         gameObject.SetActive(false);
     }
 }

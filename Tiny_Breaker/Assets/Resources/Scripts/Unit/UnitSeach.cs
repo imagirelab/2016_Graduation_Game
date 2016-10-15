@@ -30,32 +30,33 @@ public class UnitSeach : MonoBehaviour
 
         Initialize();
     }
-    
+
     void Update()
     {
-        if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
-        {
-            count = 0;
-            isFind = true;
-            lookonTarget = unit.targetObject;
-        }
-        else
-        {
-            //フラグが切り替わる条件
-            RaycastHit hit;
-            Vector3 vec = unit.targetObject.transform.position - transform.position;
-            Ray ray = new Ray(transform.position, vec);
-            int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
-            if (Physics.SphereCast(ray, 3.0f, out hit, findRange + transform.localScale.x, layerMask))
+        if (unit.targetObject != null)
+            if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
             {
-                if (hit.collider.gameObject == unit.targetObject)
+                count = 0;
+                isFind = true;
+                lookonTarget = unit.targetObject;
+            }
+            else
+            {
+                //フラグが切り替わる条件
+                RaycastHit hit;
+                Vector3 vec = unit.targetObject.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, vec);
+                int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
+                if (Physics.SphereCast(ray, 3.0f, out hit, findRange + transform.localScale.x, layerMask))
                 {
-                    count = 0;
-                    isFind = true;
-                    lookonTarget = unit.targetObject;
+                    if (hit.collider.gameObject == unit.targetObject)
+                    {
+                        count = 0;
+                        isFind = true;
+                        lookonTarget = unit.targetObject;
+                    }
                 }
             }
-        }
 
         //狙った敵と本来狙うべき敵に齟齬があった時初期化する
         if (lookonTarget != unit.targetObject)

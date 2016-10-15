@@ -22,9 +22,6 @@ public class Demons : Unit
         //死亡フラグ
         IsDead = false;
 
-        //巡回ルート
-        if (gameObject.transform.parent == null)
-            loiteringPointObj = new Transform[] { transform };
 
         //ステータスの決定
         SetStatus();
@@ -32,6 +29,16 @@ public class Demons : Unit
         //攻撃に関する設定
         GetComponent<UnitAttack>().AtkRange = ATKRange;
         GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
+
+        //////設定がなされていなかった時の仮置き
+        if (goalObject == null)
+            goalObject = GameObject.Find("DummyTarget");
+        //一番近くの敵を狙う
+        SetNearTargetObject();
+
+        //巡回ルート
+        if (gameObject.transform.parent == null)
+            loiteringPointObj = new Transform[] { goalObject.transform };
     }
 
     void Update()

@@ -126,9 +126,9 @@ public class UnitAttack : MonoBehaviour
         }
     }
 
+    //悪魔と兵士について
     void AttackUnit()
     {
-        //悪魔と兵士について
         //倍率
         float mag = 1.0f;
 
@@ -214,9 +214,9 @@ public class UnitAttack : MonoBehaviour
         }
     }
 
+    //城への攻撃はこっち
     void AttackDefenseBase()
     {
-        //城への攻撃はこっち
         if (target.GetComponent<DefenseBase>())
             target.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
     }

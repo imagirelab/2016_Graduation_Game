@@ -404,22 +404,16 @@ public class Player : MonoBehaviour
     {
         if (spiritsDataCopy.Count == 0)
             return;
-
-        //GrowPoint demonPoint = demon.GetComponent<Demons>().GrowPoint;
+        
         GrowPoint demonPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
         GrowPoint spiritPoint = spiritsDataCopy[0];
 
+        //成長値を加算
         demonPoint.AddGrowPoint(spiritPoint);
-        //demonPoint.CurrentHP_GrowPoint += demonPoint.GetHP_GrowPoint + spiritPoint.GetHP_GrowPoint;
-        //demonPoint.CurrentATK_GrowPoint += demonPoint.GetATK_GrowPoint + spiritPoint.GetATK_GrowPoint;
-        //demonPoint.CurrentSPEED_GrowPoint += demonPoint.GetSPEED_GrowPoint + spiritPoint.GetSPEED_GrowPoint;
-        //demonPoint.CurrentAtackTime_GrowPoint += demonPoint.GetAtackTime_GrowPoint + spiritPoint.GetAtackTime_GrowPoint;
 
+        //加算結果を代入
         demon.GetComponent<Demons>().GrowPoint = demonPoint;
-
-        //ステータスの代入  あってもなくてもいい　デバック用の表示更新用
-        //demon.GetComponent<Demons>().SetStatus();
-
+        
         spiritsDataCopy.Remove(spiritsDataCopy[0]);
     }
 
@@ -436,7 +430,6 @@ public class Player : MonoBehaviour
         //プレファブの悪魔のデータの設定
         //悪魔が作られてからやるSetStatusは個別のステータス
         //おそらくアドレス渡しになるため同じプレファブから作られたすべてのオブジェクトが共通の値を持つこととなる
-        //GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
         GrowPoint growPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
 
         //召喚コストの計算
@@ -446,21 +439,20 @@ public class Player : MonoBehaviour
         {
             //悪魔を出す
             GameObject instaceObject = (GameObject)Instantiate(demon,
-                                                            rootes[rootNum].transform.position + randVac,
+                                                            spawnPoint.position,
                                                             Quaternion.identity);
-            instaceObject.transform.SetParent(this.transform, false);
+            instaceObject.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
             Vector3 summonVec = (rootPointes[rootNum].ToArray()[0].position - rootes[rootNum].transform.position).normalized;   //初めの向き
             Quaternion rotation = Quaternion.LookRotation(summonVec);
-            instaceObject.transform.rotation = rotation;
+            instaceObject.transform.rotation = rotation;    //出た瞬間の向き
             instaceObject.tag = transform.gameObject.tag;    //自分のタグを設定
             instaceObject.layer = transform.gameObject.layer;    //レイヤーを設定
             instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
             instaceObject.GetComponent<Unit>().goalObject = target; //最終目標
-                                                                    //instaceObject.GetComponent<Demons>().Order = orders[Demon_TYPE.PUPU];
-            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootNum].ToArray();
-            instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
-
-            instaceObject.GetComponent<Unit>().rootNum = rootNum;
+            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootNum].ToArray();  //巡回ルート地点配列
+            instaceObject.GetComponent<Demons>().GrowPoint = growPoint; //成長値
+            instaceObject.GetComponent<Unit>().rootNum = rootNum;   //ルート番号
+            instaceObject.GetComponent<Unit>().spawnTargetPosition = rootes[rootNum].transform.position + randVac;
 
             //出るとき重なる瞬間は回らないように
             instaceObject.GetComponent<Rigidbody>().freezeRotation = true;

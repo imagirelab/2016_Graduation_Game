@@ -64,7 +64,9 @@ public class Unit : MonoBehaviour
     [SerializeField]
     protected float deadTime = 1.0f;
     protected float deadcount = 0.0f;
-    
+
+    //出現場所の目的場所
+    public Vector3 spawnTargetPosition = Vector3.zero;
 
     public void Move(Vector3 target, float speed)
     {
