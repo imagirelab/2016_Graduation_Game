@@ -6,9 +6,14 @@ public class UnitMove : MonoBehaviour
     Coroutine cor;
 
     [SerializeField]
+    GameObject statusUI;    //召喚中に消すステータスのUI
+    [SerializeField]
     float spawnMoveTime = 0.0f;
     [SerializeField]
     float spawnStopTime = 0.0f;
+    [SerializeField]
+    float setTime = 0.0f;
+    bool setFlag = false;   //構えたどうかのフラグ
 
     void Start()
     {
@@ -25,26 +30,41 @@ public class UnitMove : MonoBehaviour
         //動くときには回れるように
         gameObject.GetComponent<Rigidbody>().freezeRotation = false;
 
-        //召喚時の動き
-        bool spawnEnd = false;
-        Vector3 startPosition = transform.position;
-        Vector3 subVec = unit.spawnTargetPosition - startPosition;
-        float time = 0.0f;
-        while (spawnEnd == false)
+        //召喚時の動きがあるもの
+        if(unit.setSpawnTargetFlag)
         {
-            time += Time.deltaTime;
-            if (time >= spawnMoveTime)
+            //ステータスUIを消す
+            if (statusUI == null)
+                statusUI = new GameObject();
+            statusUI.SetActive(false);
+
+            bool spawnEnd = false;
+            Vector3 startPosition = transform.position;
+            Vector3 subVec;
+            subVec = unit.SpawnTargetPosition - startPosition;
+            float time = 0.0f;
+            while (spawnEnd == false)
             {
-                spawnEnd = true;
-                time = spawnMoveTime;
+                time += Time.deltaTime;
+                if (time >= spawnMoveTime)
+                {
+                    spawnEnd = true;
+                    time = spawnMoveTime;
+                }
+                float rate = time / spawnMoveTime;
+                Vector3 rateVec = subVec * rate;
+                transform.position = startPosition + rateVec;   //座標の代入
+                //GetComponent<Rigidbody>().velocity = subVec.normalized * 30.0f;
+                GetComponent<NavMeshAgent>().enabled = false;
+                yield return null;
             }
-            float rate = time / spawnMoveTime;
-            Vector3 rateVec = subVec * rate;
-            transform.position = startPosition + rateVec;
-            GetComponent<NavMeshAgent>().enabled = false;
-            yield return null;
+            yield return new WaitForSeconds(spawnStopTime);
+            //ステータスUIを表示
+            statusUI.SetActive(true);
+            //transform.position = unit.SpawnTargetPosition;
+            //GetComponent<NavMeshAgent>().enabled = true;
         }
-        yield return new WaitForSeconds(spawnStopTime);
+        GetComponent<SphereCollider>().enabled = true;
 
         //通常の時の動き
         while (true)
@@ -54,21 +74,41 @@ public class UnitMove : MonoBehaviour
                 switch (unit.state)
                 {
                     case Unit.State.Search:
-                        unit.UpdataRootPoint(3.0f);
+                        gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+                        //構えの処理
+                        if (!setFlag)
+                        {
+                            GetComponent<NavMeshAgent>().enabled = false;
+                            GetComponent<Rigidbody>().velocity = Vector3.zero;
+                            yield return new WaitForSeconds(setTime);
+                            setFlag = true;
+                        }
+
+                        unit.UpdataRootPoint(1.0f);
 
                         Vector3 rootPos = unit.GetRootPosition();
                         Vector3 rootVec = rootPos - transform.position;
                         transform.LookAt(transform.position + rootVec);
 
                         //サーチ中止まってたら何かに引っかかってる可能性
-                        Ray raySearch = new Ray(transform.position, rootVec);
-                        if (Physics.SphereCast(raySearch, 3.0f, out hit, 5.0f, layerMask))
+                        //Ray raySearch = new Ray(transform.position, rootVec);
+                        Ray raySearch = new Ray(new Vector3(
+                            transform.position.x,
+                            transform.position.y + 1.5f,    //視線の高さ分上げている形
+                            transform.position.z),
+                            new Vector3(
+                            rootVec.x,
+                            rootVec.y + 1.5f,               //視線の高さ分上げている形
+                            rootVec.z));
+
+                        if (Physics.SphereCast(raySearch, 1.5f, out hit, 3.0f, layerMask))
                         {
                             if (hit.collider.gameObject.tag == "Ground" || hit.collider.gameObject.layer == 9)
                             {
                                 //ナビゲーションは最低限で用いる
                                 GetComponent<NavMeshAgent>().enabled = true;
                                 unit.Move(rootPos, unit.loiteringSPEED);
+                                //Debug.Log(hit.collider.gameObject.name);
                             }
                             else
                             {
@@ -83,6 +123,10 @@ public class UnitMove : MonoBehaviour
                         }
                         break;
                     case Unit.State.Find:
+
+                        gameObject.GetComponent<Rigidbody>().freezeRotation = false;
+                        setFlag = false;
+
                         unit.UpdataRootPoint(15.0f);
                         //重なっている
                         if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
@@ -91,14 +135,25 @@ public class UnitMove : MonoBehaviour
                             GetComponent<Rigidbody>().velocity = Vector3.zero;
                         }
                         else
-                        { 
+                        {
+
                             Vector3 targetVec = unit.targetObject.transform.position - transform.position;
                             transform.LookAt(transform.position + targetVec);
 
                             //サーチ中止まってたら何かに引っかかってる可能性
-                            Ray rayFind = new Ray(transform.position, targetVec);
-                            if (Physics.SphereCast(rayFind, 3.0f, out hit, 5.0f, layerMask))
+                            //Ray rayFind = new Ray(transform.position, targetVec);
+                            Ray rayFind = new Ray(new Vector3(
+                            transform.position.x,
+                            transform.position.y + 1.5f,    //視線の高さ分上げている形
+                            transform.position.z),
+                            new Vector3(
+                            targetVec.x,
+                            targetVec.y + 1.5f,               //視線の高さ分上げている形
+                            targetVec.z));
+
+                            if (Physics.SphereCast(rayFind, 1.5f, out hit, 3.0f, layerMask))
                             {
+
                                 if (hit.collider.gameObject.tag == "Ground" || hit.collider.gameObject.layer == 9)
                                 {
                                     //ナビゲーションは最低限で用いる
@@ -119,8 +174,10 @@ public class UnitMove : MonoBehaviour
                         }
                         break;
                     default:
+                        setFlag = false;
                         GetComponent<NavMeshAgent>().enabled = false;
                         GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        gameObject.GetComponent<Rigidbody>().freezeRotation = true;
                         break;
                 }
             }

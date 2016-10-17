@@ -89,7 +89,7 @@ public class Player : MonoBehaviour
     string tergetTag = "";
     public string TergetTag { get { return tergetTag; } }
 
-    //召喚する道番号
+    //召喚する道番号 ０：下　１：真ん中　２：上
     int rootNum = 0;
 
     #endregion
@@ -425,7 +425,22 @@ public class Player : MonoBehaviour
     public void DebugSummon(GameObject demon)
     {
         //適当な値を入れて重なることを避ける
-        Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        Vector3 randVac;
+        switch(rootNum)
+        {
+            case 0:
+                randVac = new Vector3(Random.Range(-5.5f, 5.5f), 0.0f, Random.Range(-4.0f, 10.0f));
+                break;
+            case 1:
+                randVac = new Vector3(Random.Range(-5.0f, 5.0f), 0.0f, Random.Range(0.0f, 18.0f));
+                break;
+            case 2:
+                randVac = new Vector3(Random.Range(-6.0f, 6.0f), 0.0f, Random.Range(-9.0f, 9.0f));
+                break;
+            default:
+                randVac = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
+                break;
+        }
 
         //プレファブの悪魔のデータの設定
         //悪魔が作られてからやるSetStatusは個別のステータス
@@ -452,7 +467,7 @@ public class Player : MonoBehaviour
             instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootNum].ToArray();  //巡回ルート地点配列
             instaceObject.GetComponent<Demons>().GrowPoint = growPoint; //成長値
             instaceObject.GetComponent<Unit>().rootNum = rootNum;   //ルート番号
-            instaceObject.GetComponent<Unit>().spawnTargetPosition = rootes[rootNum].transform.position + randVac;
+            instaceObject.GetComponent<Unit>().SpawnTargetPosition = rootes[rootNum].transform.position + randVac;
 
             //出るとき重なる瞬間は回らないように
             instaceObject.GetComponent<Rigidbody>().freezeRotation = true;

@@ -67,9 +67,17 @@ public class UnitAttack : MonoBehaviour
                     {
                         RaycastHit hit;
                         Vector3 vec = unit.targetObject.transform.position - transform.position;
-                        Ray ray = new Ray(transform.position, vec);
+                        //Ray ray = new Ray(transform.position, vec);
+                        Ray ray = new Ray(new Vector3(
+                            transform.position.x,
+                            transform.position.y + 1.5f,    //視線の高さ分上げている形
+                            transform.position.z),
+                            new Vector3(
+                            vec.x,
+                            vec.y + 1.5f,               //視線の高さ分上げている形
+                            vec.z));
                         int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
-                        if (Physics.SphereCast(ray, 3.0f, out hit, atkRange + transform.localScale.x, layerMask))
+                        if (Physics.SphereCast(ray, 1.5f, out hit, atkRange + transform.localScale.x, layerMask))
                         {
                             if (hit.collider.gameObject == unit.targetObject)
                             {

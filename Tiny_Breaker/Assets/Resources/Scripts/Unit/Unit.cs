@@ -21,7 +21,7 @@ public class Unit : MonoBehaviour
         Dead,
         Wait
     }
-    public State state = State.Wait;
+    public State state = State.Search;
 
     //ステータス
     [SerializeField, TooltipAttribute("ステータス")]
@@ -66,7 +66,18 @@ public class Unit : MonoBehaviour
     protected float deadcount = 0.0f;
 
     //出現場所の目的場所
-    public Vector3 spawnTargetPosition = Vector3.zero;
+    public bool setSpawnTargetFlag = false;
+    Vector3 spawnTargetPosition;
+    public Vector3 SpawnTargetPosition
+    {
+        get { return spawnTargetPosition; }
+        set
+        {
+            spawnTargetPosition = value;
+            setSpawnTargetFlag = true;
+        }
+    }
+
 
     public void Move(Vector3 target, float speed)
     {
