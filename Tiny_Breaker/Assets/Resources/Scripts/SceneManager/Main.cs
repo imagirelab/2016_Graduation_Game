@@ -47,6 +47,11 @@ public class Main : MonoBehaviour
         for (int i = 0; i < spawer.Length; i++)
             if (spawer[i] == null)
                 spawer[i] = new Spawner();
+        if (spawer.Length == 0)
+        {
+            spawer = new Spawner[1];
+            spawer[0] = new Spawner();
+        }
     }
 	
 	void Update ()

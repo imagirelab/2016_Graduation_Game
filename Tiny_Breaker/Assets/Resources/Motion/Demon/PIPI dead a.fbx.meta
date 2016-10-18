@@ -1,90 +1,68 @@
 fileFormatVersion: 2
-guid: 651b1b131b3dbf44bab11403ab59360d
-timeCreated: 1476444580
+guid: b7dd715e26b321548af3570313400edd
+timeCreated: 1476785555
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: atk1
-    100002: Back
-    100004: Body
-    100006: Face
-    100008: Head
-    100010: Hips
-    100012: L_Arm
-    100014: L_arming
-    100016: L_Finger
-    100018: L_fingering
-    100020: L_Foot
-    100022: L_Hand
-    100024: L_handing
-    100026: L_Hone
-    100028: L_Hone1
-    100030: L_Hones
-    100032: L_Leg
-    100034: L_Shoulder
-    100036: L_Toe
-    100038: Master
-    100040: //RootNode
-    100042: R_Arm
-    100044: R_arming
-    100046: R_Finger
-    100048: R_fingering
-    100050: R_Foot
-    100052: R_Hand
-    100054: R_handing
-    100056: R_Hone
-    100058: R_Hone1
-    100060: R_Hones
-    100062: R_Leg
-    100064: R_Shoulder
-    100066: R_Toe
-    100068: Tale
-    100070: Tale1
-    100072: Tale2
-    100074: Tale3
-    400000: atk1
-    400002: Back
-    400004: Body
-    400006: Face
-    400008: Head
-    400010: Hips
-    400012: L_Arm
-    400014: L_arming
-    400016: L_Finger
-    400018: L_fingering
-    400020: L_Foot
-    400022: L_Hand
-    400024: L_handing
-    400026: L_Hone
-    400028: L_Hone1
-    400030: L_Hones
-    400032: L_Leg
-    400034: L_Shoulder
-    400036: L_Toe
-    400038: Master
-    400040: //RootNode
-    400042: R_Arm
-    400044: R_arming
-    400046: R_Finger
-    400048: R_fingering
-    400050: R_Foot
-    400052: R_Hand
-    400054: R_handing
-    400056: R_Hone
-    400058: R_Hone1
-    400060: R_Hones
-    400062: R_Leg
-    400064: R_Shoulder
-    400066: R_Toe
-    400068: Tale
-    400070: Tale1
-    400072: Tale2
-    400074: Tale3
-    4300000: atk1
+    100000: //RootNode
+    100002: polySurface11
+    100004: rig_out:Back
+    100006: rig_out:Body
+    100008: rig_out:Face
+    100010: rig_out:Head
+    100012: rig_out:Hips
+    100014: rig_out:L_Arm
+    100016: rig_out:L_Finger
+    100018: rig_out:L_fingering
+    100020: rig_out:L_Foot
+    100022: rig_out:L_Hand
+    100024: rig_out:L_Leg
+    100026: rig_out:L_Shoulder
+    100028: rig_out:Master
+    100030: rig_out:R_Arm
+    100032: rig_out:R_Finger
+    100034: rig_out:R_fingering
+    100036: rig_out:R_Foot
+    100038: rig_out:R_Hand
+    100040: rig_out:R_Leg
+    100042: rig_out:R_Shoulder
+    100044: rig_out:Ring
+    100046: rig_out:Tale
+    100048: rig_out:Tale1
+    100050: rig_out:Tale2
+    100052: rig_out:Tale3
+    400000: //RootNode
+    400002: polySurface11
+    400004: rig_out:Back
+    400006: rig_out:Body
+    400008: rig_out:Face
+    400010: rig_out:Head
+    400012: rig_out:Hips
+    400014: rig_out:L_Arm
+    400016: rig_out:L_Finger
+    400018: rig_out:L_fingering
+    400020: rig_out:L_Foot
+    400022: rig_out:L_Hand
+    400024: rig_out:L_Leg
+    400026: rig_out:L_Shoulder
+    400028: rig_out:Master
+    400030: rig_out:R_Arm
+    400032: rig_out:R_Finger
+    400034: rig_out:R_fingering
+    400036: rig_out:R_Foot
+    400038: rig_out:R_Hand
+    400040: rig_out:R_Leg
+    400042: rig_out:R_Shoulder
+    400044: rig_out:Ring
+    400046: rig_out:Tale
+    400048: rig_out:Tale1
+    400050: rig_out:Tale2
+    400052: rig_out:Tale3
+    4300000: polySurface11
     7400000: Take 001
     9500000: //RootNode
-    13700000: atk1
+    13700000: polySurface11
   materials:
     importMaterials: 1
     materialName: 0
@@ -109,7 +87,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 8
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using StaticClass;
 
 public class UnitAttack : MonoBehaviour
 {
@@ -72,10 +73,7 @@ public class UnitAttack : MonoBehaviour
                             transform.position.x,
                             transform.position.y + 1.5f,    //視線の高さ分上げている形
                             transform.position.z),
-                            new Vector3(
-                            vec.x,
-                            vec.y + 1.5f,               //視線の高さ分上げている形
-                            vec.z));
+                            vec);
                         int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
                         if (Physics.SphereCast(ray, 1.5f, out hit, atkRange + transform.localScale.x, layerMask))
                         {
@@ -186,6 +184,11 @@ public class UnitAttack : MonoBehaviour
         if (target.GetComponent<House>().HPpro <= -target.GetComponent<House>().GetHP ||
             target.GetComponent<House>().HPpro >= target.GetComponent<House>().GetHP)
         {
+            //死んだフラグを立てる
+            target.GetComponent<House>().IsDead = true;
+            //リストからはずす
+            BuildingDataBase.getInstance().RemoveList(target);
+
             if (rootObject.GetComponent<Player>() != null)
             {
                 Player player = rootObject.GetComponent<Player>();
@@ -193,6 +196,9 @@ public class UnitAttack : MonoBehaviour
                 //スポナーがあるときPlayerIDを登録
                 if (target.GetComponent<Spawner>() != null)
                 {
+                    //事前にタグを保存しておく
+                    target.GetComponent<House>().OldTag = target.tag;
+
                     //倒した奴のタグにする
                     target.tag = player.transform.gameObject.tag;
                     //子供も一緒に
@@ -202,10 +208,10 @@ public class UnitAttack : MonoBehaviour
                     target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
                     target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
 
-                    //一旦出ていた兵士は全員殺す
-                    foreach (Transform child in target.transform)
-                        if (child.gameObject.GetComponent<Unit>())
-                            child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
+                    ////一旦出ていた兵士は全員殺す
+                    //foreach (Transform child in target.transform)
+                    //    if (child.gameObject.GetComponent<Unit>())
+                    //        child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
                 }
 
                 //コストの計算

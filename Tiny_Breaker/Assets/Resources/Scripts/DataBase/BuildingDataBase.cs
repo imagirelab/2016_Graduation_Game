@@ -28,7 +28,8 @@ namespace StaticClass
 
         public void RemoveList(GameObject item)
         {
-            list.Remove(item);
+            if(list.Contains(item))
+                list.Remove(item);
         }
 
         //一番近い魂を返す
