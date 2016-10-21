@@ -178,7 +178,7 @@ public class Player : MonoBehaviour
     {
         counter++;
 
-        if (counter > 60)
+        if (counter > 30)
         {
             counter = 0;
 
@@ -240,7 +240,7 @@ public class Player : MonoBehaviour
         NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
 
         //PlayerNoが記入されていないもの以外を取得
-        //demonStatus.WhereNotEqualTo("PlayerNo", "");
+        demonStatus.WhereEqualTo("PlayerNo", playerID);
 
         //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
         //demonStatus.OrderByDescending("createDate");
@@ -308,8 +308,8 @@ public class Player : MonoBehaviour
                         smaphoMsg.G_HP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
                     if (ncmbObj["ATK"] != null)
                         smaphoMsg.G_ATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
-                    if (ncmbObj["DEX"] != null)
-                        smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["DEX"].ToString());
+                    if (ncmbObj["SPEED"] != null)
+                        smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["SPEED"].ToString());
                     //smaphoMsg.G_ATKTime = System.Convert.ToInt32(ncmbObj["ATKTime"].ToString());
 
                     smaphoMsgList.Add(smaphoMsg);
