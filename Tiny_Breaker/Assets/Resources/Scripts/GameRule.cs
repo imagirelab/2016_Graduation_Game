@@ -30,9 +30,7 @@ namespace StaticClass
         GameRule()
         {
             Reset();
-            //for(int i = 0; i < playerNum; i++)
-            //    round.Add("Player" + i, 0);
-         }
+        }
 
         public static GameRule getInstance()
         {
