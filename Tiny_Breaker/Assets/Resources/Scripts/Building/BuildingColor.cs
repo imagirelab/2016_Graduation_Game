@@ -10,12 +10,13 @@ public class BuildingColor : MonoBehaviour
     void Start()
     {
         root = transform.root.gameObject;
+
     }
 
     void Update()
     {
-        if(GetComponent<MeshRenderer>() != null)
-            switch(root.tag)
+        if (GetComponent<MeshRenderer>() != null)
+            switch (root.tag)
             {
                 case "Player1":
                     GetComponent<MeshRenderer>().material = mat[0];

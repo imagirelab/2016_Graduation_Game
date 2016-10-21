@@ -7,7 +7,7 @@ public class PlayerColor : MonoBehaviour
     //枠画像
     [SerializeField]
     Image frame;
-    
+
     //差し替える枠画像
     [SerializeField]
     Sprite[] frameSprites = new Sprite[GameRule.playerNum + 1];
@@ -19,7 +19,7 @@ public class PlayerColor : MonoBehaviour
     //差し替える体力になる画像
     [SerializeField]
     Sprite[] HPSprites = new Sprite[GameRule.playerNum + 1];
-    
+
     //表示する色のプレイヤーID
     int playerID = 0;
 

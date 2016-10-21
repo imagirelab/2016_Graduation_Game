@@ -18,7 +18,7 @@ public class Demons : Unit
     {
         // 作られたときにリストに追加する
         DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-       
+
         //死亡フラグ
         IsDead = false;
 
@@ -43,7 +43,7 @@ public class Demons : Unit
 
     void Update()
     {
-        if(IsDead)
+        if (IsDead)
         {
             state = State.Dead;
             Dying();
@@ -85,7 +85,7 @@ public class Demons : Unit
     //死んだときの処理
     void Dead()
     {
-        if(!IsDead)
+        if (!IsDead)
         {
             IsDead = true;
 
@@ -133,10 +133,10 @@ public class Demons : Unit
             status.CurrentHP += (int)(status.GetHP * 0.1f);
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
             status.CurrentATK += (int)(status.GetATK * 0.1f);
-        for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
-            status.CurrentSPEED += status.GetSPEED * 0.15f;
-        for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
-            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+        //for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
+        //    status.CurrentSPEED += status.GetSPEED * 0.15f;
+        //for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
+        //    status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
 
         //カンスト
         if (status.CurrentHP >= 9999)

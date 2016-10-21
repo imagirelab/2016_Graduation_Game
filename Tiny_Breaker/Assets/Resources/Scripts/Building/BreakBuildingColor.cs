@@ -11,10 +11,7 @@ public class BreakBuildingColor : MonoBehaviour
     void Start()
     {
         root = transform.root.gameObject;
-    }
-    
-    void Update()
-    {
+
         if (GetComponent<MeshRenderer>() != null && root.GetComponent<House>())
             switch (root.GetComponent<House>().OldTag)
             {
@@ -28,5 +25,9 @@ public class BreakBuildingColor : MonoBehaviour
                     GetComponent<MeshRenderer>().material = mat[2];
                     break;
             }
+    }
+    
+    void Update()
+    {
     }
 }

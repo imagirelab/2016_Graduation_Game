@@ -167,6 +167,7 @@
     <Compile Include="Assets\Resources\Scripts\Unit\Effects\UnitEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\Effects\shootEffect.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\SeachRange.cs" />
+    <Compile Include="Assets\Resources\Scripts\Unit\ShadowColor.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\Soldier\Soldier.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\Status.cs" />
     <Compile Include="Assets\Resources\Scripts\Unit\Unit.cs" />
