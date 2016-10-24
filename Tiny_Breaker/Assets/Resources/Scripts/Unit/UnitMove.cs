@@ -15,17 +15,15 @@ public class UnitMove : MonoBehaviour
     float setTime = 0.0f;
     bool setFlag = false;   //構えたどうかのフラグ
 
+    //unit.setSpawnTargetFlagを読み取るためStart()からスタート
     void Start()
     {
         cor = StartCoroutine(Move());
     }
-
+    
     IEnumerator Move()
     {
         Unit unit = gameObject.GetComponent<Unit>();
-
-        RaycastHit hit;
-        int layerMask = ~(1 << transform.gameObject.layer);  //自身のレイヤー番号以外にヒットするようにしたビット演算
         
         //召喚時の動きがあるもの
         if(unit.setSpawnTargetFlag)
@@ -40,6 +38,7 @@ public class UnitMove : MonoBehaviour
             Vector3 subVec;
             subVec = unit.SpawnTargetPosition - startPosition;
             float time = 0.0f;
+
             while (spawnEnd == false)
             {
                 time += Time.deltaTime;
@@ -52,7 +51,6 @@ public class UnitMove : MonoBehaviour
                 Vector3 rateVec = subVec * rate;
                 transform.position = startPosition + rateVec;   //座標の代入
                 //GetComponent<Rigidbody>().velocity = subVec.normalized * 30.0f;
-                GetComponent<NavMeshAgent>().enabled = false;
                 yield return null;
             }
             yield return new WaitForSeconds(spawnStopTime);
@@ -73,47 +71,25 @@ public class UnitMove : MonoBehaviour
                         //構えの処理
                         if (!setFlag)
                         {
-                            //GetComponent<NavMeshAgent>().enabled = false;
-                            GetComponent<Rigidbody>().velocity = Vector3.zero;
+                            UnitStop();
                             yield return new WaitForSeconds(setTime);
                             setFlag = true;
                         }
 
                         unit.UpdataRootPoint(1.0f);
-
-                        Vector3 rootPos = unit.GetRootPosition();
-                        Vector3 rootVec = rootPos - transform.position;
-                        transform.LookAt(transform.position + rootVec);
-
-                        //サーチ中止まってたら何かに引っかかってる可能性
-                        //Ray raySearch = new Ray(transform.position, rootVec);
-                        Ray raySearch = new Ray(new Vector3(
-                            transform.position.x,
-                            transform.position.y + 1.5f,    //視線の高さ分上げている形
-                            transform.position.z),
-                            rootPos);
-
-                        if (Physics.SphereCast(raySearch, 3.0f, out hit, 3.0f, layerMask))
-                        {
-                            if (hit.collider.gameObject.tag == "Ground" ||
-                                hit.collider.gameObject.layer == 9 ||
-                                hit.collider.gameObject.layer == 14)
-                            {
-                                //ナビゲーションは最低限で用いる
-                                GetComponent<NavMeshAgent>().enabled = true;
-                                unit.Move(rootPos, unit.loiteringSPEED);
-                                Debug.Log(hit.collider.gameObject.name);
-                            }
-                            else
-                            {
-                                GetComponent<NavMeshAgent>().enabled = false;
-                                GetComponent<Rigidbody>().velocity = rootVec.normalized * unit.loiteringSPEED;
-                            }
-                        }
+                        //重なっている
+                        if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
+                            UnitStop();
                         else
                         {
-                            GetComponent<NavMeshAgent>().enabled = false;
-                            GetComponent<Rigidbody>().velocity = rootVec.normalized * unit.loiteringSPEED;
+                            Vector3 rootPos = unit.GetRootPosition();
+                            Vector3 rootVec = rootPos - transform.position;
+                            transform.LookAt(transform.position + rootVec);
+                            
+                            if (GetComponent<NavMeshAgent>().enabled)
+                                unit.Move(rootPos, unit.loiteringSPEED);
+                            else
+                                GetComponent<Rigidbody>().velocity = rootVec.normalized * unit.loiteringSPEED;
                         }
                         break;
                     case Unit.State.Find:
@@ -122,67 +98,57 @@ public class UnitMove : MonoBehaviour
                         unit.UpdataRootPoint(15.0f);
                         //重なっている
                         if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
-                        {
-                            GetComponent<NavMeshAgent>().enabled = false;
-                            GetComponent<Rigidbody>().velocity = Vector3.zero;
-                        }
+                            UnitStop();
                         else
                         {
                             Vector3 targetVec = unit.targetObject.transform.position - transform.position;
                             transform.LookAt(transform.position + targetVec);
-
-                            //サーチ中止まってたら何かに引っかかってる可能性
-                            //Ray rayFind = new Ray(transform.position, targetVec);
-                            Ray rayFind = new Ray(new Vector3(
-                            transform.position.x,
-                            transform.position.y + 1.5f,    //視線の高さ分上げている形
-                            transform.position.z),
-                            targetVec);
-
-                            if (Physics.SphereCast(rayFind, 3.0f, out hit, 3.0f, layerMask))
-                            {
-                                if (hit.collider.gameObject.tag == "Ground" ||
-                                    hit.collider.gameObject.layer == 9 ||
-                                    hit.collider.gameObject.layer == 14)
-                                {
-                                    //ナビゲーションは最低限で用いる
-                                    GetComponent<NavMeshAgent>().enabled = true;
-                                    unit.Move(unit.targetObject.transform.position, unit.status.CurrentSPEED);
-                                }
-                                else
-                                {
-                                    GetComponent<NavMeshAgent>().enabled = false;
-                                    GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
-                                }
-                            }
+                            
+                            if (GetComponent<NavMeshAgent>().enabled)
+                                unit.Move(unit.targetObject.transform.position, unit.status.CurrentSPEED);
                             else
-                            {
-                                GetComponent<NavMeshAgent>().enabled = false;
                                 GetComponent<Rigidbody>().velocity = targetVec.normalized * unit.status.CurrentSPEED;
-                            }
                         }
                         break;
                     default:
                         setFlag = false;
-                        GetComponent<NavMeshAgent>().enabled = false;
-                        GetComponent<Rigidbody>().velocity = Vector3.zero;
+                        UnitStop();
                         break;
                 }
             }
             else
-                GetComponent<Rigidbody>().velocity = Vector3.zero;
-            
+                UnitStop();
+
             yield return null;
         }
     }
     
-    void OnEnable()
-    {
-        //cor = StartCoroutine(Move());
-    }
-
     void OnDisable()
     {
         StopCoroutine(cor);
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        GetComponent<NavMeshAgent>().enabled = true;
+    }
+
+    void OnCollisionStay(Collision collision)
+    {
+        GetComponent<NavMeshAgent>().enabled = true;
+    }
+
+    void OnCollisionExit(Collision collision)
+    {
+        UnitStop();
+    }
+
+    //移動を止める
+    void UnitStop()
+    {
+        if (GetComponent<NavMeshAgent>())
+            GetComponent<NavMeshAgent>().speed = 0.0f;
+        GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 }

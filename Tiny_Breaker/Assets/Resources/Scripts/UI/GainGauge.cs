@@ -23,6 +23,10 @@ public class GainGauge : MonoBehaviour
 	void Update ()
 	{
         float HPRate = (float)(house.HPpro + house.GetHP) / (float)(house.GetHP * 2.0f);
+        if (HPRate >= 1.0f)
+            HPRate = 1.0f;
+        if(HPRate <= 0.0f)
+            HPRate = 0.0f;
 
         //プレイヤー１側
         Player1Color.localScale = new Vector3(HPRate, Player1Color.localScale.y, Player1Color.localScale.z);

@@ -86,7 +86,8 @@ public class Unit : MonoBehaviour
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.updateRotation = false;
-            agent.speed = speed * 3.0f;
+            //agent.speed = speed * 8.0f;
+            agent.speed = 50.0f;        //全員一律で同じ速さで壁を回避
             agent.destination = target;
         }
     }

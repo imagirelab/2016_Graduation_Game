@@ -67,7 +67,7 @@ namespace StaticClass
             List<GameObject> list = new List<GameObject>();
 
             foreach (GameObject e in chacklist)
-                if(e.GetComponent<Unit>())
+                if (e.GetComponent<Unit>())
                     if (e.GetComponent<Unit>().rootNum == rootNum)
                         list.Add(e);
 
