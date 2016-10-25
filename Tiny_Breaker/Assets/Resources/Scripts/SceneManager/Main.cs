@@ -9,7 +9,7 @@ public class Main : MonoBehaviour
     DefenseBase P1Base;
     [SerializeField]
     DefenseBase P2Base;
-    
+
     [SerializeField, HeaderAttribute("StartPreparation")]
     Image StartUI;
 
@@ -27,8 +27,8 @@ public class Main : MonoBehaviour
     [SerializeField]
     Spawner[] spawer;
 
-    void Start ()
-	{
+    void Start()
+    {
         startCount = 0.0f;
 
         if (P1Base == null)
@@ -41,7 +41,7 @@ public class Main : MonoBehaviour
             time = new TimeLimit();
         if (debugcontrol == null)
             debugcontrol = new GameObject();
-        for(int i = 0; i < player.Length; i++)
+        for (int i = 0; i < player.Length; i++)
             if (player[i] == null)
                 player[i] = new GameObject();
         for (int i = 0; i < spawer.Length; i++)
@@ -53,11 +53,11 @@ public class Main : MonoBehaviour
             spawer[0] = new Spawner();
         }
     }
-	
-	void Update ()
-	{
+
+    void Update()
+    {
         //開始条件
-        if(startCount >= startEndTime)
+        if (startCount >= startEndTime)
         {
             StartUI.enabled = false;
 
@@ -76,10 +76,10 @@ public class Main : MonoBehaviour
         }
 
         //終了条件
-		if(P1Base.HPpro <= 0 || P2Base.HPpro <= 0 || time.End)
+        if (P1Base.HPpro <= 0 || P2Base.HPpro <= 0 || time.End)
         {
             //残り体力判定（ラウンド結果判定）
-            if(P1Base.HPpro > P2Base.HPpro)
+            if (P1Base.HPpro > P2Base.HPpro)
             {
                 GameRule.getInstance().round.Add(GameRule.ResultType.Player1Win);
             }
@@ -93,19 +93,20 @@ public class Main : MonoBehaviour
             }
 
             //ラウンド数超えてるか判定
-            if(GameRule.getInstance().round.Count >= GameRule.roundCount)
-            {
-                int p1wincount = 0;
-                int p2wincount = 0;
-                
-                foreach(var e in GameRule.getInstance().round)
-                {
-                    if (e == GameRule.ResultType.Player1Win)
-                        p1wincount++;
-                    if (e == GameRule.ResultType.Player2Win)
-                        p2wincount++;
-                }
+            int p1wincount = 0;
+            int p2wincount = 0;
 
+            foreach (var e in GameRule.getInstance().round)
+            {
+                if (e == GameRule.ResultType.Player1Win)
+                    p1wincount++;
+                if (e == GameRule.ResultType.Player2Win)
+                    p2wincount++;
+            }
+
+            if (p1wincount > ((float)GameRule.roundCount / 2.0f) ||
+                p2wincount > ((float)GameRule.roundCount / 2.0f))
+            {
                 //最終結果判定
                 if (p1wincount > p2wincount)
                 {
@@ -129,5 +130,5 @@ public class Main : MonoBehaviour
                 SceneManager.LoadScene("MainScene");
             }
         }
-	}
+    }
 }

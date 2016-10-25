@@ -129,14 +129,22 @@ public class Demons : Unit
         status.SetStatus();
 
         //今のステータスを算出する
+        float hp = status.GetHP;
+        float atk = status.GetATK;
+
         for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
-            status.CurrentHP += (int)(status.GetHP * 0.1f);
+            hp *= 1.1f;
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
-            status.CurrentATK += (int)(status.GetATK * 0.1f);
+            atk *= 1.1f;
+        //status.CurrentHP += (int)(status.GetHP * 0.1f);
+        //status.CurrentATK += (int)(status.GetATK * 0.1f);
         //for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
         //    status.CurrentSPEED += status.GetSPEED * 0.15f;
         //for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
         //    status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+
+        status.CurrentHP = (int)hp;
+        status.CurrentATK = (int)atk;
 
         //カンスト
         if (status.CurrentHP >= 9999)

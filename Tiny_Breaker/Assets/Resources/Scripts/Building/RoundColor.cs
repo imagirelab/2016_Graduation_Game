@@ -8,28 +8,28 @@ public class RoundColor : MonoBehaviour
 
     [SerializeField]
     Material[] mat = new Material[GameRule.roundCount + 1];
-
-    void Start()
-    {
-
-    }
-
+    
     void Update()
     {
+        int p1win = 0;
+        int p2win = 0;
+
         if (colorChangeMesh != null && GameRule.getInstance().round.Count <= colorChangeMesh.Length)
             for (int i = 0; i < GameRule.getInstance().round.Count; i++)
             {
                 switch (GameRule.getInstance().round[i])
                 {
                     case GameRule.ResultType.Player1Win:
-                        colorChangeMesh[i].material = mat[0];
+                        colorChangeMesh[p1win].material = mat[0];
+                        p1win++;
                         break;
                     case GameRule.ResultType.Player2Win:
-                        colorChangeMesh[i].material = mat[1];
+                        colorChangeMesh[colorChangeMesh.Length - 1 - p2win].material = mat[1];
+                        p2win++;
                         break;
-                    case GameRule.ResultType.Draw:
-                        colorChangeMesh[i].material = mat[2];
-                        break;
+                    //case GameRule.ResultType.Draw:
+                    //    colorChangeMesh[i].material = mat[2];
+                    //    break;
                     default:
                         colorChangeMesh[i].material = mat[3];
                         break;
