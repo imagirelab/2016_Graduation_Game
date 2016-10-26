@@ -239,7 +239,7 @@ public class Player : MonoBehaviour
         //クエリを作成
         NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
 
-        //PlayerNoが記入されていないもの以外を取得
+        //自分のPlayerNoが記入されていないもの以外を取得
         demonStatus.WhereEqualTo("PlayerNo", playerID);
 
         //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
@@ -327,6 +327,7 @@ public class Player : MonoBehaviour
         NCMBObject nbcObj = new NCMBObject("SpiritData");
 
         nbcObj["TYPE"] = _spiritData.GetDemonType.ToString();
+        nbcObj["PlayerNo"] = playerID;
 
         nbcObj.SaveAsync();
     }
@@ -336,7 +337,8 @@ public class Player : MonoBehaviour
     {
         NCMBObject nbcObj = new NCMBObject("CostData");
 
-        nbcObj["Cost"] = _costData.ToString();
+        nbcObj["Cost"] = _costData;
+        nbcObj["PlayerNo"] = playerID;
 
         nbcObj.SaveAsync();
     }
