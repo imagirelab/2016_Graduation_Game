@@ -408,6 +408,11 @@ public class Player : MonoBehaviour
             return;
         
         GrowPoint demonPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
+
+        //レベル上限
+        if (demonPoint.Level >= 20)
+            return;
+
         GrowPoint spiritPoint = spiritsDataCopy[0];
 
         //成長値を加算

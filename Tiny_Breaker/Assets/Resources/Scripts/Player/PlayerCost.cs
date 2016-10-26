@@ -83,8 +83,9 @@ public class PlayerCost : MonoBehaviour {
         int growcount = level - 1;
         if (growcount < 0) growcount = 0;
 
-        return GetDemonCost +                                           //基礎値
-            (int)((float)GetDemonCost * GetDemonCostRate) * growcount;   //成長によって増やす値
+        //return GetDemonCost +                                           //基礎値
+        //    (int)((float)GetDemonCost * GetDemonCostRate) * growcount;   //成長によって増やす値
+        return GetDemonCost + 5 * growcount;
     }
 
     public void SetDefault(int max, int state, int costparsecond, int demon, float demonRate, int soldier, int house)
