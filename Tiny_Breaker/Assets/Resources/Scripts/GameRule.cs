@@ -19,11 +19,10 @@ namespace StaticClass
             TimeUp,
             None
         }
+        //最終結果
         public ResultType result = ResultType.None;
+        //ラウンド結果
         public List<ResultType> round = new List<ResultType>();
-
-        //取ったラウンドの数
-        //public Dictionary<string, int> round = new Dictionary<string, int>();
 
         static GameRule gameRule = new GameRule();
 

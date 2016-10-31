@@ -182,19 +182,23 @@ public class LoadManager : MonoBehaviour
             unit.GetComponent<Demons>().GrowPoint.SetDefault(type, grow.GHP, grow.GATK, grow.GSPEED, grow.GATKSPEED);
     }
 
+    //コストの設定
     void SetCost(CostData CostTable)
     {
         foreach (var cost in CostTable.All)
         {
-            for(int i = 0; i < GameRule.playerNum; i++)
-            {
-                GameObject player = GameObject.Find("Player" + (i + 1));
-                if (player.GetComponent<PlayerCost>())
-                    player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.DemonCostRate, cost.SoldierCost, cost.HouseCost);
-            }
+            //ラウンド数によってセットする値を変える
+            if(cost.Round == GameRule.getInstance().round.Count)
+                for(int i = 0; i < GameRule.playerNum; i++)
+                {
+                    GameObject player = GameObject.Find("Player" + (i + 1));
+                    if (player.GetComponent<PlayerCost>())
+                        player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.DemonCostRate, cost.SoldierCost, cost.HouseCost);
+                }
         }
     }
 
+    //小屋の設定
     void SetHut(HutData hutTable)
     {
         foreach (var hut in hutTable.All)

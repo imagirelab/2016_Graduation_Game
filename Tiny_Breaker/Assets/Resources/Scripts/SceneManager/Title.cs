@@ -17,7 +17,9 @@ public class Title : MonoBehaviour
 
     void Start()
     {
+        //静的なデータの初期化
         GameRule.getInstance().Reset();
+        RoundDataBase.getInstance().Reset();
 
         //オブジェクトの設定し忘れ
         if (fade == null)

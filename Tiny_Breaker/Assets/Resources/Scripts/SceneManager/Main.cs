@@ -126,6 +126,10 @@ public class Main : MonoBehaviour
             }
             else
             {
+                //ラウンド終了時に持っていたコストを保存しておく
+                for (int i = 0; i < GameRule.playerNum; i++)
+                    RoundDataBase.getInstance().PassesCost[i] = player[i].GetComponent<PlayerCost>().CurrentCost;
+
                 //ラウンド数が超えていなければもう一回
                 SceneManager.LoadScene("MainScene");
             }

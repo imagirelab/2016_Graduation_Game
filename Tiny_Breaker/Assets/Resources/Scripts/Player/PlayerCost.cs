@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using StaticClass;
 
 public class PlayerCost : MonoBehaviour {
 
@@ -35,7 +36,8 @@ public class PlayerCost : MonoBehaviour {
     float time = 0;     //時間
     
     void Start () {
-        currentCost = StateCost;
+        currentCost = RoundDataBase.getInstance().PassesCost[GetComponent<Player>().playerID - 1];
+        AddCost(StateCost);
     }
 	
 	void Update () {

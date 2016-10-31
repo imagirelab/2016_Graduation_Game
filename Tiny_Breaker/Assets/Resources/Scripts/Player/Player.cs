@@ -92,6 +92,15 @@ public class Player : MonoBehaviour
     //召喚する道番号 ０：下　１：真ん中　２：上
     int rootNum = 0;
 
+    //召喚クールタイム
+    [SerializeField]
+    float coolTime = 0.5f;
+    float coolCount = 0.0f;
+    bool canSummon = true;
+
+    [SerializeField]
+    int maxSummonNum = 50;
+
     #endregion
 
     void Start()
@@ -170,12 +179,17 @@ public class Player : MonoBehaviour
 
         rootNum = 0;
 
+        //クールカウントの初期化
+        coolCount = 0.0f;
+        canSummon = true;
+
         if (spawnPoint == null)
             spawnPoint = new GameObject().transform;
     }
 
     void FixedUpdate()
     {
+        //受信制御
         counter++;
 
         if (counter > 30)
@@ -185,6 +199,18 @@ public class Player : MonoBehaviour
             //受信後の処理
             if(IsReceive)   //trueの時だけ受信する
                 Receive();
+        }
+
+        //クールタイム処理
+        if(!canSummon)
+        {
+            coolCount += Time.deltaTime;
+
+            if (coolCount > coolTime)
+            {
+                coolCount = 0.0f;
+                canSummon = true;
+            }
         }
 
         //リストの初めのやつから処理を行う
@@ -431,6 +457,19 @@ public class Player : MonoBehaviour
 
     public void DebugSummon(GameObject demon)
     {
+        //生成した兵士の数のカウント
+        int childDemonsCount = 0;
+        foreach (Transform child in transform)
+            if (child.GetComponent<Demons>())
+                childDemonsCount++;
+
+        //召喚できない条件なら何もしないで返す
+        if (!canSummon || childDemonsCount > maxSummonNum)
+            return;
+
+        //canSummonがtrueだったらそのまま召喚処理
+        canSummon = false;
+
         //適当な値を入れて重なることを避ける
         Vector3 randVac;
         switch(rootNum)
@@ -439,7 +478,7 @@ public class Player : MonoBehaviour
                 randVac = new Vector3(Random.Range(-5.5f, 5.5f), 0.0f, Random.Range(-4.0f, 10.0f));
                 break;
             case 1:
-                randVac = new Vector3(Random.Range(-5.0f, 5.0f), 0.0f, Random.Range(0.0f, 18.0f));
+                randVac = new Vector3(Random.Range(-5.0f, 5.0f), 0.0f, Random.Range(-9.0f, 9.0f));
                 break;
             case 2:
                 randVac = new Vector3(Random.Range(-6.0f, 6.0f), 0.0f, Random.Range(-9.0f, 9.0f));

@@ -6,6 +6,7 @@
 
     public class CostMaster : MasterBase
     {
+        public int Round { get; private set; }
         public int MaxCost { get; private set; }
         public int StateCost { get; private set; }
         public int CostParSecond { get; private set; }
