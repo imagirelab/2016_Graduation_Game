@@ -144,6 +144,7 @@
     <Compile Include="Assets\Resources\Scripts\SceneManager\Main.cs" />
     <Compile Include="Assets\Resources\Scripts\SceneManager\Result.cs" />
     <Compile Include="Assets\Resources\Scripts\SceneManager\Title.cs" />
+    <Compile Include="Assets\Resources\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Resources\Scripts\TimeLimit.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DebugSwitchChild.cs" />
     <Compile Include="Assets\Resources\Scripts\UI\DefenseBaseGauge.cs" />

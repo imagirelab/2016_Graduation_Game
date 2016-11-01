@@ -80,7 +80,7 @@ public class Unit : MonoBehaviour
 
     //無敵時間
     [SerializeField]
-    protected float invincibleTime = 2.0f;
+    protected float invincibleTime = 1.3f;
     protected float invincibleCount = 0.0f;
     protected bool invincibleFlag = false;
 
