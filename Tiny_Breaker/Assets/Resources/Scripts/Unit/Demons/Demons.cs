@@ -96,7 +96,7 @@ public class Demons : Unit
                 transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
 
             Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
-            Instantiate(deadSE);
+            SoundManager.deadSEFlag = true;
 
             //いらない子供から消していく
             if (transform.IsChildOf(transform))
