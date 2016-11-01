@@ -16,12 +16,11 @@ public class Demons : Unit
 
     void Start()
     {
-        // 作られたときにリストに追加する
-        DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-
+        //はじめ無敵スタート
+        invincibleFlag = true;
+        
         //死亡フラグ
         IsDead = false;
-
 
         //ステータスの決定
         SetStatus();
@@ -43,6 +42,10 @@ public class Demons : Unit
 
     void Update()
     {
+        //無敵
+        if (invincibleFlag)
+            Invincible();
+
         if (IsDead)
         {
             state = State.Dead;
@@ -164,7 +167,23 @@ public class Demons : Unit
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if (!IsDead)
+        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
             DemonDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
+    //無敵の処理
+    void Invincible()
+    {
+        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
+            DemonDataBase.getInstance().RemoveList(this.gameObject);
+
+        invincibleCount += Time.deltaTime;
+
+        if (invincibleCount >= invincibleTime)
+        {
+            invincibleCount = 0.0f;
+            // 作られたときにリストに追加する
+            DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
+        }
     }
 }

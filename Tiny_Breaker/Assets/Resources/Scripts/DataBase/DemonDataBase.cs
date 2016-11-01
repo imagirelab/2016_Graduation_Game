@@ -37,6 +37,11 @@ namespace StaticClass
             return dictionary.Count;
         }
 
+        public bool ChackKey(GameObject key)
+        {
+            return dictionary.ContainsKey(key);
+        }
+
         //指定したvalueの要素だけを取得
         List<GameObject> GetListToTag(string tag)
         {
