@@ -25,21 +25,25 @@ public class SE : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if(_unit.state == Unit.State.Find)
+        if(_unit.state == Unit.State.Find && !SoundManager.findSEFlag)
         {
-            if (!oneCall && !_audioSource.isPlaying)
-            {
-                _audioSource.PlayOneShot(findSE);
-                oneCall = true;
-            }
+            SoundManager.findSEFlag = true;
+
+            //if (!oneCall && !_audioSource.isPlaying)
+            //{
+            //    _audioSource.PlayOneShot(findSE);
+            //    oneCall = true;
+            //}
         }
-        else if(_unit.state == Unit.State.Attack)
+        else if(_unit.state == Unit.State.Attack && !SoundManager.atackSEFlag)
         {
-            if (!_audioSource.isPlaying)
-            {
-                _audioSource.PlayOneShot(atackSE);
-                oneCall = false;
-            }
+            SoundManager.atackSEFlag = true;
+
+            //if (!_audioSource.isPlaying)
+            //{
+            //    _audioSource.PlayOneShot(atackSE);
+            //    oneCall = false;
+            //}
         }
         else
         {

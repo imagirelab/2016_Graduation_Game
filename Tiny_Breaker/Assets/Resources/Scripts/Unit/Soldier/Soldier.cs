@@ -77,7 +77,7 @@ public class Soldier : Unit
 
             //死亡エフェクト出現
             Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
-            Instantiate(deadSE);
+            SoundManager.deadSEFlag = true;
 
             //リストから外すタイミングを死んだ条件の中に入れる
             SolgierDataBase.getInstance().RemoveList(this.gameObject);
