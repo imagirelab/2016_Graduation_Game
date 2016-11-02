@@ -8,6 +8,8 @@ public class LoadManager : MonoBehaviour
 {
     [SerializeField]
     bool IsLoad = true;
+    bool loadEnd = false;
+    public bool LoadEnd { get { return loadEnd; } }
 
     private static readonly string paramurl = "https://yoo3006.github.io/ParamData.csv";
     private static readonly string growurl = "https://yoo3006.github.io/GrowData.csv";
@@ -33,6 +35,8 @@ public class LoadManager : MonoBehaviour
     //void Start()
     public IEnumerator Start()
     {
+        loadEnd = false;
+
         //ロードしない設定なら飛ばす
         if (IsLoad)
         {
@@ -152,6 +156,8 @@ public class LoadManager : MonoBehaviour
 
             Debug.Log("Load END");
         }
+
+        loadEnd = true;
     }
 
     /// <summary>
