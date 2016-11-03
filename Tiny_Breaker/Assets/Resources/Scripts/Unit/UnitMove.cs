@@ -24,9 +24,9 @@ public class UnitMove : MonoBehaviour
     IEnumerator Move()
     {
         Unit unit = gameObject.GetComponent<Unit>();
-        
+
         //召喚時の動きがあるもの
-        if(unit.setSpawnTargetFlag)
+        if (unit.setSpawnTargetFlag)
         {
             //ステータスUIを消す
             if (statusUI == null)

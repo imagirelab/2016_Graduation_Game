@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using StaticClass;
+using SpicyPixel.Threading;
 
-public class Unit : MonoBehaviour
+public class Unit : ConcurrentBehaviour
 {
     //タイプ
     public enum Type
@@ -45,9 +46,7 @@ public class Unit : MonoBehaviour
     public GameObject targetObject;       //目標
 
     public GameObject deadEffect;       //死亡エフェクト
-
-    public GameObject deadSE;           //遊び
-
+    
     [HideInInspector]
     public string targetTag;       //相手のタグ
 

@@ -1,24 +1,27 @@
-﻿// 悪魔単体の処理をするクラス
-
-using UnityEngine;
+﻿using UnityEngine;
 using StaticClass;
+using SpicyPixel.Threading.Tasks;
+using System.Threading;
+using System.Collections;
 
 public class Demons : Unit
 {
     //成長値
     [SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
-    private GrowPoint growPoint;
+    GrowPoint growPoint;
     public GrowPoint GrowPoint
     {
         get { return growPoint; }
         set { growPoint = value; }
     }
 
+    Thread thread;
+
     void Start()
     {
         //はじめ無敵スタート
         invincibleFlag = true;
-        
+
         //死亡フラグ
         IsDead = false;
 
@@ -38,6 +41,9 @@ public class Demons : Unit
         //巡回ルート
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { goalObject.transform };
+
+        //thread = new Thread(ThreadTest);
+        //thread.Start();
     }
 
     void Update()
@@ -92,6 +98,7 @@ public class Demons : Unit
         {
             IsDead = true;
 
+            //リストから外す
             DemonDataBase.getInstance().RemoveList(this.gameObject);
 
             //死んだ直後に魂を回収してみる
@@ -122,7 +129,6 @@ public class Demons : Unit
                 if (comp != GetComponent<Transform>() && comp != GetComponent<Demons>() && comp != GetComponent<Rigidbody>())
                     Destroy(comp);
         }
-        //Destroy(gameObject);
     }
 
     //ステータスの設定
@@ -139,12 +145,6 @@ public class Demons : Unit
             hp *= 1.1f;
         for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
             atk *= 1.1f;
-        //status.CurrentHP += (int)(status.GetHP * 0.1f);
-        //status.CurrentATK += (int)(status.GetATK * 0.1f);
-        //for (int i = 0; i < growPoint.CurrentSPEED_GrowPoint - growPoint.GetSPEED_GrowPoint; i++)
-        //    status.CurrentSPEED += status.GetSPEED * 0.15f;
-        //for (int i = 0; i < growPoint.CurrentAtackTime_GrowPoint - growPoint.GetAtackTime_GrowPoint; i++)
-        //    status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
 
         status.CurrentHP = (int)hp;
         status.CurrentATK = (int)atk;
@@ -185,5 +185,57 @@ public class Demons : Unit
             // 作られたときにリストに追加する
             DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
         }
+    }
+
+
+    IEnumerator Createobject()
+    {
+        GetComponent<SpawnMove>().enabled = true;
+
+        while (!GetComponent<SpawnMove>().End)
+        {
+
+        }
+
+        while (true)
+        {
+            //無敵
+            if (invincibleFlag)
+                Invincible();
+
+            if (IsDead)
+            {
+                state = State.Dead;
+                Dying();
+            }
+            else
+            {
+                //死亡処理
+                if (status.CurrentHP <= 0)
+                    Dead();
+
+                //一番近くの敵を狙う
+                SetNearTargetObject();
+
+                //状態の切り替え
+                if (GetComponent<UnitSeach>().IsFind)
+                    state = State.Find;
+                else
+                    state = State.Search;
+
+                if (GetComponent<UnitAttack>().IsAttack)
+                    state = State.Attack;
+
+                //ダメージを受けたかの確認
+                DamageCheck(status.CurrentHP);
+            }
+
+            yield return null;
+        }
+    }
+
+    public void ThreadTest()
+    {
+        taskFactory.StartNew(Createobject());
     }
 }
