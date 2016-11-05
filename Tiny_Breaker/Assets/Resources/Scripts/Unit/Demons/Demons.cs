@@ -1,33 +1,26 @@
 ﻿using UnityEngine;
 using StaticClass;
-using SpicyPixel.Threading.Tasks;
-using System.Threading;
 using System.Collections;
 
 public class Demons : Unit
 {
-    //成長値
-    [SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
-    GrowPoint growPoint;
-    public GrowPoint GrowPoint
-    {
-        get { return growPoint; }
-        set { growPoint = value; }
-    }
-
-    Thread thread;
-
+    [SerializeField, TooltipAttribute("種類")]
+    Enum.Demon_TYPE DemonType = Enum.Demon_TYPE.POPO;
+    
     void Start()
     {
-        //はじめ無敵スタート
-        invincibleFlag = true;
+        Initialize();
+    }
+
+    //初期化
+    void Initialize()
+    {
+        //無敵起動
+        StartCoroutine(Invincible());
 
         //死亡フラグ
         IsDead = false;
-
-        //ステータスの決定
-        SetStatus();
-
+        
         //攻撃に関する設定
         GetComponent<UnitAttack>().AtkRange = ATKRange;
         GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
@@ -42,8 +35,7 @@ public class Demons : Unit
         if (gameObject.transform.parent == null)
             loiteringPointObj = new Transform[] { goalObject.transform };
 
-        //thread = new Thread(ThreadTest);
-        //thread.Start();
+        loiteringSPEED = status.CurrentSPEED;
     }
 
     void Update()
@@ -103,7 +95,7 @@ public class Demons : Unit
 
             //死んだ直後に魂を回収してみる
             if (transform.parent != null)
-                transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
+                transform.parent.gameObject.GetComponent<Player>().AddSpiritList(DemonType);
 
             Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
             SoundManager.deadSEFlag = true;
@@ -130,112 +122,24 @@ public class Demons : Unit
                     Destroy(comp);
         }
     }
-
-    //ステータスの設定
-    public void SetStatus()
-    {
-        //基礎ステータスの代入
-        status.SetStatus();
-
-        //今のステータスを算出する
-        float hp = status.GetHP;
-        float atk = status.GetATK;
-
-        for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
-            hp *= 1.1f;
-        for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
-            atk *= 1.1f;
-
-        status.CurrentHP = (int)hp;
-        status.CurrentATK = (int)atk;
-
-        //カンスト
-        if (status.CurrentHP >= 9999)
-            status.CurrentHP = 9999;
-        if (status.CurrentATK >= 2000)
-            status.CurrentATK = 2000;
-        if (status.CurrentSPEED >= 10)
-            status.CurrentSPEED = 10;
-        if (status.CurrentAtackTime <= 0.5f)    //１フレーム以下にならない方がいいかも
-            status.CurrentAtackTime = 0.5f;
-
-        status.MaxHP = status.CurrentHP;
-
-        loiteringSPEED = status.CurrentSPEED;
-    }
-
+    
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
+        DemonDataBase.getInstance().RemoveList(this.gameObject);
     }
 
-    //無敵の処理
-    void Invincible()
+    //無敵の処理（無敵になるタイミングで呼び出す）
+    IEnumerator Invincible()
     {
-        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
+        // リストから外す
+        DemonDataBase.getInstance().RemoveList(this.gameObject);
+        
+        yield return new WaitForSeconds(invincibleTime);
+        
+        // リストに追加する
+        DemonDataBase.getInstance().AddList(this.gameObject);
 
-        invincibleCount += Time.deltaTime;
-
-        if (invincibleCount >= invincibleTime)
-        {
-            invincibleCount = 0.0f;
-            // 作られたときにリストに追加する
-            DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-        }
-    }
-
-
-    IEnumerator Createobject()
-    {
-        GetComponent<SpawnMove>().enabled = true;
-
-        while (!GetComponent<SpawnMove>().End)
-        {
-
-        }
-
-        while (true)
-        {
-            //無敵
-            if (invincibleFlag)
-                Invincible();
-
-            if (IsDead)
-            {
-                state = State.Dead;
-                Dying();
-            }
-            else
-            {
-                //死亡処理
-                if (status.CurrentHP <= 0)
-                    Dead();
-
-                //一番近くの敵を狙う
-                SetNearTargetObject();
-
-                //状態の切り替え
-                if (GetComponent<UnitSeach>().IsFind)
-                    state = State.Find;
-                else
-                    state = State.Search;
-
-                if (GetComponent<UnitAttack>().IsAttack)
-                    state = State.Attack;
-
-                //ダメージを受けたかの確認
-                DamageCheck(status.CurrentHP);
-            }
-
-            yield return null;
-        }
-    }
-
-    public void ThreadTest()
-    {
-        taskFactory.StartNew(Createobject());
+        yield return null;
     }
 }

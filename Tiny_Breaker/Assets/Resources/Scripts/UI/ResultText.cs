@@ -8,22 +8,22 @@ public class ResultText : MonoBehaviour
 	{
 		switch(GameRule.getInstance().result)
         {
-            case GameRule.ResultType.Player1Win:
+            case Enum.ResultType.Player1Win:
                 GetComponent<Text>().text = "Player1 Win";
                 GetComponent<Text>().color = Color.red;
                 break;
 
-            case GameRule.ResultType.Player2Win:
+            case Enum.ResultType.Player2Win:
                 GetComponent<Text>().text = "Player2 Win";
                 GetComponent<Text>().color = Color.blue;
                 break;
 
-            case GameRule.ResultType.Draw:
+            case Enum.ResultType.Draw:
                 GetComponent<Text>().text = "Draw";
                 GetComponent<Text>().color = Color.green;
                 break;
 
-            case GameRule.ResultType.TimeUp:
+            case Enum.ResultType.TimeUp:
                 GetComponent<Text>().text = "Time Up";
                 GetComponent<Text>().color = Color.yellow;
                 break;
@@ -33,10 +33,5 @@ public class ResultText : MonoBehaviour
                 GetComponent<Text>().color = Color.white;
                 break;
         }
-	}
-	
-	void Update ()
-	{
-		
 	}
 }

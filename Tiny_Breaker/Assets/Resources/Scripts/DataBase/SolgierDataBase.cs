@@ -64,7 +64,7 @@ namespace StaticClass
         }
 
         //リストの中から同じルート番号のものを見つけてリストを再構成
-        List<GameObject> GetListToRoot(List<GameObject> chacklist, int rootNum)
+        List<GameObject> GetListToRoot(List<GameObject> chacklist, Enum.Direction_TYPE rootNum)
         {
             List<GameObject> list = new List<GameObject>();
 
@@ -103,7 +103,7 @@ namespace StaticClass
         /// <param name="center">中心点</param>
         /// <param name="rootNum">ルート番号</param>
         /// <returns>一番近い兵士</returns>
-        public GameObject GetNearestObject(string tag, Vector3 center, int rootNum)
+        public GameObject GetNearestObject(string tag, Vector3 center, Enum.Direction_TYPE rootNum)
         {
             //指定したタグ以外で一番近いものとする
             List<GameObject> list = GetListToTagExc(tag);

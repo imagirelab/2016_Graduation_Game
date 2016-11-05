@@ -46,7 +46,7 @@ public class Spawner : MonoBehaviour
     int solNum = 0;
 
     [SerializeField]
-    int rootNum = 0;
+    Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
 
     void Start()
     {
@@ -73,11 +73,11 @@ public class Spawner : MonoBehaviour
         }
 
         GameObject Ax = (GameObject)Resources.Load("Prefabs/Soldier/SoldierAx");
-        Ax.GetComponent<Unit>().status.SetStatus();
+        Ax.GetComponent<Unit>().status.SetStatus(0);
         GameObject Gun = (GameObject)Resources.Load("Prefabs/Soldier/SoldierGun");
-        Gun.GetComponent<Unit>().status.SetStatus();
+        Gun.GetComponent<Unit>().status.SetStatus(0);
         GameObject Shield = (GameObject)Resources.Load("Prefabs/Soldier/SoldierShield");
-        Shield.GetComponent<Unit>().status.SetStatus();
+        Shield.GetComponent<Unit>().status.SetStatus(0);
 
         soldiers = new GameObject[] { Ax, Gun, Shield };
         //soldiers = new GameObject[] { Shield, Shield, Shield };

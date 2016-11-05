@@ -12,7 +12,6 @@ public class LoadManager : MonoBehaviour
     public bool LoadEnd { get { return loadEnd; } }
 
     private static readonly string paramurl = "https://yoo3006.github.io/ParamData.csv";
-    private static readonly string growurl = "https://yoo3006.github.io/GrowData.csv";
     private static readonly string costurl = "https://yoo3006.github.io/CostData.csv";
     private static readonly string huturl = "https://yoo3006.github.io/HutData.csv";
 
@@ -61,17 +60,14 @@ public class LoadManager : MonoBehaviour
 
             //gh-pageから文字列を取得
             WWW paramwww = new WWW(paramurl);
-            WWW growwww = new WWW(growurl);
             WWW costwww = new WWW(costurl);
             WWW hutwww = new WWW(huturl);
 
             yield return paramwww;
-            yield return growwww;
             yield return costwww;
             yield return hutwww;
 
             string paramtext = paramwww.text;
-            string growtext = growwww.text;
             string costtext = costwww.text;
             string huttext = hutwww.text;
 
@@ -82,9 +78,6 @@ public class LoadManager : MonoBehaviour
 
             ParamData ParamTable = new ParamData();
             ParamTable.Load(paramtext);
-
-            GrowData GrowTable = new GrowData();
-            GrowTable.Load(growtext);
 
             CostData CostTable = new CostData();
             CostTable.Load(costtext);
@@ -126,28 +119,6 @@ public class LoadManager : MonoBehaviour
                 }
             }
 
-            //成長値データの取り込み
-            foreach (var grow in GrowTable.All)
-            {
-                switch (grow.ID)
-                {
-                    case "popo":
-                        if (prePOPO != null)
-                            SetGrow(grow, prePOPO, GrowPoint.Type.POPO);
-                        break;
-                    case "pupu":
-                        if (prePUPU != null)
-                            SetGrow(grow, prePUPU, GrowPoint.Type.PUPU);
-                        break;
-                    case "pipi":
-                        if (prePIPI != null)
-                            SetGrow(grow, prePIPI, GrowPoint.Type.PIPI);
-                        break;
-                    default:
-                        break;
-                }
-            }
-
             //コストデータの取り込み
             SetCost(CostTable);
 
@@ -173,6 +144,7 @@ public class LoadManager : MonoBehaviour
         return strStream;
     }
 
+    //パラメータの設定
     void SetParm(ParamMaster param, GameObject unit)
     {
         if (unit.GetComponent<Unit>())
@@ -180,12 +152,6 @@ public class LoadManager : MonoBehaviour
             unit.GetComponent<Unit>().status.SetDefault(param.HP, param.ATK, param.SPEED, param.ATKSPEED);
             unit.GetComponent<Unit>().ATKRange = param.ATKRENGE;
         }
-    }
-
-    void SetGrow(GrowMaster grow, GameObject unit, GrowPoint.Type type)
-    {
-        if (unit.GetComponent<Demons>())
-            unit.GetComponent<Demons>().GrowPoint.SetDefault(type, grow.GHP, grow.GATK, grow.GSPEED, grow.GATKSPEED);
     }
 
     //コストの設定

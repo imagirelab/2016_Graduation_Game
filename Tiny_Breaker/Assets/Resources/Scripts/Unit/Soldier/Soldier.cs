@@ -134,7 +134,7 @@ public class Soldier : Unit
     void SetStatus()
     {
         //基礎ステータスの代入
-        status.SetStatus();
+        status.SetStatus(0);
 
         //今のステータスを算出する
         for (int i = 0; i < powerUPCount; i++)

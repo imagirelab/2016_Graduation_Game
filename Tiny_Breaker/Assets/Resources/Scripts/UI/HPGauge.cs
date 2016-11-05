@@ -24,10 +24,13 @@ public class HPGauge : MonoBehaviour
 
     void Update()
     {
-        float HPRate = (float)unit.status.CurrentHP / (float)unit.status.MaxHP;
-        //体力部分
-        HP.localScale = new Vector3(HPRate, HP.localScale.y, HP.localScale.z);
-        //下地部分
-        HPBase.localScale = new Vector3(1.0f - HPRate, HPBase.localScale.y, HPBase.localScale.z);
+        if (unit.status.MaxHP != 0)
+        {
+            float HPRate = (float)unit.status.CurrentHP / (float)unit.status.MaxHP;
+            //体力部分
+            HP.localScale = new Vector3(HPRate, HP.localScale.y, HP.localScale.z);
+            //下地部分
+            HPBase.localScale = new Vector3(1.0f - HPRate, HPBase.localScale.y, HPBase.localScale.z);
+        }
     }
 }

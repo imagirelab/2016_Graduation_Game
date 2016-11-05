@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using NCMB;
 
@@ -6,7 +7,7 @@ using NCMB;
 public class Player : MonoBehaviour
 {
     #region フィールド
-
+    
     //受信が必要ないときにOFFにする
     [SerializeField]
     bool IsReceive = true;
@@ -21,28 +22,14 @@ public class Player : MonoBehaviour
 
     //スマホ側に送信するのに一時的にデータをためておく場所
     List<int> costData = new List<int>();
-    List<GrowPoint> spiritsData = new List<GrowPoint>();
-    List<GrowPoint> spiritsDataCopy = new List<GrowPoint>();    //デバッグ用に使う魂データのコピー
+    List<Enum.Demon_TYPE> spiritsData = new List<Enum.Demon_TYPE>();
+    List<Enum.Demon_TYPE> spiritsDataCopy = new List<Enum.Demon_TYPE>();    //デバッグ用に使う魂データのコピー
     
-    enum Demon_TYPE
-    {
-        POPO,
-        PUPU,
-        PIPI
-    }
-
-    enum Direction_TYPE
-    {
-        Top,
-        Middle,
-        Bottom
-    }
-
     //スマホからのメッセージ一覧
     struct SmaphoMsg
     {
-        public Direction_TYPE dirType;
-        public Demon_TYPE type;
+        public Enum.Direction_TYPE dirType;
+        public Enum.Demon_TYPE type;
         public int G_HP;
         public int G_ATK;
         public int G_SPD;
@@ -52,29 +39,21 @@ public class Player : MonoBehaviour
     
     //スマホ側から受け取る情報を抑制するためのカウンター
     int counter = 0;
-    
+
     //各種悪魔のプレファブ
-    Dictionary<Demon_TYPE, GameObject> demons = new Dictionary<Demon_TYPE, GameObject>(){
-        {Demon_TYPE.POPO, null},
-        {Demon_TYPE.PUPU, null},
-        {Demon_TYPE.PIPI, null}
-    };
-
-    //各種成長値
-    Dictionary<GrowPoint.Type, GrowPoint> growPoints = new Dictionary<GrowPoint.Type, GrowPoint>(){
-        {GrowPoint.Type.POPO, null},
-        {GrowPoint.Type.PUPU, null},
-        {GrowPoint.Type.PIPI, null}
-    };
-    public GrowPoint PlayerGrowPoint(GrowPoint.Type type) { return growPoints[type]; }
-
+    [SerializeField]
+    GameObject[] demons = new GameObject[(int)Enum.Demon_TYPE.Num];
+    public GameObject[] Demons { get { return demons; } }
+    //Playerクラス内で使う悪魔達のレベル
+    int[] demonsLevel = new int[(int)Enum.Demon_TYPE.Num];
+    public int[] DemonsLevel { get { return demonsLevel; } }
+    //Debug確認用
+    Status[] demonsStatus = new Status[(int)Enum.Demon_TYPE.Num];
+    public Status[] DemonsStatus { get { return demonsStatus; } }
 
     [SerializeField, TooltipAttribute("出撃位置")]
     Transform spawnPoint;
     public Transform SpawnPoint { get { return spawnPoint; } }
-
-    [SerializeField, Range(0.0f, 1.0f), TooltipAttribute("強化時のスケール倍率")]
-    float powerUpScale = 0.1f;
 
     //巡回ルート配列
     [SerializeField]
@@ -82,7 +61,6 @@ public class Player : MonoBehaviour
     Dictionary<int, List<Transform>> rootPointes = new Dictionary<int, List<Transform>>();
 
     //最終目標物
-    [SerializeField]
     public GameObject target;
     //相手のタグ
     [SerializeField]
@@ -90,13 +68,12 @@ public class Player : MonoBehaviour
     public string TergetTag { get { return tergetTag; } }
 
     //召喚する道番号 ０：下　１：真ん中　２：上
-    int rootNum = 0;
+    Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
 
     //召喚クールタイム
     [SerializeField]
     float coolTime = 0.5f;
-    float coolCount = 0.0f;
-    bool canSummon = true;
+    bool IsCool = false;
 
     [SerializeField]
     int maxSummonNum = 50;
@@ -105,60 +82,16 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        //悪魔のプレファブの内部数値の成長値だけ初期化
-        //速度に困ったら代入方法を変える
-        if (demons[Demon_TYPE.POPO] == null)
+        //悪魔のレベルだけ初期化
+        for(int i = 0; i < demonsLevel.Length; i++)
+            demonsLevel[i] = 0;
+        //ステータスの作成
+        for (int i = 0; i < demonsStatus.Length; i++)
         {
-            demons[Demon_TYPE.POPO] = (GameObject)Resources.Load("Prefabs/Demon/POPO");
-            demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.SetGrowPoint();
-            demons[Demon_TYPE.POPO].GetComponent<Demons>().status.SetStatus();
-        }
-        if (demons[Demon_TYPE.PUPU] == null)
-        {
-            demons[Demon_TYPE.PUPU] = (GameObject)Resources.Load("Prefabs/Demon/PUPU");
-            demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.SetGrowPoint();
-            demons[Demon_TYPE.PUPU].GetComponent<Demons>().status.SetStatus();
-        }
-        if (demons[Demon_TYPE.PIPI] == null)
-        { 
-            demons[Demon_TYPE.PIPI] = (GameObject)Resources.Load("Prefabs/Demon/PIPI");
-            demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.SetGrowPoint();
-            demons[Demon_TYPE.PIPI].GetComponent<Demons>().status.SetStatus();
-        }
-
-        //成長値の初期化
-        if (growPoints[GrowPoint.Type.POPO] == null)
-        {
-            growPoints[GrowPoint.Type.POPO] = new GrowPoint();
-            growPoints[GrowPoint.Type.POPO].SetDefault(
-                GrowPoint.Type.POPO,
-                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
-                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
-                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
-                demons[Demon_TYPE.POPO].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
-            growPoints[GrowPoint.Type.POPO].SetGrowPoint();
-        }
-        if (growPoints[GrowPoint.Type.PUPU] == null)
-        {
-            growPoints[GrowPoint.Type.PUPU] = new GrowPoint();
-            growPoints[GrowPoint.Type.PUPU].SetDefault(
-                GrowPoint.Type.PUPU,
-                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
-                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
-                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
-                demons[Demon_TYPE.PUPU].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
-            growPoints[GrowPoint.Type.PUPU].SetGrowPoint();
-        }
-        if (growPoints[GrowPoint.Type.PIPI] == null)
-        {
-            growPoints[GrowPoint.Type.PIPI] = new GrowPoint();
-            growPoints[GrowPoint.Type.PIPI].SetDefault(
-                GrowPoint.Type.PIPI,
-                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetHP_GrowPoint,
-                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetATK_GrowPoint,
-                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetSPEED_GrowPoint,
-                demons[Demon_TYPE.PIPI].GetComponent<Demons>().GrowPoint.GetAtackTime_GrowPoint);
-            growPoints[GrowPoint.Type.PIPI].SetGrowPoint();
+            Status status = demons[i].GetComponent<Unit>().status;
+            demonsStatus[i] = new Status();
+            demonsStatus[i].SetDefault(status.GetHP, status.GetATK, status.GetSPEED, status.GetAtackTime);
+            demonsStatus[i].SetStatus(demonsLevel[i]);
         }
 
         //設定し忘れたときは今いる場所を設定
@@ -176,12 +109,9 @@ public class Player : MonoBehaviour
                 rootPointes[i].Add(child);
             rootPointes[i].Add(target.transform); //最後に最終目的地
         }
-
-        rootNum = 0;
-
+        
         //クールカウントの初期化
-        coolCount = 0.0f;
-        canSummon = true;
+        IsCool = false;
 
         if (spawnPoint == null)
             spawnPoint = new GameObject().transform;
@@ -201,39 +131,14 @@ public class Player : MonoBehaviour
                 Receive();
         }
 
-        //クールタイム処理
-        if(!canSummon)
-        {
-            coolCount += Time.deltaTime;
-
-            if (coolCount > coolTime)
-            {
-                coolCount = 0.0f;
-                canSummon = true;
-            }
-        }
 
         //リストの初めのやつから処理を行う
         if (smaphoMsgList.Count > 0)
         {
-            //方向指示召喚
-            switch (smaphoMsgList[0].dirType)
-            {
-                case Direction_TYPE.Top:
-                    ChangeRoot(2);
-                    DebugSummon(demons[smaphoMsgList[0].type]);
-                    break;
-                case Direction_TYPE.Middle:
-                    ChangeRoot(1);
-                    DebugSummon(demons[smaphoMsgList[0].type]);
-                    break;
-                case Direction_TYPE.Bottom:
-                    ChangeRoot(0);
-                    DebugSummon(demons[smaphoMsgList[0].type]);
-                    break;
-                default:
-                    break;
-            }
+            //方向指示
+            ChangeRoot((int)smaphoMsgList[0].dirType);
+            //召喚
+            DebugSummon((int)smaphoMsgList[0].type);
             //処理したらリストから外す
             smaphoMsgList.Remove(smaphoMsgList[0]);
         }
@@ -288,36 +193,36 @@ public class Player : MonoBehaviour
                     SmaphoMsg smaphoMsg = new SmaphoMsg();
 
                     //方向
-                    Direction_TYPE dir = Direction_TYPE.Middle;
+                    Enum.Direction_TYPE dir = Enum.Direction_TYPE.Middle;
                     switch (ncmbObj["Direction"].ToString())
                     {
                         case "Top":
-                            dir = Direction_TYPE.Top;
+                            dir = Enum.Direction_TYPE.Top;
                             break;
                         case "Middle":
-                            dir = Direction_TYPE.Middle;
+                            dir = Enum.Direction_TYPE.Middle;
                             break;
                         case "Bottom":
-                            dir = Direction_TYPE.Bottom;
+                            dir = Enum.Direction_TYPE.Bottom;
                             break;
                         default:
                             Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
                             break;
                     }
                     smaphoMsg.dirType = dir;
-                    
+
                     //タイプの振り分け
-                    Demon_TYPE type = Demon_TYPE.POPO;
+                    Enum.Demon_TYPE type = Enum.Demon_TYPE.POPO;
                     switch (ncmbObj["Type"].ToString())
                     {
                         case "POPO":
-                            type = Demon_TYPE.POPO;
+                            type = Enum.Demon_TYPE.POPO;
                             break;
                         case "PUPU":
-                            type = Demon_TYPE.PUPU;
+                            type = Enum.Demon_TYPE.PUPU;
                             break;
                         case "PIPI":
-                            type = Demon_TYPE.PIPI;
+                            type = Enum.Demon_TYPE.PIPI;
                             break;
                         default:
                             Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
@@ -348,11 +253,11 @@ public class Player : MonoBehaviour
     }
     
     //魂をサーバーに送信
-    void PushSpirit(GrowPoint _spiritData)
+    void PushSpirit(Enum.Demon_TYPE _spiritData)
     {
         NCMBObject nbcObj = new NCMBObject("SpiritData");
 
-        nbcObj["TYPE"] = _spiritData.GetDemonType.ToString();
+        nbcObj["TYPE"] = _spiritData.ToString();
         nbcObj["PlayerNo"] = playerID;
 
         nbcObj.SaveAsync();
@@ -370,7 +275,7 @@ public class Player : MonoBehaviour
     }
 
     //魂リストへの追加
-    public void AddSpiritList(GrowPoint spiritdata)
+    public void AddSpiritList(Enum.Demon_TYPE spiritdata)
     {
         spiritsData.Add(spiritdata);
 
@@ -388,132 +293,87 @@ public class Player : MonoBehaviour
         PlayerCost playerCost = gameObject.GetComponent<PlayerCost>();
         playerCost.AddCost(costdata);
     }
-
-    //召喚指示を受け取った時の処理
-    void SummonOrder()
+    
+    //パワーアップ
+    public void DebugPowerUP(int demonType)
     {
-        //出撃座標
-        Vector3 spawnPosition = spawnPoint.position;
-        //適当な値を入れて重なることを避ける
-        Vector3 randVac = new Vector3(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
-
-        //プレファブの悪魔のデータの設定
-        //悪魔が作られてからやるSetStatusは個別のステータス
-        //おそらくアドレス渡しになるため同じプレファブから作られたすべてのオブジェクトが共通の値を持つこととなる
-        GameObject demon = demons[smaphoMsgList[0].type];
-        GrowPoint growPoint = demon.GetComponent<Demons>().GrowPoint;
-
-        //成長値の代入
-        growPoint.CurrentHP_GrowPoint = smaphoMsgList[0].G_HP;
-        growPoint.CurrentATK_GrowPoint = smaphoMsgList[0].G_ATK;
-        growPoint.CurrentSPEED_GrowPoint = smaphoMsgList[0].G_SPD;
-        growPoint.CurrentAtackTime_GrowPoint = smaphoMsgList[0].G_ATKTime;
-
-        //ステータスの代入
-        //demon.GetComponent<Demons>().SetStatus();
-
-        //悪魔を出す
-        GameObject instaceObject = (GameObject)Instantiate(demon,
-                                                        spawnPosition + randVac,           //プレイヤーごとの出撃位置
-                                                        Quaternion.identity);
-        instaceObject.transform.SetParent(this.transform, false);
-        //instaceObject.GetComponent<Demons>().Order = orders[smaphoMsgList[0].type];
-        instaceObject.GetComponent<Demons>().GrowPoint = growPoint;
-
-        //強さに応じてスケールを変える処理
-        float growScale = 1.0f + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
-        //制限
-        if (growScale >= 3.0f)
-            growScale = 3.0f;
-        instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
-    }
-
-    public void DebugPowerUP(GameObject demon)
-    {
+        //魂がなければそのまま返す
         if (spiritsDataCopy.Count == 0)
             return;
         
-        GrowPoint demonPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
-
         //レベル上限
-        if (demonPoint.Level >= 20)
+        if (demonsLevel[demonType] >= 20)
             return;
 
-        GrowPoint spiritPoint = spiritsDataCopy[0];
+        demonsLevel[demonType]++;
 
-        //成長値を加算
-        demonPoint.AddGrowPoint(spiritPoint);
-
-        //加算結果を代入
-        demon.GetComponent<Demons>().GrowPoint = demonPoint;
-        
         spiritsDataCopy.Remove(spiritsDataCopy[0]);
+
+        //デバック確認用
+        demonsStatus[demonType].SetStatus(demonsLevel[demonType]);
     }
 
-    public void ChangeRoot(int rootNum)
+    //進む方向変える（ボタンで呼び出す関数なので引数にint型で方向を指示）
+    public void ChangeRoot(int dir)
     {
-        this.rootNum = rootNum;
+        this.rootNum = (Enum.Direction_TYPE)dir;
     }
 
-    public void DebugSummon(GameObject demon)
+    //召喚指示（ボタンで呼び出す関数なので引数にint型で召喚する種類を指示）
+    public void DebugSummon(int demonType)
     {
-        //生成した兵士の数のカウント
+        //生成した悪魔の数のカウント
         int childDemonsCount = 0;
         foreach (Transform child in transform)
             if (child.GetComponent<Demons>())
                 childDemonsCount++;
 
         //召喚できない条件なら何もしないで返す
-        if (!canSummon || childDemonsCount > maxSummonNum)
+        if (IsCool || childDemonsCount > maxSummonNum)
             return;
 
-        //canSummonがtrueだったらそのまま召喚処理
-        canSummon = false;
+        //召喚と同時にクールタイムに入る
+        StartCoroutine(CoolTime());
 
         //適当な値を入れて重なることを避ける
         Vector3 randVac;
         switch(rootNum)
         {
-            case 0:
+            case Enum.Direction_TYPE.Bottom:
                 randVac = new Vector3(Random.Range(-5.5f, 5.5f), 0.0f, Random.Range(-4.0f, 10.0f));
                 break;
-            case 1:
+            case Enum.Direction_TYPE.Middle:
                 randVac = new Vector3(Random.Range(-5.0f, 5.0f), 0.0f, Random.Range(-9.0f, 9.0f));
                 break;
-            case 2:
+            case Enum.Direction_TYPE.Top:
                 randVac = new Vector3(Random.Range(-6.0f, 6.0f), 0.0f, Random.Range(-9.0f, 9.0f));
                 break;
             default:
                 randVac = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
                 break;
         }
-
-        //プレファブの悪魔のデータの設定
-        //悪魔が作られてからやるSetStatusは個別のステータス
-        //おそらくアドレス渡しになるため同じプレファブから作られたすべてのオブジェクトが共通の値を持つこととなる
-        GrowPoint growPoint = growPoints[demon.GetComponent<Demons>().GrowPoint.GetDemonType];
-
+        
         //召喚コストの計算
-        int demonCost = GetComponent<PlayerCost>().GetCurrentDemonCost(demon.GetComponent<Demons>().GrowPoint.Level);
+        int demonCost = GetComponent<PlayerCost>().GetCurrentDemonCost(demonsLevel[demonType]);
         
         if (GetComponent<PlayerCost>().UseableCost(demonCost))
         {
             //悪魔を出す
-            GameObject instaceObject = (GameObject)Instantiate(demon,
+            GameObject instaceObject = (GameObject)Instantiate(demons[demonType],
                                                             spawnPoint.position,
                                                             Quaternion.identity);
+            instaceObject.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
             instaceObject.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
-            Vector3 summonVec = (rootPointes[rootNum].ToArray()[0].position - rootes[rootNum].transform.position).normalized;   //初めの向き
+            Vector3 summonVec = (rootPointes[(int)rootNum].ToArray()[0].position - rootes[(int)rootNum].transform.position).normalized;   //初めの向き
             Quaternion rotation = Quaternion.LookRotation(summonVec);
             instaceObject.transform.rotation = rotation;    //出た瞬間の向き
             instaceObject.tag = transform.gameObject.tag;    //自分のタグを設定
             instaceObject.layer = transform.gameObject.layer;    //レイヤーを設定
             instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
             instaceObject.GetComponent<Unit>().goalObject = target; //最終目標
-            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootNum].ToArray();  //巡回ルート地点配列
-            instaceObject.GetComponent<Demons>().GrowPoint = growPoint; //成長値
+            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[(int)rootNum].ToArray();  //巡回ルート地点配列
             instaceObject.GetComponent<Unit>().rootNum = rootNum;   //ルート番号
-            instaceObject.GetComponent<Unit>().SpawnTargetPosition = rootes[rootNum].transform.position + randVac;
+            instaceObject.GetComponent<Unit>().SpawnTargetPosition = rootes[(int)rootNum].transform.position + randVac;
 
             //出るとき重なる瞬間は回らないように
             instaceObject.GetComponent<Rigidbody>().freezeRotation = true;
@@ -527,11 +387,24 @@ public class Player : MonoBehaviour
         }
     }
 
-    public GrowPoint GetFirstSpirit()
+    //魂リストの最初の種類
+    public Enum.Demon_TYPE GetFirstSpirit()
     {
         if (spiritsDataCopy.Count == 0)
-            return null;
+            return Enum.Demon_TYPE.None;
         else
             return spiritsDataCopy[0];
+    }
+
+    //クールタイムの処理
+    IEnumerator CoolTime()
+    {
+        IsCool = true;
+
+        yield return new WaitForSeconds(coolTime);
+
+        IsCool = false;
+
+        yield return null;
     }
 }

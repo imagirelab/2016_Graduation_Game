@@ -19,11 +19,11 @@ public class RoundColor : MonoBehaviour
             {
                 switch (GameRule.getInstance().round[i])
                 {
-                    case GameRule.ResultType.Player1Win:
+                    case Enum.ResultType.Player1Win:
                         colorChangeMesh[p1win].material = mat[0];
                         p1win++;
                         break;
-                    case GameRule.ResultType.Player2Win:
+                    case Enum.ResultType.Player2Win:
                         colorChangeMesh[colorChangeMesh.Length - 1 - p2win].material = mat[1];
                         p2win++;
                         break;

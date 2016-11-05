@@ -14,6 +14,7 @@ public class Unit : ConcurrentBehaviour
     }
     public Type type = Type.White;
 
+    //状態
     public enum State
     {
         Search,
@@ -22,15 +23,18 @@ public class Unit : ConcurrentBehaviour
         Dead,
         Wait
     }
-    public State state = State.Search;
+    //[HideInInspector]
+    public State state = State.Wait;
 
     //ステータス
     [SerializeField, TooltipAttribute("ステータス")]
     public Status status;
-
+    //[HideInInspector]
+    public int level = 0;
+    //攻撃範囲
     [SerializeField]
     public float ATKRange = 10.0f;
-
+    //徘徊速度
     [SerializeField]
     public float loiteringSPEED = 1.0f;
 
@@ -56,7 +60,7 @@ public class Unit : ConcurrentBehaviour
 
     int currentRootPoint = 0;
     [HideInInspector]
-    public int rootNum = 0;
+    public Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
 
     [SerializeField]
     protected float deadMoveSpeed = 0.0f;    //死んだときに動くならその値
@@ -65,6 +69,7 @@ public class Unit : ConcurrentBehaviour
     protected float deadcount = 0.0f;
 
     //出現場所の目的場所
+    [HideInInspector]
     public bool setSpawnTargetFlag = false;
     Vector3 spawnTargetPosition;
     public Vector3 SpawnTargetPosition
@@ -80,7 +85,6 @@ public class Unit : ConcurrentBehaviour
     //無敵時間
     [SerializeField]
     protected float invincibleTime = 1.3f;
-    protected float invincibleCount = 0.0f;
     protected bool invincibleFlag = false;
 
     public void Move(Vector3 target, float speed)

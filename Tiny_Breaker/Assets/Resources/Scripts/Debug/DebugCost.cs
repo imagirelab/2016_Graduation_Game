@@ -3,31 +3,28 @@ using UnityEngine.UI;
 
 public class DebugCost : MonoBehaviour
 {
-
     [SerializeField]
-    GameObject player;
+    Player player = null;
+    [SerializeField]
+    PlayerCost playerCost = null;
 
-    // Use this for initialization
+    int[] level = new int[(int)Enum.Demon_TYPE.Num];
+    
     void Start()
     {
-        if (player == null)
-            player = new GameObject(this.ToString() + " nothing player");
+        level = player.DemonsLevel;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (player.GetComponent<PlayerCost>())
-        {
-            this.GetComponent<Text>().text = player.name.ToString() + ":" + player.GetComponent<PlayerCost>().CurrentCost + "/" + player.GetComponent<PlayerCost>().GetMaxCost + "\n" +
-                                                "HouseCost:" + player.GetComponent<PlayerCost>().GetHouseCost + "\n" +
-                                                "SoldierCost:" + player.GetComponent<PlayerCost>().GetSoldierCost + "\n" +
+            this.GetComponent<Text>().text = playerCost.GetComponent<PlayerCost>().CurrentCost + "/" + playerCost.GetComponent<PlayerCost>().GetMaxCost + "\n" +
+                                                "HouseCost:" + playerCost.GetHouseCost + "\n" +
+                                                "SoldierCost:" + playerCost.GetSoldierCost + "\n" +
                                                 "POPOCost:" +
-                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.POPO).Level) + "\n" +
+                                                playerCost.GetCurrentDemonCost(level[(int)Enum.Demon_TYPE.POPO]) + "\n" +
                                                 "PUPUCost:" +
-                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PUPU).Level) + "\n" +
+                                                playerCost.GetCurrentDemonCost(level[(int)Enum.Demon_TYPE.PUPU]) + "\n" +
                                                 "PIPICost:" +
-                                                player.GetComponent<PlayerCost>().GetCurrentDemonCost(player.GetComponent<Player>().PlayerGrowPoint(GrowPoint.Type.PIPI).Level);
-        }
+                                                playerCost.GetCurrentDemonCost(level[(int)Enum.Demon_TYPE.PIPI]);
     }
 }

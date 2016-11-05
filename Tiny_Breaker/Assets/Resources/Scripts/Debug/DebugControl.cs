@@ -10,31 +10,12 @@ public class DebugControl : MonoBehaviour
     [SerializeField]
     List<GameObject> DebugObject = new List<GameObject>();
     [SerializeField]
-    GameObject player1;
+    Player player1 = null;
     [SerializeField]
-    GameObject player2;
-
-    [SerializeField]
-    GameObject POPO;
-    [SerializeField]
-    GameObject PUPU;
-    [SerializeField]
-    GameObject PIPI;
-
+    Player player2 = null;
+    
     void Start()
     {
-        if (player1 == null)
-            player1 = new GameObject();
-        if (player2 == null)
-            player2 = new GameObject();
-
-        if (POPO == null)
-            POPO = new GameObject();
-        if (PUPU == null)
-            PUPU = new GameObject();
-        if (PIPI == null)
-            PIPI = new GameObject();
-
         GameRule.getInstance().debugFlag = IsDebug;
         
         SetDebugActive(GameRule.getInstance().debugFlag);
@@ -48,141 +29,94 @@ public class DebugControl : MonoBehaviour
             GameRule.getInstance().debugFlag = !GameRule.getInstance().debugFlag;
             SetDebugActive(GameRule.getInstance().debugFlag);
         }
+        
+        #region Player1の方の操作
 
-        //Player1の方の操作
-        if (player1.GetComponent<Player>() != null)
+        if (player1 != null)
         {
-            Player playerComp = player1.GetComponent<Player>();
+            Player player = player1;
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.Q))
-                playerComp.DebugPowerUP(PUPU);
+                player.DebugPowerUP((int)Enum.Demon_TYPE.PUPU);
             if (Input.GetKeyDown(KeyCode.A))
-                playerComp.DebugPowerUP(POPO);
+                player.DebugPowerUP((int)Enum.Demon_TYPE.POPO);
             if (Input.GetKeyDown(KeyCode.Z))
-                playerComp.DebugPowerUP(PIPI);
+                player.DebugPowerUP((int)Enum.Demon_TYPE.PIPI);
 
             //PIPI召喚
             if (Input.GetKeyDown(KeyCode.W))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(PIPI);
-            }
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.PIPI);
             if (Input.GetKeyDown(KeyCode.S))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(PIPI);
-            }
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.PIPI);
             if (Input.GetKeyDown(KeyCode.X))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(PIPI);
-            }
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.PIPI);
 
             //PUPU召喚
             if (Input.GetKeyDown(KeyCode.E))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(PUPU);
-            }
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.PUPU);
             if (Input.GetKeyDown(KeyCode.D))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(PUPU);
-            }
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.PUPU);
             if (Input.GetKeyDown(KeyCode.C))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(PUPU);
-            }
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.PUPU);
 
             //POPO召喚
             if (Input.GetKeyDown(KeyCode.R))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(POPO);
-            }
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.POPO);
             if (Input.GetKeyDown(KeyCode.F))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(POPO);
-            }
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.POPO);
             if (Input.GetKeyDown(KeyCode.V))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(POPO);
-            }
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.POPO);
         }
 
-        //Player2の方の操作
-        if (player2.GetComponent<Player>() != null)
+        #endregion
+
+        #region Player2の方の操作
+
+        if (player2 != null)
         {
-            Player playerComp = player2.GetComponent<Player>();
+            Player player = player2;
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.LeftBracket))
-            {
-                playerComp.DebugPowerUP(PUPU);
-            }
+                player.DebugPowerUP((int)Enum.Demon_TYPE.PUPU);
             if (Input.GetKeyDown(KeyCode.Colon))
-            {
-                playerComp.DebugPowerUP(POPO);
-            }
+                player.DebugPowerUP((int)Enum.Demon_TYPE.POPO);
             if (Input.GetKeyDown(KeyCode.Slash))
-            {
-                playerComp.DebugPowerUP(PIPI);
-            }
+                player.DebugPowerUP((int)Enum.Demon_TYPE.PIPI);
+
             //PIPI召喚
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(PIPI);
-            }
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(PIPI);
-            }
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(PIPI);
-            }
+            if (Input.GetKeyDown(KeyCode.P))
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.PIPI);
+            if (Input.GetKeyDown(KeyCode.L))
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.PIPI);
+            if (Input.GetKeyDown(KeyCode.Comma))
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.PIPI);
 
             //PUPU召喚
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(PUPU);
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(PUPU);
-            }
-            if (Input.GetKeyDown(KeyCode.Comma))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(PUPU);
-            }
+            if (Input.GetKeyDown(KeyCode.O))
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.PUPU);
+            if (Input.GetKeyDown(KeyCode.K))
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.PUPU);
+            if (Input.GetKeyDown(KeyCode.M))
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.PUPU);
 
             //POPO召喚
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                playerComp.ChangeRoot(2);
-                playerComp.DebugSummon(POPO);
-            }
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                playerComp.ChangeRoot(1);
-                playerComp.DebugSummon(POPO);
-            }
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                playerComp.ChangeRoot(0);
-                playerComp.DebugSummon(POPO);
-            }
+            if (Input.GetKeyDown(KeyCode.I))
+                Summon(player, Enum.Direction_TYPE.Top, Enum.Demon_TYPE.POPO);
+            if (Input.GetKeyDown(KeyCode.J))
+                Summon(player, Enum.Direction_TYPE.Middle, Enum.Demon_TYPE.POPO);
+            if (Input.GetKeyDown(KeyCode.N))
+                Summon(player, Enum.Direction_TYPE.Bottom, Enum.Demon_TYPE.POPO);
         }
+
+        #endregion
+    }
+
+    void Summon(Player player, Enum.Direction_TYPE rootNum, Enum.Demon_TYPE type)
+    {
+        player.ChangeRoot((int)rootNum);
+        player.DebugSummon((int)type);
     }
 
     void SetDebugActive(bool flag)

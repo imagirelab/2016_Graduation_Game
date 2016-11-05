@@ -34,7 +34,7 @@ public class GrowPoint
     private int currentATK_GrowPoint;
     private int currentSPEED_GrowPoint;
     private int currentAtackTime_GrowPoint;
-    private int level = 1;
+    private int level = 0;
 
     public int CurrentHP_GrowPoint
     {
@@ -75,7 +75,7 @@ public class GrowPoint
         currentAtackTime_GrowPoint = AtackTime_GrowPoint;
 
         //レベル初期化
-        level = 1;
+        level = 0;
     }
 
     //成長値の合計値の取得

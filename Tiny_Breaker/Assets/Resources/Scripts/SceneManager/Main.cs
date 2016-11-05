@@ -106,15 +106,15 @@ public class Main : MonoBehaviour
             //残り体力判定（ラウンド結果判定）
             if (P1Base.HPpro > P2Base.HPpro)
             {
-                GameRule.getInstance().round.Add(GameRule.ResultType.Player1Win);
+                GameRule.getInstance().round.Add(Enum.ResultType.Player1Win);
             }
             if (P1Base.HPpro < P2Base.HPpro)
             {
-                GameRule.getInstance().round.Add(GameRule.ResultType.Player2Win);
+                GameRule.getInstance().round.Add(Enum.ResultType.Player2Win);
             }
             if (P1Base.HPpro == P2Base.HPpro)
             {
-                GameRule.getInstance().round.Add(GameRule.ResultType.Draw);
+                GameRule.getInstance().round.Add(Enum.ResultType.Draw);
             }
 
             //ラウンド数超えてるか判定
@@ -123,9 +123,9 @@ public class Main : MonoBehaviour
 
             foreach (var e in GameRule.getInstance().round)
             {
-                if (e == GameRule.ResultType.Player1Win)
+                if (e == Enum.ResultType.Player1Win)
                     p1wincount++;
-                if (e == GameRule.ResultType.Player2Win)
+                if (e == Enum.ResultType.Player2Win)
                     p2wincount++;
             }
 
@@ -135,15 +135,15 @@ public class Main : MonoBehaviour
                 //最終結果判定
                 if (p1wincount > p2wincount)
                 {
-                    GameRule.getInstance().result = GameRule.ResultType.Player1Win;
+                    GameRule.getInstance().result = Enum.ResultType.Player1Win;
                 }
                 if (p1wincount < p2wincount)
                 {
-                    GameRule.getInstance().result = GameRule.ResultType.Player2Win;
+                    GameRule.getInstance().result = Enum.ResultType.Player2Win;
                 }
                 if (p1wincount == p2wincount)
                 {
-                    GameRule.getInstance().result = GameRule.ResultType.Draw;
+                    GameRule.getInstance().result = Enum.ResultType.Draw;
                 }
 
                 //リザルトシーンへ

@@ -4,6 +4,7 @@
 [System.Serializable]
 public class Status
 {
+    //基本ステータス
     [SerializeField, TooltipAttribute("体力")]
     private int HP = 0;
     [SerializeField, TooltipAttribute("攻撃力")]
@@ -21,11 +22,11 @@ public class Status
     //プレハブのすべて共有の値になってしまうため
     //元々のステータスはいじらないようにするため
     //別の変数を用意
-    private int maxHP;
-    private int currentHP;
-    private int currentATK;
-    private float currentSPEED;
-    private float currentAtackTime;
+    private int maxHP = 0;                  // HP           の最大値
+    private int currentHP = 0;              // HP           の現在値
+    private int currentATK = 0;             // ATK          の現在値
+    private float currentSPEED = 0;         // SPEED        の現在値
+    private float currentAtackTime = 0;     // AtackTime    の現在値
 
     public int MaxHP
     {
@@ -53,18 +54,33 @@ public class Status
         set { currentAtackTime = value; }
     }
 
-    Status()
+    public Status()
     {
-        SetStatus();
+        SetStatus(0);
     }
 
-    ////現在のステータスに代入する
-    public void SetStatus()
+    ////レベルに対応したステータスに設定する
+    public void SetStatus(int level)
     {
         currentHP = HP;
         currentATK = ATK;
         currentSPEED = SPEED;
         currentAtackTime = AtackTime;
+
+        //今のステータスを算出する
+        float hp = currentHP;
+        float atk = currentATK;
+
+        for (int i = 0; i < level; i++)
+        {
+            hp *= 1.1f;
+            atk *= 1.1f;
+        }
+
+        currentHP = (int)hp;
+        currentATK = (int)atk;
+        
+        MaxHP = currentHP;
     }
 
     //基準を変えたいときに呼び出す
@@ -74,7 +90,5 @@ public class Status
         ATK = atk;
         SPEED = speed;
         AtackTime = atkspeed;
-
-        SetStatus();
     }
 }

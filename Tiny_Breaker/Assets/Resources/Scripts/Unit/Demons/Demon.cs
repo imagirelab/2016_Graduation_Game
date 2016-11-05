@@ -8,197 +8,197 @@ using StaticClass;
 
 public class Demon : Unit
 {
-    //成長値
-    [SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
-    GrowPoint growPoint;
-    public GrowPoint GrowPoint
-    {
-        get { return growPoint; }
-        set { growPoint = value; }
-    }
+    ////成長値
+    //[SerializeField, TooltipAttribute("悪魔の成長値ポイント")]
+    //GrowPoint growPoint;
+    //public GrowPoint GrowPoint
+    //{
+    //    get { return growPoint; }
+    //    set { growPoint = value; }
+    //}
 
-    Thread thread;
+    //Thread thread;
 
-    void Start()
-    {
-        thread = new Thread(ThreadTest);
-        thread.Start();
+    //void Start()
+    //{
+    //    thread = new Thread(ThreadTest);
+    //    thread.Start();
 
-        //はじめ無敵スタート
-        invincibleFlag = true;
+    //    //はじめ無敵スタート
+    //    invincibleFlag = true;
 
-        //死亡フラグ
-        IsDead = false;
+    //    //死亡フラグ
+    //    IsDead = false;
 
-        //ステータスの決定
-        SetStatus();
+    //    //ステータスの決定
+    //    SetStatus();
 
-        //攻撃に関する設定
-        GetComponent<UnitAttack>().AtkRange = ATKRange;
-        GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
+    //    //攻撃に関する設定
+    //    GetComponent<UnitAttack>().AtkRange = ATKRange;
+    //    GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
 
-        //////設定がなされていなかった時の仮置き
-        if (goalObject == null)
-            goalObject = GameObject.Find("DummyTarget");
-        //一番近くの敵を狙う
-        SetNearTargetObject();
+    //    //////設定がなされていなかった時の仮置き
+    //    if (goalObject == null)
+    //        goalObject = GameObject.Find("DummyTarget");
+    //    //一番近くの敵を狙う
+    //    SetNearTargetObject();
 
-        //巡回ルート
-        if (gameObject.transform.parent == null)
-            loiteringPointObj = new Transform[] { goalObject.transform };
-    }
+    //    //巡回ルート
+    //    if (gameObject.transform.parent == null)
+    //        loiteringPointObj = new Transform[] { goalObject.transform };
+    //}
 
-    void Update()
-    {
-        //無敵
-        if (invincibleFlag)
-            Invincible();
+    //void Update()
+    //{
+    //    //無敵
+    //    if (invincibleFlag)
+    //        Invincible();
 
-        if (IsDead)
-        {
-            state = State.Dead;
-            Dying();
-        }
-        else
-        {
-            //死亡処理
-            if (status.CurrentHP <= 0)
-                Dead();
+    //    if (IsDead)
+    //    {
+    //        state = State.Dead;
+    //        Dying();
+    //    }
+    //    else
+    //    {
+    //        //死亡処理
+    //        if (status.CurrentHP <= 0)
+    //            Dead();
 
-            //一番近くの敵を狙う
-            SetNearTargetObject();
+    //        //一番近くの敵を狙う
+    //        SetNearTargetObject();
 
-            //状態の切り替え
-            if (GetComponent<UnitSeach>().IsFind)
-                state = State.Find;
-            else
-                state = State.Search;
+    //        //状態の切り替え
+    //        if (GetComponent<UnitSeach>().IsFind)
+    //            state = State.Find;
+    //        else
+    //            state = State.Search;
 
-            if (GetComponent<UnitAttack>().IsAttack)
-                state = State.Attack;
+    //        if (GetComponent<UnitAttack>().IsAttack)
+    //            state = State.Attack;
 
-            //ダメージを受けたかの確認
-            DamageCheck(status.CurrentHP);
-        }
-    }
+    //        //ダメージを受けたかの確認
+    //        DamageCheck(status.CurrentHP);
+    //    }
+    //}
 
-    //死んでいる時の処理
-    void Dying()
-    {
-        deadcount += Time.deltaTime;
+    ////死んでいる時の処理
+    //void Dying()
+    //{
+    //    deadcount += Time.deltaTime;
 
-        GetComponent<Rigidbody>().velocity = transform.forward * -1 * deadMoveSpeed;
+    //    GetComponent<Rigidbody>().velocity = transform.forward * -1 * deadMoveSpeed;
 
-        if (deadcount > deadTime)
-            Destroy(gameObject);
-    }
+    //    if (deadcount > deadTime)
+    //        Destroy(gameObject);
+    //}
 
-    //死んだときの処理
-    void Dead()
-    {
-        if (!IsDead)
-        {
-            IsDead = true;
+    ////死んだときの処理
+    //void Dead()
+    //{
+    //    if (!IsDead)
+    //    {
+    //        IsDead = true;
 
-            //リストから外す
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
+    //        //リストから外す
+    //        DemonDataBase.getInstance().RemoveList(this.gameObject);
 
-            //死んだ直後に魂を回収してみる
-            if (transform.parent != null)
-                transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
+    //        //死んだ直後に魂を回収してみる
+    //        if (transform.parent != null)
+    //            transform.parent.gameObject.GetComponent<Player>().AddSpiritList(growPoint);
 
-            Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
-            SoundManager.deadSEFlag = true;
+    //        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+    //        SoundManager.deadSEFlag = true;
 
-            //いらない子供から消していく
-            if (transform.IsChildOf(transform))
-                foreach (Transform child in transform)
-                {
-                    //Modelsの中の削除処理
-                    if (child.name == "Models")
-                    {
-                        //トランスフォーム以外のコンポーネント
-                        foreach (Component comp in child.GetComponents<Component>())
-                            if (comp != child.GetComponent<Transform>())
-                                Destroy(comp);
-                    }
-                    else
-                        Destroy(child.gameObject);
-                }
+    //        //いらない子供から消していく
+    //        if (transform.IsChildOf(transform))
+    //            foreach (Transform child in transform)
+    //            {
+    //                //Modelsの中の削除処理
+    //                if (child.name == "Models")
+    //                {
+    //                    //トランスフォーム以外のコンポーネント
+    //                    foreach (Component comp in child.GetComponents<Component>())
+    //                        if (comp != child.GetComponent<Transform>())
+    //                            Destroy(comp);
+    //                }
+    //                else
+    //                    Destroy(child.gameObject);
+    //            }
 
-            //自分のコンポーネントの削除
-            foreach (Component comp in this.GetComponents<Component>())
-                if (comp != GetComponent<Transform>() && comp != GetComponent<Demons>() && comp != GetComponent<Rigidbody>())
-                    Destroy(comp);
-        }
-    }
+    //        //自分のコンポーネントの削除
+    //        foreach (Component comp in this.GetComponents<Component>())
+    //            if (comp != GetComponent<Transform>() && comp != GetComponent<Demons>() && comp != GetComponent<Rigidbody>())
+    //                Destroy(comp);
+    //    }
+    //}
 
-    //ステータスの設定
-    public void SetStatus()
-    {
-        //基礎ステータスの代入
-        status.SetStatus();
+    ////ステータスの設定
+    //public void SetStatus()
+    //{
+    //    //基礎ステータスの代入
+    //    status.SetStatus();
 
-        //今のステータスを算出する
-        float hp = status.GetHP;
-        float atk = status.GetATK;
+    //    //今のステータスを算出する
+    //    float hp = status.GetHP;
+    //    float atk = status.GetATK;
 
-        for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
-            hp *= 1.1f;
-        for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
-            atk *= 1.1f;
+    //    for (int i = 0; i < growPoint.CurrentHP_GrowPoint - growPoint.GetHP_GrowPoint; i++)
+    //        hp *= 1.1f;
+    //    for (int i = 0; i < growPoint.CurrentATK_GrowPoint - growPoint.GetATK_GrowPoint; i++)
+    //        atk *= 1.1f;
 
-        status.CurrentHP = (int)hp;
-        status.CurrentATK = (int)atk;
+    //    status.CurrentHP = (int)hp;
+    //    status.CurrentATK = (int)atk;
 
-        //カンスト
-        if (status.CurrentHP >= 9999)
-            status.CurrentHP = 9999;
-        if (status.CurrentATK >= 2000)
-            status.CurrentATK = 2000;
-        if (status.CurrentSPEED >= 10)
-            status.CurrentSPEED = 10;
-        if (status.CurrentAtackTime <= 0.5f)    //１フレーム以下にならない方がいいかも
-            status.CurrentAtackTime = 0.5f;
+    //    //カンスト
+    //    if (status.CurrentHP >= 9999)
+    //        status.CurrentHP = 9999;
+    //    if (status.CurrentATK >= 2000)
+    //        status.CurrentATK = 2000;
+    //    if (status.CurrentSPEED >= 10)
+    //        status.CurrentSPEED = 10;
+    //    if (status.CurrentAtackTime <= 0.5f)    //１フレーム以下にならない方がいいかも
+    //        status.CurrentAtackTime = 0.5f;
 
-        status.MaxHP = status.CurrentHP;
+    //    status.MaxHP = status.CurrentHP;
 
-        loiteringSPEED = status.CurrentSPEED;
-    }
+    //    loiteringSPEED = status.CurrentSPEED;
+    //}
 
-    //破壊されたときにリストから外す
-    void OnDisable()
-    {
-        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
-    }
+    ////破壊されたときにリストから外す
+    //void OnDisable()
+    //{
+    //    if (DemonDataBase.getInstance().ChackKey(this.gameObject))
+    //        DemonDataBase.getInstance().RemoveList(this.gameObject);
+    //}
 
-    //無敵の処理
-    void Invincible()
-    {
-        if (DemonDataBase.getInstance().ChackKey(this.gameObject))
-            DemonDataBase.getInstance().RemoveList(this.gameObject);
+    ////無敵の処理
+    //void Invincible()
+    //{
+    //    if (DemonDataBase.getInstance().ChackKey(this.gameObject))
+    //        DemonDataBase.getInstance().RemoveList(this.gameObject);
 
-        invincibleCount += Time.deltaTime;
+    //    //invincibleCount += Time.deltaTime;
 
-        if (invincibleCount >= invincibleTime)
-        {
-            invincibleCount = 0.0f;
-            // 作られたときにリストに追加する
-            DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-        }
-    }
+    //    //if (invincibleCount >= invincibleTime)
+    //    //{
+    //    //    invincibleCount = 0.0f;
+    //    //    // 作られたときにリストに追加する
+    //    //    DemonDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
+    //    //}
+    //}
 
 
-    IEnumerator Createobject()
-    {
-        Debug.Log("Running task");
-        yield return null;
-    }
+    //IEnumerator Createobject()
+    //{
+    //    Debug.Log("Running task");
+    //    yield return null;
+    //}
 
-    public void ThreadTest()
-    {
-        Thread.Sleep(5000);
-        taskFactory.StartNew(Createobject());
-    }
+    //public void ThreadTest()
+    //{
+    //    Thread.Sleep(5000);
+    //    taskFactory.StartNew(Createobject());
+    //}
 }

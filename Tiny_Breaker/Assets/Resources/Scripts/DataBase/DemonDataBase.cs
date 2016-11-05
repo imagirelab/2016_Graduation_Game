@@ -21,14 +21,17 @@ namespace StaticClass
             dictionary.Clear();
         }
 
-        public void AddList(GameObject key, string value)
+        public void AddList(GameObject key)
         {
+            string value = key.tag;
+
             dictionary.Add(key, value);
         }
 
         public void RemoveList(GameObject key)
         {
-            dictionary.Remove(key);
+            if (dictionary.ContainsKey(key))
+                dictionary.Remove(key);
         }
 
         //辞書にある数の取得
@@ -37,6 +40,7 @@ namespace StaticClass
             return dictionary.Count;
         }
 
+        //渡されたオブジェクトがリストにあるかどうかチェックする
         public bool ChackKey(GameObject key)
         {
             return dictionary.ContainsKey(key);
@@ -67,7 +71,7 @@ namespace StaticClass
         }
 
         //リストの中から同じルート番号のものを見つけてリストを再構成
-        List<GameObject> GetListToRoot(List<GameObject> chacklist, int rootNum)
+        List<GameObject> GetListToRoot(List<GameObject> chacklist, Enum.Direction_TYPE rootNum)
         {
             List<GameObject> list = new List<GameObject>();
 
@@ -111,7 +115,7 @@ namespace StaticClass
         /// <param name="center">中心点</param>
         /// <param name="rootNum">ルート番号</param>
         /// <returns>一番近い悪魔</returns>
-        public GameObject GetNearestObject(string tag, Vector3 center, int rootNum)
+        public GameObject GetNearestObject(string tag, Vector3 center, Enum.Direction_TYPE rootNum)
         {
             ////指定したタグ以外で一番近いものとする
             //List<GameObject> list = GetListToTagExc(tag);
