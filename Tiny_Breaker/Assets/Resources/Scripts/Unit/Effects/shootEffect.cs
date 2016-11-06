@@ -16,9 +16,9 @@ public class shootEffect : MonoBehaviour
 
         if (GetComponentInParent<UnitAttack>() != null)
         {
-            if (_unitAttack.target != null)
+            if (_unitAttack.Target != null)
             {
-                target = _unitAttack.target;
+                target = _unitAttack.Target;
 
                 this.GetComponent<Rigidbody>().velocity = new Vector3(target.transform.position.x - this.transform.position.x,
                     target.transform.position.y + offset.y - this.transform.position.y,

@@ -4,58 +4,77 @@ using System.Collections;
 public class ChangeAnimation : MonoBehaviour
 {
     Coroutine cor;
-
-    //親
-    GameObject unit;
-
-    Unit.State state;
     
     IEnumerator Change()
     {
+        //親
+        GameObject parent;
+
         if (gameObject.transform.parent.gameObject.transform.parent != null)
-            unit = gameObject.transform.parent.gameObject.transform.parent.gameObject;
+            parent = gameObject.transform.parent.gameObject.transform.parent.gameObject;
         else
-            unit = gameObject;
+            parent = gameObject;
+
+        Unit unit = parent.GetComponent<Unit>();
+        Animator animator = GetComponent<Animator>();
+        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
+        AnimatorControllerParameter[] parameters = animator.parameters;
+
+        Unit.State state;
 
         state = Unit.State.Search;
 
         while (true)
         {
-            if (GetComponent<Animator>())
+            if (animator)
             {
-                AnimatorControllerParameter[] parameters = GetComponent<Animator>().parameters;
                 foreach (AnimatorControllerParameter param in parameters)
                 {
-                    if (param.name == "IsAttack" && unit.GetComponent<UnitAttack>())
-                        GetComponent<Animator>().SetBool("IsAttack", unit.GetComponent<UnitAttack>().IsAttack);
-                    if (param.name == "IsFind" && unit.GetComponent<UnitSeach>())
-                        GetComponent<Animator>().SetBool("IsFind", unit.GetComponent<UnitSeach>().IsFind);
-                    if (param.name == "IsDead" && unit.GetComponent<Unit>())
-                        GetComponent<Animator>().SetBool("IsDead", unit.GetComponent<Unit>().IsDead);
+                    if (param.name == "IsAttack")
+                        animator.SetBool("IsAttack", false);
+                    if (param.name == "IsFind")
+                        animator.SetBool("IsFind", false);
+                    if (param.name == "IsDead")
+                        animator.SetBool("IsDead", false);
+
+                    switch (unit.state)
+                    {
+                        case Unit.State.Attack:
+                            if (param.name == "IsAttack")
+                                animator.SetBool("IsAttack", true);
+                            break;
+                        case Unit.State.Find:
+                            if (param.name == "IsFind")
+                                animator.SetBool("IsFind", true);
+                            break;
+                        case Unit.State.Dead:
+                            if (param.name == "IsDead")
+                                animator.SetBool("IsDead", true);
+                            break;
+                        default:
+                            break;
+                    }
 
                     //アニメーションの再生速度
-                    if (unit.GetComponent<Unit>())
+                    if (unit)
                     {
-                        Unit unitComp = unit.GetComponent<Unit>();
-                        AnimatorStateInfo currentState = GetComponent<Animator>().GetCurrentAnimatorStateInfo(0);
-
-                        switch (unitComp.state)
+                        switch (unit.state)
                         {
                             case Unit.State.Attack:
                                 if (state != Unit.State.Attack &&
                                    currentState.shortNameHash == Animator.StringToHash("attack"))
                                 {
-                                    state = unitComp.state;
+                                    state = unit.state;
 
                                     //Animatorで再生中のAnimationClipのTotal再生時間
                                     float duration = currentState.length;
-                                    float animetionTimeRate = duration / unit.GetComponent<Unit>().status.CurrentAtackTime;
-                                    GetComponent<Animator>().speed = animetionTimeRate;
+                                    float animetionTimeRate = duration / unit.status.CurrentAtackTime;
+                                    animator.speed = animetionTimeRate;
                                 }
                                 break;
                             default:
-                                state = unitComp.state;
-                                GetComponent<Animator>().speed = 1.0f;
+                                state = unit.state;
+                                animator.speed = 1.0f;
                                 break;
                         }
                     }
@@ -64,7 +83,7 @@ public class ChangeAnimation : MonoBehaviour
             yield return null;
         }
     }
-    
+
     void OnEnable()
     {
         cor = StartCoroutine(Change());

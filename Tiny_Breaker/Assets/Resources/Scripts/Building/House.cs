@@ -57,8 +57,7 @@ public class House : MonoBehaviour
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if (!IsDead)
-            BuildingDataBase.getInstance().RemoveList(this.gameObject);
+        BuildingDataBase.getInstance().RemoveList(this.gameObject);
     }
 
     void Update()
@@ -145,6 +144,8 @@ public class House : MonoBehaviour
     {
         //死んでいるフラグを立てる
         IsDying = true;
+
+        BuildingDataBase.getInstance().RemoveList(this.gameObject);
 
         //一旦出ていた兵士は全員殺す
         foreach (Transform child in transform)

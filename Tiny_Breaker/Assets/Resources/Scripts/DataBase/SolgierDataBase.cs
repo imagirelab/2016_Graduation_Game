@@ -30,7 +30,8 @@ namespace StaticClass
 
         public void RemoveList(GameObject key)
         {
-            dictionary.Remove(key);
+            if (dictionary.ContainsKey(key))
+                dictionary.Remove(key);
         }
 
         //辞書にある数の取得

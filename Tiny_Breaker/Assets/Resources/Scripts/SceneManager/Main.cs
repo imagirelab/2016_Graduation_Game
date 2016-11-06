@@ -34,6 +34,9 @@ public class Main : MonoBehaviour
 
     void Start()
     {
+        //フレームレートを固定
+        Application.targetFrameRate = 30;
+
         startCount = 0.0f;
 
         if (P1Base == null)

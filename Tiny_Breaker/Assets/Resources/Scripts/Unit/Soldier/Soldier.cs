@@ -2,157 +2,198 @@
 
 using UnityEngine;
 using StaticClass;
+using System.Collections;
 
 public class Soldier : Unit
 {
     public int powerUPCount = 0;
-    
+
     void Start()
     {
+        Initialize();
+    }
+
+    //初期化
+    void Initialize()
+    {
+        seach = GetComponent<UnitSeach>();
+        attack = GetComponent<UnitAttack>();
+        move = GetComponent<UnitMove>();
+
+        sCollider = GetComponent<SphereCollider>();
+
         // 作られたときにリストに追加する
         SolgierDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
-        
-        deadcount = 0.0f;
 
         //死亡フラグ
         IsDead = false;
 
-        //巡回ルート
-        if (gameObject.transform.parent == null)
-            loiteringPointObj = new Transform[] { transform };
-
-        //ステータスの決定
-        SetStatus();
-
         //攻撃に関する設定
-        GetComponent<UnitAttack>().AtkRange = ATKRange;
-        GetComponent<UnitAttack>().AtkTime = status.CurrentAtackTime;
+        attack.AtkTime = status.CurrentAtackTime;
+        //巡回速度
+        loiteringSPEED = 1.8f;
+
+        ////設定がなされていなかった時の仮置き
+        if (gameObject.transform.parent == null)
+            loiteringPointObj = new Transform[] { goalObject.transform };
+        if (goalObject == null)
+            goalObject = GameObject.Find("DummyTarget");
+
+        //一番近くの敵を狙う
+        SetNearTargetObject();
+
+        StartCoroutine(SoldierLife());
+        StartCoroutine(NearTarget());
     }
 
-    void Update()
+    IEnumerator SoldierLife()
     {
-        if (IsDead)
-        {
-            state = State.Dead;
-            Dying();
-        }
-        else
-        {
-            //死亡処理
-            if (status.CurrentHP <= 0)
-                Dead();
+        //コライダーオン
+        sCollider.enabled = true;
 
+        //移動開始
+        move.enabled = true;
+
+        float widthScale = (transform.localScale.x + transform.localScale.z) / 2.0f;
+        float colliderScalingDiameter = sCollider.radius * widthScale;
+
+        seach.enabled = false;
+
+        //生きている時の処理
+        while (status.CurrentHP > 0)
+        {
             //一番近くの敵を狙う
-            SetNearTargetObject();
-
-            //状態の切り替え
-            if (GetComponent<UnitSeach>().IsFind)
-                state = State.Find;
-            else
-                state = State.Search;
-
-            if (GetComponent<UnitAttack>().IsAttack)
-                state = State.Attack;
+            //SetNearTargetObject();
 
             //ダメージを受けたかの確認
             DamageCheck(status.CurrentHP);
-        }
-    }
-    
-    //死んでいる時の処理
-    void Dying()
-    {
-        deadcount += Time.deltaTime;
 
-        if (deadcount > deadTime)
-            Destroy(gameObject);
-    }
+            state = State.Search;
 
-    //死んだときの処理
-    void Dead()
-    {
-        if (!IsDead)
-        {
-            IsDead = true;
-
-            //死亡エフェクト出現
-            Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
-            SoundManager.deadSEFlag = true;
-
-            //リストから外すタイミングを死んだ条件の中に入れる
-            SolgierDataBase.getInstance().RemoveList(this.gameObject);
-
-            //いらない子供から消していく
-            if (transform.IsChildOf(transform))
-                foreach (Transform child in transform)
+            //無駄な処理を省くための条件
+            if (targetDistance - targetColliderRadius < ATKRange + colliderScalingDiameter)
+            {
+                if (targetDistance < colliderScalingDiameter) //重なっている時
                 {
-                    //Modelsの中の削除処理
-                    if (child.name == "Models")
-                    {
-                        //トランスフォーム以外のコンポーネント
-                        foreach (Component comp in child.GetComponents<Component>())
-                            if (comp != child.GetComponent<Transform>())
-                                Destroy(comp);
-
-                        //孫の削除処理
-                        foreach (Transform grandson in child)
-                        {
-                            //兵士用
-                            if (grandson.name == "Model")
-                            {
-                                //トランスフォーム以外のコンポーネント
-                                foreach (Component comp in grandson.GetComponents<Component>())
-                                    if (comp != grandson.GetComponent<Transform>())
-                                        Destroy(comp);
-
-                                //コライダーがついているものをONにする
-                                foreach (GameObject e in GetAllChildren.GetAll(grandson.gameObject))
-                                    if (e.GetComponent<Collider>())
-                                    {
-                                        e.GetComponent<Collider>().enabled = true;
-                                        e.AddComponent<Rigidbody>();
-                                    }
-                            }
-                            //Modelではなく、パーティクルでもないもの以外は消す
-                            else if(!grandson.gameObject.GetComponent<ParticleSystem>())
-                                Destroy(grandson.gameObject);
-                        }
-                      
-                    }
-                    else
-                        Destroy(child.gameObject);
+                    state = State.Attack;
+                    seach.enabled = false;
+                    attack.enabled = true;
                 }
+                else
+                {
+                    RaycastHit hit;
+                    Vector3 vec = targetObject.transform.position - transform.position;
+                    Ray ray = new Ray(transform.position, vec);
+                    ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
 
-            //自分のコンポーネントの削除
-            foreach (Component comp in this.GetComponents<Component>())
-                if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())
-                    Destroy(comp);
+                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
+                    if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
+                    {
+                        if (hit.collider.gameObject == targetObject)
+                        {
+                            state = State.Attack;
+                            seach.enabled = false;
+                            attack.enabled = true;
+                        }
+                    }
+                }
+            }
+            else if (targetDistance - targetColliderRadius <= seach.findRange + colliderScalingDiameter &&
+                    targetDistance - targetColliderRadius >= ATKRange + colliderScalingDiameter)
+            {
+                seach.enabled = true;
+                attack.enabled = false;
+            }
+            else
+            {
+                attack.enabled = false;
+            }
+
+            //発見状態の条件
+            if (seach.enabled)
+            {
+                if (seach.IsLose)
+                    seach.enabled = false;
+                if (seach.IsFind)
+                    state = State.Find;
+            }
+
+            yield return null;
         }
+
+        //死亡処理
+        state = State.Dead;
+        yield return StartCoroutine(Dead());
+
+        Destroy(gameObject);
     }
 
-    //ステータスの設定
-    void SetStatus()
+    IEnumerator Dead()
     {
-        //基礎ステータスの代入
-        status.SetStatus(0);
+        IsDead = true;
 
-        //今のステータスを算出する
-        for (int i = 0; i < powerUPCount; i++)
-            status.CurrentHP += (int)(status.GetHP * 0.5f);
-        for (int i = 0; i < powerUPCount; i++)
-            status.CurrentATK += (int)(status.GetATK * 0.5f);
-        for (int i = 0; i < powerUPCount; i++)
-            status.CurrentSPEED += status.GetSPEED * 0.15f;
-        for (int i = 0; i < powerUPCount; i++)
-            status.CurrentAtackTime -= status.GetAtackTime * 0.05f;
+        //死亡エフェクト出現
+        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+        SoundManager.deadSEFlag = true;
 
-        status.MaxHP = status.CurrentHP;
+        //リストから外すタイミングを死んだ条件の中に入れる
+        SolgierDataBase.getInstance().RemoveList(this.gameObject);
+
+        //いらない子供から消していく
+        if (transform.IsChildOf(transform))
+            foreach (Transform child in transform)
+            {
+                //Modelsの中の削除処理
+                if (child.name == "Models")
+                {
+                    //トランスフォーム以外のコンポーネント
+                    foreach (Component comp in child.GetComponents<Component>())
+                        if (comp != child.GetComponent<Transform>())
+                            Destroy(comp);
+
+                    //孫の削除処理
+                    foreach (Transform grandson in child)
+                    {
+                        //兵士用
+                        if (grandson.name == "Model")
+                        {
+                            //トランスフォーム以外のコンポーネント
+                            foreach (Component comp in grandson.GetComponents<Component>())
+                                if (comp != grandson.GetComponent<Transform>())
+                                    Destroy(comp);
+
+                            //コライダーがついているものをONにする
+                            foreach (GameObject e in GetAllChildren.GetAll(grandson.gameObject))
+                                if (e.GetComponent<Collider>())
+                                {
+                                    e.GetComponent<Collider>().enabled = true;
+                                    e.AddComponent<Rigidbody>();
+                                }
+                        }
+                        //Modelではなく、パーティクルでもないもの以外は消す
+                        else if (!grandson.gameObject.GetComponent<ParticleSystem>())
+                            Destroy(grandson.gameObject);
+                    }
+
+                }
+                else
+                    Destroy(child.gameObject);
+            }
+
+        //自分のコンポーネントの削除
+        foreach (Component comp in this.GetComponents<Component>())
+            if (comp != GetComponent<Transform>() && comp != GetComponent<Soldier>())
+                Destroy(comp);
+
+        yield return null;
+
+        //死んでいる時の処理
+        yield return new WaitForSeconds(deadTime);
     }
 
     //破壊されたときにリストから外す
     void OnDisable()
     {
-        if (!IsDead)
-            SolgierDataBase.getInstance().RemoveList(this.gameObject);
+        SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 }

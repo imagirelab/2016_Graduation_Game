@@ -362,6 +362,7 @@ public class Player : MonoBehaviour
             GameObject instaceObject = (GameObject)Instantiate(demons[demonType],
                                                             spawnPoint.position,
                                                             Quaternion.identity);
+            //レベル上げ
             instaceObject.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
             instaceObject.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
             Vector3 summonVec = (rootPointes[(int)rootNum].ToArray()[0].position - rootes[(int)rootNum].transform.position).normalized;   //初めの向き

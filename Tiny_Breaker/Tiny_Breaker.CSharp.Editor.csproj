@@ -106,20 +106,20 @@
     <Reference Include="Simplygon">
       <HintPath>Assets\Editor\Simplygon.dll</HintPath>
     </Reference>
-    <Reference Include="System.Threading">
-      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\System.Threading.dll</HintPath>
-    </Reference>
-    <Reference Include="SpicyPixel.Threading.Unity.Test">
-      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\Editor\SpicyPixel.Threading.Unity.Test.dll</HintPath>
-    </Reference>
-    <Reference Include="SpicyPixel.Threading.Test">
-      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\Editor\SpicyPixel.Threading.Test.dll</HintPath>
+    <Reference Include="SpicyPixel.Threading">
+      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\SpicyPixel.Threading.dll</HintPath>
     </Reference>
     <Reference Include="SpicyPixel.Threading.Unity">
       <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\SpicyPixel.Threading.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="SpicyPixel.Threading">
-      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\SpicyPixel.Threading.dll</HintPath>
+    <Reference Include="System.Threading">
+      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\System.Threading.dll</HintPath>
+    </Reference>
+    <Reference Include="SpicyPixel.Threading.Test">
+      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\Editor\SpicyPixel.Threading.Test.dll</HintPath>
+    </Reference>
+    <Reference Include="SpicyPixel.Threading.Unity.Test">
+      <HintPath>Assets\SpicyPixel\Modules\ConcurrencyKit\Bin\Editor\SpicyPixel.Threading.Unity.Test.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

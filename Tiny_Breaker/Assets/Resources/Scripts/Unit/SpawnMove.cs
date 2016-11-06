@@ -2,15 +2,10 @@
 
 using UnityEngine;
 using System.Collections;
-using SpicyPixel.Threading;
-using SpicyPixel.Threading.Tasks;
-using System.Threading;
 
-public class SpawnMove : ConcurrentBehaviour
+public class SpawnMove : MonoBehaviour
 {
-    Thread thread;
-
-    bool end = false;   //最後まで終わったかどうかのフラグ
+    bool end;
     public bool End { get { return end; } }
 
     [SerializeField]
@@ -19,50 +14,39 @@ public class SpawnMove : ConcurrentBehaviour
     float stopTime = 0.0f;     //召喚時の止まる時間
 
     Vector3 targetVec = Vector3.zero;       //召喚時の目標地点までの距離ベクトル
-    public Vector3 SetTargetVec { set { targetVec = value; } }
+    public void SetTargetVec(Vector3 vec) { targetVec = vec; }
 
-    void OnEnable()
-    {
-        thread = new Thread(ThreadTemp);
-        thread.Start();
-    }
+    Coroutine cor;
 
-    void ThreadTemp()
+    public IEnumerator Spawn()
     {
-        taskFactory.StartNew(CoroutineTemp());
-    }
-
-    IEnumerator CoroutineTemp()
-    {
+        end = false;
         //召喚時の動きがあるもの
         //if (unit.setSpawnTargetFlag)
         //{
-            ////ステータスUIを消す
-            //if (statusUI == null)
-            //    statusUI = new GameObject();
-            //statusUI.SetActive(false);
+        ////ステータスUIを消す
+        //if (statusUI == null)
+        //    statusUI = new GameObject();
+        //statusUI.SetActive(false);
 
-            bool moveEnd = false;
-            Vector3 startPosition = transform.position;
-            Vector3 targetPosition = startPosition + targetVec;
-            float time = 0.0f;
-
-            while (moveEnd == false)
+        bool moveEnd = false;
+        Vector3 startPosition = transform.position;
+        float time = 0.0f;
+        
+        while (moveEnd == false)
+        {
+            time += Time.deltaTime;
+            if (time >= moveTime)
             {
-                time += Time.deltaTime;
-                if (time >= moveTime)
-                {
-                    moveEnd = true;
-                    time = moveTime;
-                }
-                float rate = time / moveTime;
-                Vector3 rateVec = targetPosition * rate;
-                transform.position = startPosition + rateVec;   //座標の代入
-                yield return null;
+                moveEnd = true;
+                time = moveTime;
             }
-            yield return new WaitForSeconds(stopTime);
-
-        end = true;
+            float rate = time / moveTime;
+            Vector3 rateVec = targetVec * rate;
+            transform.position = startPosition + rateVec;   //座標の代入
+            yield return null;
+        }
+        yield return new WaitForSeconds(stopTime);
 
         //    //ステータスUIを表示
         //    statusUI.SetActive(true);
@@ -70,7 +54,16 @@ public class SpawnMove : ConcurrentBehaviour
         //GetComponent<SphereCollider>().enabled = true;
         //gameObject.GetComponent<Rigidbody>().freezeRotation = true;
 
-        //yield return null;
+        end = true;
     }
 
+    void OnEnable()
+    {
+        cor = StartCoroutine(Spawn());
+    }
+
+    void OnDisable()
+    {
+        StopCoroutine(cor);
+    }
 }

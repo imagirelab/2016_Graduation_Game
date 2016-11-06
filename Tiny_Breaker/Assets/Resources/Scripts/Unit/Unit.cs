@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using StaticClass;
-using SpicyPixel.Threading;
+using System.Collections;
 
-public class Unit : ConcurrentBehaviour
+public class Unit : MonoBehaviour
 {
     //タイプ
     public enum Type
@@ -48,6 +48,8 @@ public class Unit : ConcurrentBehaviour
     public GameObject goalObject;       //ゴール
     [HideInInspector]
     public GameObject targetObject;       //目標
+    protected float targetDistance = 0.0f;
+    protected float targetColliderRadius = 0.0f;
 
     public GameObject deadEffect;       //死亡エフェクト
     
@@ -69,23 +71,23 @@ public class Unit : ConcurrentBehaviour
     protected float deadcount = 0.0f;
 
     //出現場所の目的場所
-    [HideInInspector]
-    public bool setSpawnTargetFlag = false;
     Vector3 spawnTargetPosition;
     public Vector3 SpawnTargetPosition
     {
         get { return spawnTargetPosition; }
-        set
-        {
-            spawnTargetPosition = value;
-            setSpawnTargetFlag = true;
-        }
+        set { spawnTargetPosition = value; }
     }
 
     //無敵時間
     [SerializeField]
     protected float invincibleTime = 1.3f;
     protected bool invincibleFlag = false;
+    
+    //使うコンポーネント
+    protected UnitSeach seach;
+    protected UnitAttack attack;
+    protected UnitMove move;
+    protected SphereCollider sCollider;
 
     public void Move(Vector3 target, float speed)
     {
@@ -128,6 +130,11 @@ public class Unit : ConcurrentBehaviour
                 if (Vector3.Distance(this.transform.position, nearBuild.transform.position) <
                     Vector3.Distance(this.transform.position, targetObject.transform.position))
                     targetObject = nearBuild;
+
+        //一番近い敵との直線距離
+        targetDistance = Vector3.Distance(this.transform.position, targetObject.transform.position);
+        if (targetObject.GetComponent<SphereCollider>())
+            targetColliderRadius = targetObject.GetComponent<SphereCollider>().radius * targetObject.transform.localScale.x;
     }
 
     //ダメージを受けたか確認する
@@ -161,4 +168,16 @@ public class Unit : ConcurrentBehaviour
                 currentRootPoint++;
         }
     }
+
+    protected IEnumerator NearTarget()
+    {
+        while (true)
+        {
+            //一番近くの敵を狙う
+            SetNearTargetObject();
+
+            yield return new WaitForSeconds(0.4f);
+        }
+    }
+
 }

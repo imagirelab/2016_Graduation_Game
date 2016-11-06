@@ -48,6 +48,9 @@ public class Spawner : MonoBehaviour
     [SerializeField]
     Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
 
+    [SerializeField]
+    int houseLevel = 0;
+
     void Start()
     {
         currentPlayerID = 0;
@@ -130,6 +133,8 @@ public class Spawner : MonoBehaviour
                     instance.GetComponent<Unit>().LoiteringPointObj = rootPointes[j].ToArray();     //巡回ルート
                     instance.GetComponent<Unit>().goalObject = players[j].SpawnPoint.gameObject;    //最終目標
                     instance.GetComponent<Unit>().rootNum = rootNum;    //ルート番号を継承
+                    //レベル上げ
+                    instance.GetComponent<Unit>().status.SetStatus(houseLevel);
                 }
             }
         }
@@ -169,6 +174,8 @@ public class Spawner : MonoBehaviour
                     instance.GetComponent<Unit>().LoiteringPointObj = rootPointes[id].ToArray();    //徘徊ルート
                     instance.GetComponent<Unit>().goalObject = players[id].target;  //最終目標
                     instance.GetComponent<Unit>().rootNum = rootNum;    //ルート番号を継承
+                    //レベル上げ
+                    instance.GetComponent<Unit>().status.SetStatus(houseLevel);
                 }
             }
         }
