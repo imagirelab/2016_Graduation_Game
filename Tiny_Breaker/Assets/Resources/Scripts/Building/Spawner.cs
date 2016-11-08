@@ -186,11 +186,6 @@ public class Spawner : MonoBehaviour
         int rnd = Random.Range(0, soldiers.Length);
 
         solNum = rnd;
-
-        //solNum++;
-
-        //if (solNum >= soldiers.Length)
-        //    solNum = 0;
     }
 
     public void SetDefault(int num, int max, float time)

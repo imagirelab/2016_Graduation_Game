@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using NCMB;
 
@@ -8,45 +7,27 @@ public class Player : MonoBehaviour
 {
     #region フィールド
     
-    //受信が必要ないときにOFFにする
-    [SerializeField]
-    bool IsReceive = true;
     //送信が必要ないときにOFFにする
     [SerializeField]
     bool IsPush = true;
 
     //プレイヤーを識別する番号
     //誰の悪魔が魂の回収を行ったのかを判断するため必要だと思った
-    public int playerID = 1;
-    public int targetID = 2;
+    public int playerID = 0;
+    public int targetID = 1;
 
     //スマホ側に送信するのに一時的にデータをためておく場所
     List<int> costData = new List<int>();
     List<Enum.Demon_TYPE> spiritsData = new List<Enum.Demon_TYPE>();
     List<Enum.Demon_TYPE> spiritsDataCopy = new List<Enum.Demon_TYPE>();    //デバッグ用に使う魂データのコピー
     
-    //スマホからのメッセージ一覧
-    struct SmaphoMsg
-    {
-        public Enum.Direction_TYPE dirType;
-        public Enum.Demon_TYPE type;
-        public int G_HP;
-        public int G_ATK;
-        public int G_SPD;
-        public int G_ATKTime;
-    };
-    List<SmaphoMsg> smaphoMsgList = new List<SmaphoMsg>();
-    
-    //スマホ側から受け取る情報を抑制するためのカウンター
-    int counter = 0;
-
     //各種悪魔のプレファブ
     [SerializeField]
     GameObject[] demons = new GameObject[(int)Enum.Demon_TYPE.Num];
     public GameObject[] Demons { get { return demons; } }
     //Playerクラス内で使う悪魔達のレベル
     int[] demonsLevel = new int[(int)Enum.Demon_TYPE.Num];
-    public int[] DemonsLevel { get { return demonsLevel; } }
+    public int[] DemonsLevel { get { return demonsLevel; } set { demonsLevel = value; } }
     //Debug確認用
     Status[] demonsStatus = new Status[(int)Enum.Demon_TYPE.Num];
     public Status[] DemonsStatus { get { return demonsStatus; } }
@@ -69,14 +50,12 @@ public class Player : MonoBehaviour
 
     //召喚する道番号 ０：下　１：真ん中　２：上
     Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
-
-    //召喚クールタイム
-    [SerializeField]
-    float coolTime = 0.5f;
-    bool IsCool = false;
-
+    
     [SerializeField]
     int maxSummonNum = 50;
+
+    [SerializeField]
+    GameObject deathbolwObj;
 
     #endregion
 
@@ -110,39 +89,15 @@ public class Player : MonoBehaviour
             rootPointes[i].Add(target.transform); //最後に最終目的地
         }
         
-        //クールカウントの初期化
-        IsCool = false;
-
         if (spawnPoint == null)
             spawnPoint = new GameObject().transform;
+
+        if (deathbolwObj == null)
+            deathbolwObj = new GameObject();
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        //受信制御
-        counter++;
-
-        if (counter > 30)
-        {
-            counter = 0;
-
-            //受信後の処理
-            if(IsReceive)   //trueの時だけ受信する
-                Receive();
-        }
-
-
-        //リストの初めのやつから処理を行う
-        if (smaphoMsgList.Count > 0)
-        {
-            //方向指示
-            ChangeRoot((int)smaphoMsgList[0].dirType);
-            //召喚
-            DebugSummon((int)smaphoMsgList[0].type);
-            //処理したらリストから外す
-            smaphoMsgList.Remove(smaphoMsgList[0]);
-        }
-
         //スピリットデータの送信
         if (spiritsData.Count > 0)
         {
@@ -162,94 +117,6 @@ public class Player : MonoBehaviour
 
             costData.Remove(costData[0]);
         }
-    }
-
-    //受信したときの処理
-    void Receive()
-    {
-        //クエリを作成
-        NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
-
-        //自分のPlayerNoが記入されていないもの以外を取得
-        demonStatus.WhereEqualTo("PlayerNo", playerID);
-
-        //createDateを降順にしてリミットを1に制限することで最新のもののみ取得
-        //demonStatus.OrderByDescending("createDate");
-        //demonStatus.Limit = 1;
-
-        //検索
-        demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            //検索失敗時
-            if (e != null)
-            {
-                Debug.Log(e.ToString());
-                return;
-            }
-            else
-            {
-                foreach (NCMBObject ncmbObj in objList)
-                {
-                    SmaphoMsg smaphoMsg = new SmaphoMsg();
-
-                    //方向
-                    Enum.Direction_TYPE dir = Enum.Direction_TYPE.Middle;
-                    switch (ncmbObj["Direction"].ToString())
-                    {
-                        case "Top":
-                            dir = Enum.Direction_TYPE.Top;
-                            break;
-                        case "Middle":
-                            dir = Enum.Direction_TYPE.Middle;
-                            break;
-                        case "Bottom":
-                            dir = Enum.Direction_TYPE.Bottom;
-                            break;
-                        default:
-                            Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
-                            break;
-                    }
-                    smaphoMsg.dirType = dir;
-
-                    //タイプの振り分け
-                    Enum.Demon_TYPE type = Enum.Demon_TYPE.POPO;
-                    switch (ncmbObj["Type"].ToString())
-                    {
-                        case "POPO":
-                            type = Enum.Demon_TYPE.POPO;
-                            break;
-                        case "PUPU":
-                            type = Enum.Demon_TYPE.PUPU;
-                            break;
-                        case "PIPI":
-                            type = Enum.Demon_TYPE.PIPI;
-                            break;
-                        default:
-                            Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
-                            break;
-                    }
-                    smaphoMsg.type = type;
-
-                    smaphoMsg.G_HP = 0;
-                    smaphoMsg.G_ATK = 0;
-                    smaphoMsg.G_SPD = 0;
-                    smaphoMsg.G_ATKTime = 1;
-                    
-                    if (ncmbObj["HP"] != null)
-                        smaphoMsg.G_HP = System.Convert.ToInt32(ncmbObj["HP"].ToString());
-                    if (ncmbObj["ATK"] != null)
-                        smaphoMsg.G_ATK = System.Convert.ToInt32(ncmbObj["ATK"].ToString());
-                    if (ncmbObj["SPEED"] != null)
-                        smaphoMsg.G_SPD = System.Convert.ToInt32(ncmbObj["SPEED"].ToString());
-                    //smaphoMsg.G_ATKTime = System.Convert.ToInt32(ncmbObj["ATKTime"].ToString());
-
-                    smaphoMsgList.Add(smaphoMsg);
-
-                    //記録を取ったら消す
-                    ncmbObj.DeleteAsync();
-                }
-            }
-        });
     }
     
     //魂をサーバーに送信
@@ -320,6 +187,7 @@ public class Player : MonoBehaviour
     }
 
     //召喚指示（ボタンで呼び出す関数なので引数にint型で召喚する種類を指示）
+    //正しく召喚されたらtrueを返す
     public void DebugSummon(int demonType)
     {
         //生成した悪魔の数のカウント
@@ -329,12 +197,9 @@ public class Player : MonoBehaviour
                 childDemonsCount++;
 
         //召喚できない条件なら何もしないで返す
-        if (IsCool || childDemonsCount > maxSummonNum)
+        if (childDemonsCount > maxSummonNum)
             return;
-
-        //召喚と同時にクールタイムに入る
-        StartCoroutine(CoolTime());
-
+        
         //適当な値を入れて重なることを避ける
         Vector3 randVac;
         switch(rootNum)
@@ -359,25 +224,25 @@ public class Player : MonoBehaviour
         if (GetComponent<PlayerCost>().UseableCost(demonCost))
         {
             //悪魔を出す
-            GameObject instaceObject = (GameObject)Instantiate(demons[demonType],
+            GameObject instace = (GameObject)Instantiate(demons[demonType],
                                                             spawnPoint.position,
                                                             Quaternion.identity);
             //レベル上げ
-            instaceObject.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
-            instaceObject.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
+            instace.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
+            instace.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
             Vector3 summonVec = (rootPointes[(int)rootNum].ToArray()[0].position - rootes[(int)rootNum].transform.position).normalized;   //初めの向き
             Quaternion rotation = Quaternion.LookRotation(summonVec);
-            instaceObject.transform.rotation = rotation;    //出た瞬間の向き
-            instaceObject.tag = transform.gameObject.tag;    //自分のタグを設定
-            instaceObject.layer = transform.gameObject.layer;    //レイヤーを設定
-            instaceObject.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
-            instaceObject.GetComponent<Unit>().goalObject = target; //最終目標
-            instaceObject.GetComponent<Unit>().LoiteringPointObj = rootPointes[(int)rootNum].ToArray();  //巡回ルート地点配列
-            instaceObject.GetComponent<Unit>().rootNum = rootNum;   //ルート番号
-            instaceObject.GetComponent<Unit>().SpawnTargetPosition = rootes[(int)rootNum].transform.position + randVac;
+            instace.transform.rotation = rotation;    //出た瞬間の向き
+            instace.tag = transform.gameObject.tag;    //自分のタグを設定
+            instace.layer = transform.gameObject.layer;    //レイヤーを設定
+            instace.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
+            instace.GetComponent<Unit>().goalObject = target; //最終目標
+            instace.GetComponent<Unit>().LoiteringPointObj = rootPointes[(int)rootNum].ToArray();  //巡回ルート地点配列
+            instace.GetComponent<Unit>().rootNum = rootNum;   //ルート番号
+            instace.GetComponent<Unit>().SpawnTargetPosition = rootes[(int)rootNum].transform.position + randVac;
 
             //出るとき重なる瞬間は回らないように
-            instaceObject.GetComponent<Rigidbody>().freezeRotation = true;
+            instace.GetComponent<Rigidbody>().freezeRotation = true;
 
             //強さに応じてスケールを変える処理
             //float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
@@ -396,16 +261,24 @@ public class Player : MonoBehaviour
         else
             return spiritsDataCopy[0];
     }
-
-    //クールタイムの処理
-    IEnumerator CoolTime()
+    
+    //悪魔のレベルを設定
+    public void SetDemonLevel(int demonType, int level)
     {
-        IsCool = true;
+        ////レベル上限
+        //if (level >= 20)
+        //    return;
 
-        yield return new WaitForSeconds(coolTime);
+        demonsLevel[demonType] = level;
+    }
 
-        IsCool = false;
-
-        yield return null;
+    //必殺技の発動
+    public void Deathblow()
+    {
+        GameObject instace = (GameObject)Instantiate(deathbolwObj,
+                                                    spawnPoint.position,
+                                                    Quaternion.identity);
+        instace.GetComponent<Missile>().Target = target;
+        instace.GetComponent<Missile>().enabled = true;
     }
 }

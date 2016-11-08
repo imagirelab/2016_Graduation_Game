@@ -36,6 +36,10 @@ public class DebugControl : MonoBehaviour
         {
             Player player = player1;
 
+            //必殺技
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                player.Deathblow();
+
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.Q))
                 player.DebugPowerUP((int)Enum.Demon_TYPE.PUPU);
@@ -76,6 +80,10 @@ public class DebugControl : MonoBehaviour
         if (player2 != null)
         {
             Player player = player2;
+
+            //必殺技
+            if (Input.GetKeyDown(KeyCode.RightShift))
+                player.Deathblow();
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.LeftBracket))

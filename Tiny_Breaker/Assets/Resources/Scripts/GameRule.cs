@@ -24,7 +24,11 @@ public class Enum : MonoBehaviour
         Middle,
         Top
     }
-
+    
+    public enum Deathblow_TYPE
+    {
+        Fire
+    }
 
     //ゲーム結果
     public enum ResultType

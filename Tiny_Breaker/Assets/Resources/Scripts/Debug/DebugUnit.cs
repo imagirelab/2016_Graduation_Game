@@ -48,6 +48,9 @@ public class DebugUnit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //プレイヤーのステータス先を取得
+        demonsStatus = player.DemonsStatus;
+
         this.GetComponent<Text>().text = "Demon:" + player.Demons[demonsPage].name + "\n" +
                                          "LEVEL:" + level[demonsPage] + "\n" +
                                          "HP:" + demonsStatus[demonsPage].CurrentHP + "\n" +

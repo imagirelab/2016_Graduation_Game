@@ -19,12 +19,7 @@ public class UnitAttack : MonoBehaviour
     Unit.Type unadType = Unit.Type.White;
     [SerializeField]
     float unadmag = 0.5f;
-
-    ////攻撃範囲
-    //[SerializeField]
-    //float atkRange = 2.0f;
-    //public float AtkRange { set { atkRange = value; } }
-
+    
     //攻撃間隔
     [SerializeField]
     float atkTime = 1.0f;
@@ -82,77 +77,6 @@ public class UnitAttack : MonoBehaviour
             
             yield return null;
             yield return new WaitForSeconds(atkTime - (atkTime * atkDamageDelayRate));
-
-            //if (!isAttack)
-            //{
-            //    if (unit.targetObject != null)
-            //    {
-            //        if (Vector3.Distance(this.transform.position, unit.targetObject.transform.position) < 3.0f) //3.0f = 重なっているとする距離
-            //        {
-            //            isAttack = true;
-
-            //            //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
-            //            if (target == null)
-            //                target = unit.targetObject;
-            //        }
-            //        else
-            //        {
-            //            RaycastHit hit;
-            //            Vector3 vec = unit.targetObject.transform.position - transform.position;
-            //            Ray ray = new Ray(new Vector3(
-            //                transform.position.x,
-            //                transform.position.y + 1.5f,    //視線の高さ分上げている形
-            //                transform.position.z),
-            //                vec);
-            //            int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号以外にヒットするようにしたビット演算
-            //            if (Physics.SphereCast(ray, 1.5f, out hit, atkRange + transform.localScale.x, layerMask))
-            //            {
-            //                if (hit.collider.gameObject == unit.targetObject)
-            //                {
-            //                    isAttack = true;
-
-            //                    //範囲内に攻撃対象が入ってきたときの最初の攻撃対象の設定
-            //                    if (target == null)
-            //                        target = unit.targetObject;
-            //                }
-            //                else
-            //                    isAttack = false;
-            //            }
-            //        }
-            //    }
-            //    yield return null;
-            //    yield return new WaitForSeconds(setDelayTime);
-            //}
-            //else
-            //{
-            //    yield return new WaitForSeconds(atkTime * atkDamageDelayRate);
-
-            //    //対象物が同じタグだったら仲間だから攻撃しない
-            //    if (target != null)
-            //        if (target.tag == transform.gameObject.tag)
-            //            //攻撃実行対象を戻す
-            //            target = null;
-
-            //    //攻撃対象がいることを確認してから攻撃
-            //    if (target != null)
-            //    {
-            //        transform.LookAt(target.transform.position);
-
-            //        if (target.GetComponent<Unit>())
-            //            AttackUnit();
-            //        else if (target.GetComponent<House>())
-            //            AttackHouse();
-            //        else if (target.GetComponent<DefenseBase>())
-            //            AttackDefenseBase();
-            //    }
-
-            //    //対象の体力がなくなったらフラグを一旦戻す
-            //    if (target == null)
-            //        isAttack = false;
-
-            //    yield return null;
-            //    yield return new WaitForSeconds(atkTime - (atkTime * atkDamageDelayRate));
-            //}
         }
     }
 
@@ -231,11 +155,6 @@ public class UnitAttack : MonoBehaviour
 
                     target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
                     target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
-
-                    ////一旦出ていた兵士は全員殺す
-                    //foreach (Transform child in target.transform)
-                    //    if (child.gameObject.GetComponent<Unit>())
-                    //        child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
                 }
 
                 //コストの計算

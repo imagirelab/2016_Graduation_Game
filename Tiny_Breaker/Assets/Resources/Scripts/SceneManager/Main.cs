@@ -31,6 +31,8 @@ public class Main : MonoBehaviour
     GameObject[] player = new GameObject[GameRule.playerNum];
     [SerializeField]
     Spawner[] spawer;
+    [SerializeField]
+    GameObject receiver;
 
     void Start()
     {
@@ -67,6 +69,8 @@ public class Main : MonoBehaviour
             spawer = new Spawner[1];
             spawer[0] = new Spawner();
         }
+        if (receiver == null)
+            receiver = new GameObject();
     }
 
     void Update()
@@ -93,6 +97,7 @@ public class Main : MonoBehaviour
                         e.SetActive(true);
                     foreach (var e in spawer)
                         e.enabled = true;
+                    receiver.SetActive(true);
                 }
                 else
                 {
