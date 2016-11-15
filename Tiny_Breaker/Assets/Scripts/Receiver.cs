@@ -5,6 +5,8 @@ using NCMB;
 
 public class Receiver : MonoBehaviour
 {
+    public static bool getState = true;
+
     [SerializeField]
     Player[] players = new Player[GameRule.playerNum];
 
@@ -145,6 +147,8 @@ public class Receiver : MonoBehaviour
 
                     //記録を取ったら消す
                     ncmbObj.DeleteAsync();
+
+                    getState = false;
                 }
             }
         });

@@ -125,7 +125,7 @@ public class Player : MonoBehaviour
         NCMBObject nbcObj = new NCMBObject("SpiritData");
 
         nbcObj["TYPE"] = _spiritData.ToString();
-        nbcObj["PlayerNo"] = playerID;
+        nbcObj["PlayerNo"] = playerID.ToString();
 
         nbcObj.SaveAsync();
     }
@@ -135,8 +135,8 @@ public class Player : MonoBehaviour
     {
         NCMBObject nbcObj = new NCMBObject("CostData");
 
-        nbcObj["Cost"] = _costData;
-        nbcObj["PlayerNo"] = playerID;
+        nbcObj["Cost"] = _costData.ToString();
+        nbcObj["PlayerNo"] = playerID.ToString();
 
         nbcObj.SaveAsync();
     }

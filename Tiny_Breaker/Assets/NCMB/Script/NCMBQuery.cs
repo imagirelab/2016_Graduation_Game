@@ -590,6 +590,8 @@ namespace NCMB
 					callback (resultList, error);
 				});
 
+                Receiver.getState = true;
+
 				return;
 			});
 		}
