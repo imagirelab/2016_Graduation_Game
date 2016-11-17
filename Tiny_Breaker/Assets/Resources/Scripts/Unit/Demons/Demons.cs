@@ -12,6 +12,9 @@ public class Demons : Unit
 
     SpawnMove spawn;
 
+    //複数攻撃のために敵の数を調べる必要があったため仮置き
+    int oldObjCount = 0;
+
     void Start()
     {
         Initialize();
@@ -116,15 +119,39 @@ public class Demons : Unit
                     ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
 
                     int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
-                    if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
+                    //ププがレベル１０以上になった時に行う範囲攻撃の準備
+                    if (this.DemonType == Enum.Demon_TYPE.PUPU && this.level >= 10)
                     {
-                        if (hit.collider.gameObject == targetObject)
+                        RaycastHit[] allhit = Physics.SphereCastAll(ray, 1.5f, ATKRange + colliderScalingDiameter, layerMask);
+                        //ヒットしてるオブジェクト数が変更された時のみ変更
+                        if (allhit.Length != oldObjCount)
                         {
-                            state = State.Attack;
-                            seach.enabled = false;
-                            attack.enabled = true;
+                            //格納されていたオブジェクトのリセット
+                            allTargetObject.Clear();
+                            Debug.Log("raycast : " + allhit.Length);
+                            for (int i = 0; i < allhit.Length; ++i)
+                            {
+                                allTargetObject.Add(allhit[i].collider.gameObject);
+                            }
+
+                            oldObjCount = allhit.Length;
                         }
+                        state = State.ALLAttack;
+                        seach.enabled = false;
+                        attack.enabled = true;
                     }
+                    else
+                    {
+                        if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
+                        {
+                            if (hit.collider.gameObject == targetObject)
+                            {
+                                state = State.Attack;
+                                seach.enabled = false;
+                                attack.enabled = true;
+                            }
+                        }
+                    }                    
                 }
             }
             else if (targetDistance - targetColliderRadius <= seach.findRange + colliderScalingDiameter &&

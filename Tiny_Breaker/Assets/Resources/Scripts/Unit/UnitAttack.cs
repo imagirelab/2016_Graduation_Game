@@ -3,6 +3,7 @@
 using UnityEngine;
 using System.Collections;
 using StaticClass;
+using System.Collections.Generic;
 
 public class UnitAttack : MonoBehaviour
 {
@@ -34,10 +35,15 @@ public class UnitAttack : MonoBehaviour
     [SerializeField, TooltipAttribute("構え時間")]
     float setDelayTime = 0.0f;
 
-    //攻撃実行対象
+    //攻撃実行対象(単体)
     [SerializeField]
     GameObject target = null;
     public GameObject Target { get { return target; } }
+
+    //攻撃実行対象(複数)
+    [SerializeField]
+    List<GameObject> allTarget;
+    public List<GameObject> AllTarget { get { return allTarget; } }
 
     Unit unit;
 
@@ -53,33 +59,72 @@ public class UnitAttack : MonoBehaviour
         {
             yield return new WaitForSeconds(atkTime * atkDamageDelayRate);
 
-            if (target == null)
-                target = unit.targetObject;
-
-            //対象物が同じタグだったら仲間だから攻撃しない
-            if (target != null)
-                if (target.tag == transform.gameObject.tag)
-                    //攻撃実行対象を戻す
-                    target = null;
-
-            //攻撃対象がいることを確認してから攻撃
-            if (target != null)
+            #region 単体攻撃
+            if (unit.state == Unit.State.Attack)
             {
-                transform.LookAt(target.transform.position);
+                if (target == null)
+                    target = unit.targetObject;
 
-                if (target.GetComponent<Unit>())
-                    AttackUnit();
-                else if (target.GetComponent<House>())
-                    AttackHouse();
-                else if (target.GetComponent<DefenseBase>())
-                    AttackDefenseBase();
+                //対象物が同じタグだったら仲間だから攻撃しない
+                if (target != null)
+                    if (target.tag == transform.gameObject.tag)
+                        //攻撃実行対象を戻す
+                        target = null;
+
+                //攻撃対象がいることを確認してから攻撃
+                if (target != null)
+                {
+                    transform.LookAt(target.transform.position);
+
+                    if (target.GetComponent<Unit>())
+                        AttackUnit();
+                    else if (target.GetComponent<House>())
+                        AttackHouse();
+                    else if (target.GetComponent<DefenseBase>())
+                        AttackDefenseBase();
+                }
             }
-            
+            #endregion
+            #region 複数攻撃
+            else if (unit.state == Unit.State.ALLAttack)
+            {
+                allTarget.Clear();
+                for(int i = 0; i < unit.allTargetObject.Count; i++)
+                {
+                    Debug.Log("unitCount :" + unit.allTargetObject.Count);
+                    if (allTarget.Count != unit.allTargetObject.Count)
+                    {
+                        allTarget.Add(unit.allTargetObject[i]);
+                    }
+                    Debug.Log("targetCount : " + allTarget.Count);
+                    //対象物が同じタグだったら仲間だから攻撃しない
+                    if (allTarget[i] != null)
+                        if (allTarget[i].tag == transform.gameObject.tag)
+                            //攻撃実行対象を戻す
+                            allTarget.RemoveAt(i);
+
+                    //攻撃対象がいることを確認してから攻撃
+                    if (allTarget[i] != null)
+                    {
+                        transform.LookAt(allTarget[i].transform.position);
+
+                        if (allTarget[i].GetComponent<Unit>())
+                            ALLAttackUnit(allTarget[i], i);
+                        else if (allTarget[i].GetComponent<House>())
+                            ALLAttackHouse(allTarget[i], i);
+                        else if (allTarget[i].GetComponent<DefenseBase>())
+                            ALLAttackDefenseBase(allTarget[i], i);
+                    }
+                }
+            }
+            #endregion
+
             yield return null;
             yield return new WaitForSeconds(atkTime - (atkTime * atkDamageDelayRate));
         }
     }
 
+    #region 単体攻撃
     //悪魔と兵士について
     void AttackUnit()
     {
@@ -177,6 +222,102 @@ public class UnitAttack : MonoBehaviour
         if (target.GetComponent<DefenseBase>())
             target.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
     }
+    #endregion
+
+    #region 複数攻撃
+    //悪魔と兵士について
+    void ALLAttackUnit(GameObject _target, int num)
+    {
+        //倍率
+        float mag = 1.0f;
+
+        //倍率計算
+        if (_target.GetComponent<Unit>().type == adType)
+            mag = admag;
+        if (_target.GetComponent<Unit>().type == unadType)
+            mag = unadmag;
+
+        _target.GetComponent<Unit>().status.CurrentHP -= Mathf.RoundToInt(unit.status.CurrentATK * mag);  //四捨五入
+        Debug.Log("call");
+
+        //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
+        if (_target.GetComponent<Unit>().status.CurrentHP <= 0)
+        {
+            if (_target.GetComponent<Soldier>() && unit.transform.root.gameObject.GetComponent<PlayerCost>())
+            {
+                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+                Player player = unit.transform.root.gameObject.GetComponent<Player>();
+
+                //parent.transform.root は　悪魔のRootつまりプレイヤー
+                player.AddCostList(playerCost.GetSoldierCost);
+            }
+        }
+    }
+
+    //建物への攻撃はこっち
+    void ALLAttackHouse(GameObject _target, int num)
+    {
+        GameObject rootObject = unit.transform.root.gameObject;
+
+        switch (rootObject.tag)
+        {
+            case "Player1":
+                _target.GetComponent<House>().HPpro += unit.status.CurrentATK;
+                break;
+            case "Player2":
+                _target.GetComponent<House>().HPpro -= unit.status.CurrentATK;
+                break;
+            default:
+                break;
+        }
+
+        //親が小屋クラスを持っている(プレイヤー)場合のコスト処理
+        if (_target.GetComponent<House>().HPpro <= -_target.GetComponent<House>().GetHP ||
+            _target.GetComponent<House>().HPpro >= _target.GetComponent<House>().GetHP)
+        {
+            //死んだフラグを立てる
+            _target.GetComponent<House>().IsDead = true;
+            //リストからはずす
+            BuildingDataBase.getInstance().RemoveList(_target);
+
+            if (rootObject.GetComponent<Player>() != null)
+            {
+                Player player = rootObject.GetComponent<Player>();
+
+                //スポナーがあるときPlayerIDを登録
+                if (_target.GetComponent<Spawner>() != null)
+                {
+                    //事前にタグを保存しておく
+                    _target.GetComponent<House>().OldTag = _target.tag;
+
+                    //倒した奴のタグにする
+                    _target.tag = player.transform.gameObject.tag;
+                    //子供も一緒に
+                    foreach (Transform child in _target.transform)
+                        child.gameObject.tag = player.transform.gameObject.tag;
+
+                    _target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
+                    _target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
+                }
+
+                //コストの計算
+                if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+                {
+                    PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+
+                    player.AddCostList(playerCost.GetHouseCost);
+                }
+            }
+        }
+    }
+
+    //城への攻撃はこっち
+    void ALLAttackDefenseBase(GameObject _target, int num)
+    {
+        if (_target.GetComponent<DefenseBase>())
+            _target.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
+    }
+    #endregion
 
     void OnEnable()
     {
