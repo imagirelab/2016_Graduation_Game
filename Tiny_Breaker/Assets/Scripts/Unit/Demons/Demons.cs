@@ -158,9 +158,15 @@ public class Demons : Unit
         //リストから外す
         DemonDataBase.getInstance().RemoveList(this.gameObject);
 
-        //死んだ直後に魂を回収してみる
+        //死んだ直後に成長値とコストを回収してみる
         if (transform.parent != null)
-            transform.parent.gameObject.GetComponent<Player>().AddSpiritList(DemonType);
+        {
+            PlayerCost playerCost = transform.root.gameObject.GetComponent<PlayerCost>();
+            Player player = transform.root.gameObject.GetComponent<Player>();
+            
+            player.AddCostList(playerCost.GetReturnCost);
+            player.AddSpiritList(DemonType);
+        }
 
         //死亡エフェクト
         Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);

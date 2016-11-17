@@ -165,7 +165,7 @@ public class LoadManager : MonoBehaviour
                 {
                     GameObject player = GameObject.Find("Player" + (i + 1));
                     if (player.GetComponent<PlayerCost>())
-                        player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.DemonCostRate, cost.SoldierCost, cost.HouseCost);
+                        player.GetComponent<PlayerCost>().SetDefault(cost.MaxCost, cost.StateCost, cost.CostParSecond, cost.DemonCost, cost.SoldierCost, cost.HouseCost, cost.ReturnCost);
                 }
         }
     }
