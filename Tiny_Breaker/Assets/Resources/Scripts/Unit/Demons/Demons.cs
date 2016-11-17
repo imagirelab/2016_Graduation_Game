@@ -91,6 +91,12 @@ public class Demons : Unit
             //ダメージを受けたかの確認
             DamageCheck(status.CurrentHP);
 
+            //Lv10以上のポポの場合ここで反射処理
+            if (this.DemonType == Enum.Demon_TYPE.POPO && this.level >= 10 && this.IsDamage == true)
+            {
+                Refrect();
+            }
+
             state = State.Search;
 
             //無駄な処理を省くための条件
@@ -218,5 +224,20 @@ public class Demons : Unit
     void OnDisable()
     {
         DemonDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
+    void Refrect()
+    {
+        float colliderScalingDiameter = sCollider.radius * transform.localScale.x;
+        RaycastHit hit;
+        Vector3 vec = targetObject.transform.position - transform.position;
+        Ray ray = new Ray(transform.position, vec);
+        ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
+
+        int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
+        if (Physics.SphereCast(ray, 1.5f, out hit, (ATKRange + colliderScalingDiameter) * 10, layerMask))
+        {
+            hit.collider.gameObject.GetComponent<Unit>().status.CurrentHP -= this.status.CurrentATK;
+        }
     }
 }
