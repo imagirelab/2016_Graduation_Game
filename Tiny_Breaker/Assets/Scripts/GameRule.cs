@@ -22,7 +22,8 @@ public class Enum : MonoBehaviour
     {
         Bottom,
         Middle,
-        Top
+        Top,
+        Num
     }
     
     public enum Deathblow_TYPE
