@@ -12,6 +12,9 @@ public class Demons : Unit
 
     SpawnMove spawn;
 
+    //複数攻撃のために敵の数を調べる必要があったため仮置き
+    int oldObjCount = 0;
+
     void Start()
     {
         Initialize();
@@ -91,6 +94,12 @@ public class Demons : Unit
             //ダメージを受けたかの確認
             DamageCheck(status.CurrentHP);
 
+            //Lv10以上のポポの場合ここで反射処理
+            if (this.DemonType == Enum.Demon_TYPE.POPO && this.level >= 10 && this.IsDamage == true)
+            {
+                Refrect();
+            }
+
             state = State.Search;
 
             //無駄な処理を省くための条件
@@ -109,16 +118,39 @@ public class Demons : Unit
                     Ray ray = new Ray(transform.position, vec);
                     ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
 
-                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
-                    if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
+                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
+                    //ププがレベル１０以上になった時に行う範囲攻撃の準備
+                    if (this.DemonType == Enum.Demon_TYPE.PUPU && this.level >= 10)
                     {
-                        if (hit.collider.gameObject == targetObject)
+                        RaycastHit[] allhit = Physics.SphereCastAll(ray, 1.5f, ATKRange + colliderScalingDiameter, layerMask);
+                        //ヒットしてるオブジェクト数が変更された時のみ変更
+                        if (allhit.Length != oldObjCount)
                         {
-                            state = State.Attack;
-                            seach.enabled = false;
-                            attack.enabled = true;
+                            //格納されていたオブジェクトのリセット
+                            allTargetObject.Clear();
+                            for (int i = 0; i < allhit.Length; ++i)
+                            {
+                                allTargetObject.Add(allhit[i].collider.gameObject);
+                            }
+
+                            oldObjCount = allhit.Length;
                         }
+                        state = State.ALLAttack;
+                        seach.enabled = false;
+                        attack.enabled = true;
                     }
+                    else
+                    {
+                        if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
+                        {
+                            if (hit.collider.gameObject == targetObject)
+                            {
+                                state = State.Attack;
+                                seach.enabled = false;
+                                attack.enabled = true;
+                            }
+                        }
+                    }                    
                 }
             }
             else if (targetDistance - targetColliderRadius <= seach.findRange + colliderScalingDiameter &&
@@ -219,10 +251,25 @@ public class Demons : Unit
 
         yield return null;
     }
-
+    
     //破壊されたときにリストから外す
     void OnDisable()
     {
         DemonDataBase.getInstance().RemoveList(this.gameObject);
+    }
+
+    void Refrect()
+    {
+        float colliderScalingDiameter = sCollider.radius * transform.localScale.x;
+        RaycastHit hit;
+        Vector3 vec = targetObject.transform.position - transform.position;
+        Ray ray = new Ray(transform.position, vec);
+        ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
+
+        int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
+        if (Physics.SphereCast(ray, 1.5f, out hit, (ATKRange + colliderScalingDiameter) * 10, layerMask))
+        {
+            hit.collider.gameObject.GetComponent<Unit>().status.CurrentHP -= this.status.CurrentATK;
+        }
     }
 }

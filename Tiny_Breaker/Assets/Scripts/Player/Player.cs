@@ -229,6 +229,7 @@ public class Player : MonoBehaviour
                                                             Quaternion.identity);
             //レベル上げ
             instace.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
+            instace.GetComponent<Unit>().level = demonsLevel[demonType];
             instace.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
             Vector3 summonVec = (rootPointes[(int)rootNum].ToArray()[0].position - rootes[(int)rootNum].transform.position).normalized;   //初めの向き
             Quaternion rotation = Quaternion.LookRotation(summonVec);

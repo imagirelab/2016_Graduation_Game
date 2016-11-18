@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using StaticClass;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
@@ -21,7 +22,8 @@ public class Unit : MonoBehaviour
         Find,
         Attack,
         Dead,
-        Wait
+        Wait,
+        ALLAttack
     }
     //[HideInInspector]
     public State state = State.Wait;
@@ -50,6 +52,9 @@ public class Unit : MonoBehaviour
     public GameObject targetObject;       //目標
     protected float targetDistance = 0.0f;
     protected float targetColliderRadius = 0.0f;
+
+    [HideInInspector]
+    public List<GameObject> allTargetObject;       //複数攻撃目標
 
     public GameObject deadEffect;       //死亡エフェクト
     
