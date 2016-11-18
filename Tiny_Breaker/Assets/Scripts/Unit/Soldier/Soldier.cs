@@ -30,8 +30,6 @@ public class Soldier : Unit
 
         //攻撃に関する設定
         attack.AtkTime = status.CurrentAtackTime;
-        //巡回速度
-        loiteringSPEED = 1.8f;
 
         ////設定がなされていなかった時の仮置き
         if (gameObject.transform.parent == null)

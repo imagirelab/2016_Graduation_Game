@@ -76,11 +76,11 @@ public class Spawner : MonoBehaviour
         }
 
         GameObject Ax = (GameObject)Resources.Load("Prefabs/Soldier/SoldierAx");
-        Ax.GetComponent<Unit>().status.SetStatus(0);
+        Ax.GetComponent<Unit>().status.SetStatus(houseLevel);
         GameObject Gun = (GameObject)Resources.Load("Prefabs/Soldier/SoldierGun");
-        Gun.GetComponent<Unit>().status.SetStatus(0);
+        Gun.GetComponent<Unit>().status.SetStatus(houseLevel);
         GameObject Shield = (GameObject)Resources.Load("Prefabs/Soldier/SoldierShield");
-        Shield.GetComponent<Unit>().status.SetStatus(0);
+        Shield.GetComponent<Unit>().status.SetStatus(houseLevel);
 
         soldiers = new GameObject[] { Ax, Gun, Shield };
         //soldiers = new GameObject[] { Shield, Shield, Shield };
