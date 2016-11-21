@@ -44,7 +44,7 @@ public class ShotEffect : MonoBehaviour
 
     void Update()
     {
-        if (parentUnit.state == Unit.State.Attack)
+        if (parentUnit.state == Enum.State.Attack)
         {
             if (setCount > 0)
                 setCount -= Time.deltaTime;

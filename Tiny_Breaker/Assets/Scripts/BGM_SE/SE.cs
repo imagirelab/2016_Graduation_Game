@@ -15,11 +15,11 @@ public class SE : MonoBehaviour
 	
 	void Update ()
     {
-        if(_unit.state == Unit.State.Find && !SoundManager.findSEFlag)
+        if(_unit.state == Enum.State.Find && !SoundManager.findSEFlag)
         {
             SoundManager.findSEFlag = true;
         }
-        else if(_unit.state == Unit.State.Attack && !SoundManager.atackSEFlag)
+        else if(_unit.state == Enum.State.Attack && !SoundManager.atackSEFlag)
         {
             SoundManager.atackSEFlag = true;
         }

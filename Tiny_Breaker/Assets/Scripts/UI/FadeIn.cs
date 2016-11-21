@@ -12,8 +12,8 @@ public class FadeIn : MonoBehaviour
     bool end = false;
     public bool End { get { return end; } }
 
-    void Start ()
-	{
+    void Start()
+    {
         alpha = 1.0f;
         count = 0.0f;
         GetComponent<Image>().color = new Color(GetComponent<Image>().color.r,
@@ -22,8 +22,8 @@ public class FadeIn : MonoBehaviour
                                                 alpha);
         end = false;
     }
-	
-	void Update ()
+    
+    void Update()
     {
         if (count < fadeTime)
         {

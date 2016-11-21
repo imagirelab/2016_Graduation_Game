@@ -46,7 +46,7 @@ public class shootEffect : MonoBehaviour
             Destroy(this.gameObject);
 
         //死んでいたら消える
-        if (GetComponentInParent<Unit>().state == Unit.State.Dead)
+        if (GetComponentInParent<Unit>().state == Enum.State.Dead)
             Destroy(this.gameObject);
     }
 

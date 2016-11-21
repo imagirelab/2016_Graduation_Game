@@ -20,9 +20,9 @@ public class ChangeAnimation : MonoBehaviour
         AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
         AnimatorControllerParameter[] parameters = animator.parameters;
 
-        Unit.State state;
+        Enum.State state;
 
-        state = Unit.State.Search;
+        state = Enum.State.Search;
 
         while (true)
         {
@@ -39,15 +39,15 @@ public class ChangeAnimation : MonoBehaviour
 
                     switch (unit.state)
                     {
-                        case Unit.State.Attack:
+                        case Enum.State.Attack:
                             if (param.name == "IsAttack")
                                 animator.SetBool("IsAttack", true);
                             break;
-                        case Unit.State.Find:
+                        case Enum.State.Find:
                             if (param.name == "IsFind")
                                 animator.SetBool("IsFind", true);
                             break;
-                        case Unit.State.Dead:
+                        case Enum.State.Dead:
                             if (param.name == "IsDead")
                                 animator.SetBool("IsDead", true);
                             break;
@@ -60,8 +60,8 @@ public class ChangeAnimation : MonoBehaviour
                     {
                         switch (unit.state)
                         {
-                            case Unit.State.Attack:
-                                if (state != Unit.State.Attack &&
+                            case Enum.State.Attack:
+                                if (state != Enum.State.Attack &&
                                    currentState.shortNameHash == Animator.StringToHash("attack"))
                                 {
                                     state = unit.state;

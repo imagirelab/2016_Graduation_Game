@@ -17,6 +17,25 @@ public class Enum : MonoBehaviour
         None
     }
 
+    //属性タイプ
+    public enum Color_Type
+    {
+        Blue,
+        Red,
+        Green,
+        White
+    }
+
+    //状態
+    public enum State
+    {
+        Search,
+        Find,
+        Attack,
+        Dead,
+        Wait,
+    }
+
     //ルートの方向
     public enum Direction_TYPE
     {
@@ -26,6 +45,7 @@ public class Enum : MonoBehaviour
         Num
     }
     
+    //必殺技の種類
     public enum Deathblow_TYPE
     {
         Fire

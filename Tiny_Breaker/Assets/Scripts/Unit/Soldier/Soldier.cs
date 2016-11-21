@@ -66,14 +66,14 @@ public class Soldier : Unit
             //ダメージを受けたかの確認
             DamageCheck(status.CurrentHP);
 
-            state = State.Search;
+            state = Enum.State.Search;
 
             //無駄な処理を省くための条件
             if (targetDistance - targetColliderRadius < ATKRange + colliderScalingDiameter)
             {
                 if (targetDistance < colliderScalingDiameter) //重なっている時
                 {
-                    state = State.Attack;
+                    state = Enum.State.Attack;
                     seach.enabled = false;
                     attack.enabled = true;
                 }
@@ -89,7 +89,7 @@ public class Soldier : Unit
                     {
                         if (hit.collider.gameObject == targetObject)
                         {
-                            state = State.Attack;
+                            state = Enum.State.Attack;
                             seach.enabled = false;
                             attack.enabled = true;
                         }
@@ -113,14 +113,14 @@ public class Soldier : Unit
                 if (seach.IsLose)
                     seach.enabled = false;
                 if (seach.IsFind)
-                    state = State.Find;
+                    state = Enum.State.Find;
             }
 
             yield return null;
         }
 
         //死亡処理
-        state = State.Dead;
+        state = Enum.State.Dead;
         yield return StartCoroutine(Dead());
 
         Destroy(gameObject);

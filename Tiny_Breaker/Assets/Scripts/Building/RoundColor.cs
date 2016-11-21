@@ -9,7 +9,7 @@ public class RoundColor : MonoBehaviour
     [SerializeField]
     Material[] mat = new Material[GameRule.roundCount + 1];
     
-    void Update()
+    void Start()
     {
         int p1win = 0;
         int p2win = 0;

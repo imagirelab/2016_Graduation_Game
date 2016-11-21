@@ -26,7 +26,7 @@ public class UnitMove : MonoBehaviour
             {
                 switch (unit.state)
                 {
-                    case Unit.State.Search:
+                    case Enum.State.Search:
                         //構えの処理
                         if (!setFlag)
                         {
@@ -51,7 +51,7 @@ public class UnitMove : MonoBehaviour
                                 GetComponent<Rigidbody>().velocity = rootVec.normalized * unit.loiteringSPEED;
                         }
                         break;
-                    case Unit.State.Find:
+                    case Enum.State.Find:
                         setFlag = false;
 
                         unit.UpdataRootPoint(15.0f);

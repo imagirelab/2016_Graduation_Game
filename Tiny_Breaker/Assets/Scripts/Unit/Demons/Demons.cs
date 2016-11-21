@@ -7,16 +7,30 @@ public class Demons : Unit
     [SerializeField, TooltipAttribute("種類")]
     Enum.Demon_TYPE DemonType = Enum.Demon_TYPE.POPO;
 
+    [SerializeField]
+    int powerupLevel = 10;
+
     [SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
     GameObject statusUI;
 
     SpawnMove spawn;
-
-    //複数攻撃のために敵の数を調べる必要があったため仮置き
-    int oldObjCount = 0;
-
+    
     void Start()
     {
+        //パワーアップ条件
+        if (level >= powerupLevel)
+            switch (DemonType)
+            {
+                case Enum.Demon_TYPE.POPO:
+                    refrecAttack = true;        //反射攻撃
+                    break;
+                case Enum.Demon_TYPE.PUPU:
+                    roundAttack = true;         //範囲攻撃
+                    break;
+                case Enum.Demon_TYPE.PIPI:
+                    break;
+            }
+
         Initialize();
     }
 
@@ -68,7 +82,7 @@ public class Demons : Unit
         StartCoroutine(Invincible());
 
         //出撃完了まで待つ
-        while(!spawn.End)
+        while (!spawn.End)
             yield return null;
 
         //出撃スクリプト停止
@@ -80,34 +94,30 @@ public class Demons : Unit
 
         //移動開始
         move.enabled = true;
-        
-        float colliderScalingDiameter = sCollider.radius * transform.localScale.x;
 
+        //索敵開始
         seach.enabled = false;
+
+        float colliderScalingDiameter = sCollider.radius * transform.localScale.x;
 
         //生きている時の処理
         while (status.CurrentHP > 0)
         {
-            //一番近くの敵を狙う
-            //SetNearTargetObject();
-
             //ダメージを受けたかの確認
             DamageCheck(status.CurrentHP);
 
-            //Lv10以上のポポの場合ここで反射処理
-            if (this.DemonType == Enum.Demon_TYPE.POPO && this.level >= 10 && this.IsDamage == true)
-            {
-                Refrect();
-            }
+            state = Enum.State.Search;
 
-            state = State.Search;
+            //もしターゲットをロストしていた場合だけ急きょ次に狙うものを索敵する
+            if (targetObject == null)
+                SetNearTargetObject();
 
             //無駄な処理を省くための条件
             if (targetDistance - targetColliderRadius < ATKRange + colliderScalingDiameter)
             {
                 if (targetDistance < colliderScalingDiameter) //重なっている時
                 {
-                    state = State.Attack;
+                    state = Enum.State.Attack;
                     seach.enabled = false;
                     attack.enabled = true;
                 }
@@ -117,40 +127,16 @@ public class Demons : Unit
                     Vector3 vec = targetObject.transform.position - transform.position;
                     Ray ray = new Ray(transform.position, vec);
                     ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
-
-                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
-                    //ププがレベル１０以上になった時に行う範囲攻撃の準備
-                    if (this.DemonType == Enum.Demon_TYPE.PUPU && this.level >= 10)
+                    int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //レイキャストが省くレイヤーのビット演算
+                    if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
                     {
-                        RaycastHit[] allhit = Physics.SphereCastAll(ray, 1.5f, ATKRange + colliderScalingDiameter, layerMask);
-                        //ヒットしてるオブジェクト数が変更された時のみ変更
-                        if (allhit.Length != oldObjCount)
+                        if (hit.collider.gameObject == targetObject)
                         {
-                            //格納されていたオブジェクトのリセット
-                            allTargetObject.Clear();
-                            for (int i = 0; i < allhit.Length; ++i)
-                            {
-                                allTargetObject.Add(allhit[i].collider.gameObject);
-                            }
-
-                            oldObjCount = allhit.Length;
+                            state = Enum.State.Attack;
+                            seach.enabled = false;
+                            attack.enabled = true;
                         }
-                        state = State.ALLAttack;
-                        seach.enabled = false;
-                        attack.enabled = true;
                     }
-                    else
-                    {
-                        if (Physics.SphereCast(ray, 1.5f, out hit, ATKRange + colliderScalingDiameter, layerMask))
-                        {
-                            if (hit.collider.gameObject == targetObject)
-                            {
-                                state = State.Attack;
-                                seach.enabled = false;
-                                attack.enabled = true;
-                            }
-                        }
-                    }                    
                 }
             }
             else if (targetDistance - targetColliderRadius <= seach.findRange + colliderScalingDiameter &&
@@ -170,19 +156,19 @@ public class Demons : Unit
                 if (seach.IsLose)
                     seach.enabled = false;
                 if (seach.IsFind)
-                    state = State.Find;
+                    state = Enum.State.Find;
             }
 
             yield return null;
         }
 
         //死亡処理
-        state = State.Dead;
+        state = Enum.State.Dead;
         yield return StartCoroutine(Dead());
 
         Destroy(gameObject);
     }
-    
+
     IEnumerator Dead()
     {
         IsDead = true;
@@ -195,7 +181,7 @@ public class Demons : Unit
         {
             PlayerCost playerCost = transform.root.gameObject.GetComponent<PlayerCost>();
             Player player = transform.root.gameObject.GetComponent<Player>();
-            
+
             player.AddCostList(playerCost.GetReturnCost);
             player.AddSpiritList(DemonType);
         }
@@ -237,7 +223,7 @@ public class Demons : Unit
             yield return null;
         }
     }
-    
+
     //無敵の処理（無敵になるタイミングで呼び出す）
     IEnumerator Invincible()
     {
@@ -251,25 +237,10 @@ public class Demons : Unit
 
         yield return null;
     }
-    
+
     //破壊されたときにリストから外す
     void OnDisable()
     {
         DemonDataBase.getInstance().RemoveList(this.gameObject);
-    }
-
-    void Refrect()
-    {
-        float colliderScalingDiameter = sCollider.radius * transform.localScale.x;
-        RaycastHit hit;
-        Vector3 vec = targetObject.transform.position - transform.position;
-        Ray ray = new Ray(transform.position, vec);
-        ray.origin += new Vector3(0.0f, 1.5f, 0.0f);    //視線の高さ分上げている形
-
-        int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //自身のレイヤー番号とGround以外にヒットするようにしたビット演算
-        if (Physics.SphereCast(ray, 1.5f, out hit, (ATKRange + colliderScalingDiameter) * 10, layerMask))
-        {
-            hit.collider.gameObject.GetComponent<Unit>().status.CurrentHP -= this.status.CurrentATK;
-        }
     }
 }

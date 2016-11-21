@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using StaticClass;
 
-public class PlayerCost : MonoBehaviour {
+public class PlayerCost : MonoBehaviour
+{
 
     [SerializeField, TooltipAttribute("最大コスト")]
     int MaxCost = 0;
@@ -16,7 +17,7 @@ public class PlayerCost : MonoBehaviour {
     [SerializeField, TooltipAttribute("悪魔召喚の初期コスト")]
     int DemonCost = 0;
     public int GetDemonCost { get { return DemonCost; } }
-    
+
     [SerializeField, TooltipAttribute("兵士の撃破獲得コスト")]
     int SoldierCost = 0;
     public int GetSoldierCost { get { return SoldierCost; } }
@@ -34,13 +35,15 @@ public class PlayerCost : MonoBehaviour {
     public int CurrentCost { get { return currentCost; } }
 
     float time = 0;     //時間
-    
-    void Start () {
+
+    void Start()
+    {
         currentCost = RoundDataBase.getInstance().PassesCost[GetComponent<Player>().playerID - 1];
         AddCost(StateCost);
     }
-	
-	void Update () {
+
+    void Update()
+    {
         //毎秒増えるコスト
         if (time >= 1.0f)
         {
@@ -72,7 +75,7 @@ public class PlayerCost : MonoBehaviour {
         if (currentCost - cost >= 0)
         {
             currentCost -= cost;
-            
+
             return true;
         }
         else

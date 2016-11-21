@@ -5,28 +5,14 @@ using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
+    #region フィールド
+
     //タイプ
-    public enum Type
-    {
-        Blue,
-        Red,
-        Green,
-        White
-    }
-    public Type type = Type.White;
+    public Enum.Color_Type type = Enum.Color_Type.White;
 
     //状態
-    public enum State
-    {
-        Search,
-        Find,
-        Attack,
-        Dead,
-        Wait,
-        ALLAttack
-    }
-    //[HideInInspector]
-    public State state = State.Wait;
+    [HideInInspector]
+    public Enum.State state = Enum.State.Wait;
 
     //ステータス
     [SerializeField, TooltipAttribute("ステータス")]
@@ -94,6 +80,13 @@ public class Unit : MonoBehaviour
     protected UnitMove move;
     protected SphereCollider sCollider;
 
+    //特殊攻撃フラグ
+    protected bool refrecAttack = false;    //範囲攻撃フラグ
+    protected bool roundAttack = false;     //範囲攻撃フラグ
+    public bool RoundAttack { get { return roundAttack; } }
+
+    #endregion
+
     public void Move(Vector3 target, float speed)
     {
         //NavMeshAgentで動かす
@@ -107,8 +100,8 @@ public class Unit : MonoBehaviour
             agent.destination = target;
         }
     }
-    
-    public void SetNearTargetObject()
+
+    protected void SetNearTargetObject()
     {
         //プレイヤーのTarget
         targetObject = goalObject;
@@ -140,6 +133,17 @@ public class Unit : MonoBehaviour
         targetDistance = Vector3.Distance(this.transform.position, targetObject.transform.position);
         if (targetObject.GetComponent<SphereCollider>())
             targetColliderRadius = targetObject.GetComponent<SphereCollider>().radius * targetObject.transform.localScale.x;
+    }
+
+    protected IEnumerator NearTarget()
+    {
+        while (true)
+        {
+            //一番近くの敵を狙う
+            SetNearTargetObject();
+
+            yield return new WaitForSeconds(0.4f);
+        }
     }
 
     //ダメージを受けたか確認する
@@ -174,15 +178,20 @@ public class Unit : MonoBehaviour
         }
     }
 
-    protected IEnumerator NearTarget()
+    //ダメージを受ける（ここで終わり）
+    public void AnyDamage(int damage)
     {
-        while (true)
-        {
-            //一番近くの敵を狙う
-            SetNearTargetObject();
-
-            yield return new WaitForSeconds(0.4f);
-        }
+        status.CurrentHP -= damage;
     }
 
+    //ダメージを受ける（反射することも可能）
+    public void AnyDamage(int damage, Unit attaker)
+    {
+        //通常ダメージ処理
+        status.CurrentHP -= damage;
+
+        //反射ダメージオンの状態の処理
+        if (refrecAttack)
+            attaker.AnyDamage(100);
+    }
 }

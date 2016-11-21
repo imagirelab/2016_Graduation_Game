@@ -30,8 +30,7 @@ public class LoadManager : MonoBehaviour
 
     [SerializeField]
     GameObject[] huts;
-
-    //void Start()
+    
     public IEnumerator Start()
     {
         loadEnd = false;
