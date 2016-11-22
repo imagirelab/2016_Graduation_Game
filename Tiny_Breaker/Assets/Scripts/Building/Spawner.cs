@@ -196,4 +196,13 @@ public class Spawner : MonoBehaviour
 
         timer = 0.0f;
     }
+    
+    //終了処理
+    void OnDisable()
+    {
+        //一旦出ていた兵士は全員殺す
+        foreach (Transform child in transform)
+            if (child.gameObject.GetComponent<Unit>())
+                child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
+    }
 }

@@ -84,7 +84,8 @@ public class UnitMove : MonoBehaviour
     
     void OnDisable()
     {
-        StopCoroutine(cor);
+        if(cor != null)
+            StopCoroutine(cor);
     }
     
     void OnCollisionEnter(Collision collision)

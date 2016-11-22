@@ -57,7 +57,7 @@ public class Enum : MonoBehaviour
         Player1Win,
         Player2Win,
         Draw,
-        TimeUp,
+        Num,
         None
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using NCMB;
 
@@ -63,7 +64,7 @@ public class Player : MonoBehaviour
     {
         //悪魔のレベルだけ初期化
         for(int i = 0; i < demonsLevel.Length; i++)
-            demonsLevel[i] = 0;
+            demonsLevel[i] = 10;
         //ステータスの作成
         for (int i = 0; i < demonsStatus.Length; i++)
         {
@@ -281,5 +282,16 @@ public class Player : MonoBehaviour
                                                     Quaternion.identity);
         instace.GetComponent<Missile>().Target = target;
         instace.GetComponent<Missile>().enabled = true;
+    }
+    
+    //終了時の処理
+    public IEnumerator ChildDead()
+    {
+        //出してる悪魔を全て殺す
+        foreach (Transform child in transform)
+            if (child.gameObject.GetComponent<Unit>())
+                child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
+
+        yield return null;
     }
 }

@@ -7,7 +7,7 @@ public class RoundColor : MonoBehaviour
     MeshRenderer[] colorChangeMesh = new MeshRenderer[GameRule.roundCount];
 
     [SerializeField]
-    Material[] mat = new Material[GameRule.roundCount + 1];
+    Material[] mat = new Material[GameRule.roundCount];
     
     void Start()
     {
@@ -27,11 +27,8 @@ public class RoundColor : MonoBehaviour
                         colorChangeMesh[colorChangeMesh.Length - 1 - p2win].material = mat[1];
                         p2win++;
                         break;
-                    //case GameRule.ResultType.Draw:
-                    //    colorChangeMesh[i].material = mat[2];
-                    //    break;
                     default:
-                        colorChangeMesh[i].material = mat[3];
+                        colorChangeMesh[i].material = mat[2];
                         break;
                 }
             }

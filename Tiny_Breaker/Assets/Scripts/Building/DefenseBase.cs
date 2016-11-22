@@ -11,10 +11,6 @@ public class DefenseBase : MonoBehaviour
     public int GetHP { get { return HP; } }
     public int HPpro { get { return currentHP; } set { currentHP = value; } }
     
-    //表示するテキスト
-    [SerializeField]
-    Text Text = null;
-
     [HideInInspector]
     public bool IsDamage = false;
 
@@ -31,8 +27,6 @@ public class DefenseBase : MonoBehaviour
 
         if (currentHP <= 0)
         {
-            //文字表示
-            Text.enabled = true;
             currentHP = 0;
         }
     }

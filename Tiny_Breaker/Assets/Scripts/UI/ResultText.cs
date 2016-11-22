@@ -22,12 +22,7 @@ public class ResultText : MonoBehaviour
                 GetComponent<Text>().text = "Draw";
                 GetComponent<Text>().color = Color.green;
                 break;
-
-            case Enum.ResultType.TimeUp:
-                GetComponent<Text>().text = "Time Up";
-                GetComponent<Text>().color = Color.yellow;
-                break;
-
+                
             default:
                 GetComponent<Text>().text = "None";
                 GetComponent<Text>().color = Color.white;
