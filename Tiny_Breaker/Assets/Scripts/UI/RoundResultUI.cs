@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using StaticClass;
 
 public class RoundResultUI : MonoBehaviour
@@ -7,21 +6,10 @@ public class RoundResultUI : MonoBehaviour
     [SerializeField]
     GameObject[] roundResults = new GameObject[(int)Enum.ResultType.Num];
     GameObject roundResult;
-
-    [SerializeField]
-    float expansionTime = 1.0f;
-    [SerializeField]
-    float reductionTime = 1.0f;
-    float expansionCount = 0.0f;
-
-    bool end = false;
-    public bool End { get { return end; } }
-
+    public GameObject RoundResult { get { return roundResult; } }
+    
     void OnEnable()
 	{
-        end = false;
-        expansionCount = 0.0f;
-
         foreach (GameObject e in roundResults)
             e.SetActive(false);
 
@@ -43,62 +31,5 @@ public class RoundResultUI : MonoBehaviour
             default:
                 break;
         }
-    }
-
-    public IEnumerator ScaleUp()
-    {
-        bool end = false;
-        expansionCount = 0.0f;
-
-        roundResult.GetComponent<RectTransform>().localScale = Vector3.zero;
-
-        while (!end)
-        {
-            if (expansionCount < expansionTime)
-            {
-                expansionCount += Time.deltaTime;
-            }
-            else
-            {
-                expansionCount = expansionTime;
-                end = true;
-            }
-
-            float rate = expansionCount / expansionTime;
-
-            roundResult.GetComponent<RectTransform>().localScale = new Vector3(rate, rate, rate);
-
-            yield return null;
-        }
-    }
-
-    public IEnumerator ScaleDown()
-    {
-        bool end = false;
-        expansionCount = 0.0f;
-
-        roundResult.GetComponent<RectTransform>().localScale = Vector3.one;
-
-        while (!end)
-        {
-            if (expansionCount < reductionTime)
-            {
-                expansionCount += Time.deltaTime;
-            }
-            else
-            {
-                expansionCount = reductionTime;
-                end = true;
-            }
-
-            float rate = expansionCount / reductionTime;
-            rate = 1.0f - rate;
-
-            roundResult.GetComponent<RectTransform>().localScale = new Vector3(rate, rate, rate);
-
-            yield return null;
-        }
-
-        Destroy(this.transform.gameObject);
     }
 }

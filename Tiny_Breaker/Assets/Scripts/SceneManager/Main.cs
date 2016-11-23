@@ -20,7 +20,7 @@ public class Main : MonoBehaviour
 
     //スタート準備物
     [SerializeField, HeaderAttribute("StartPreparation")]
-    Image StartUI;
+    GameObject CueUI;
 
     [SerializeField]
     GameObject mainCamera;
@@ -29,10 +29,6 @@ public class Main : MonoBehaviour
     LoadManager load;
     [SerializeField]
     GameObject fade;
-
-    [SerializeField]
-    float startEndTime = 1.0f;
-
     [SerializeField]
     TimeLimit time;
     [SerializeField]
@@ -60,9 +56,9 @@ public class Main : MonoBehaviour
         P1Base = Pot1.GetComponent<DefenseBase>();
         P2Base = Pot2.GetComponent<DefenseBase>();
 
-        if (StartUI == null)
-            StartUI = null;
-        StartUI.enabled = false;
+        if (CueUI == null)
+            CueUI = new GameObject();
+        CueUI.SetActive(false);
         if (mainCamera == null)
             mainCamera = new GameObject();
 
@@ -93,7 +89,11 @@ public class Main : MonoBehaviour
             roundResult = new GameObject();
         else
             roundResult.SetActive(false);
-        roundBall.SetActive(false);
+        //ちゃんとセットされていたら非アクティブにする
+        if (roundBall == null)
+            roundBall = new GameObject();
+        else
+            roundBall.SetActive(false);
 
         //はじめのラウンドだけ
         if (GameRule.getInstance().round.Count == 0)
@@ -130,11 +130,11 @@ public class Main : MonoBehaviour
                 yield return StartCoroutine(mainCamera.GetComponent<CameraStartMove>().StartMove());
 
             //スタートを表示して、
-            StartUI.enabled = true;
+            CueUI.SetActive(true);
+            CueUI.GetComponent<Image>().sprite = CueUI.GetComponent<CueImage>().start;
+            yield return StartCoroutine(CueUI.GetComponent<ScaleMove>().ScaleUp(CueUI.GetComponent<RectTransform>()));
+            CueUI.SetActive(false);
 
-            yield return new WaitForSeconds(startEndTime);
-
-            StartUI.enabled = false;
         }
 
         //ゲームに使うものをオンにする
@@ -145,9 +145,25 @@ public class Main : MonoBehaviour
         #region ゲーム中の処理
 
         //終了条件
-        while (!(P1Base.HPpro <= 0 || P2Base.HPpro <= 0 || time.End))
-            yield return null;
+        bool finish = false;
+        bool timeup = false;
+        while (true)
+        {
+            if (P1Base.HPpro <= 0 || P2Base.HPpro <= 0)
+            {
+                finish = true;
+                break;
+            }
+            if (time.End)
+            {
+                timeup = true;
+                break;
+            }
 
+            yield return null;
+        }
+
+        yield return null;
         #endregion
 
         #region ゲーム終了後の処理
@@ -192,12 +208,30 @@ public class Main : MonoBehaviour
         SetGameMainActive(false);
 
         //終了演出
+
+        //終了文字
+        if(finish)
+        {
+            CueUI.SetActive(true);
+            CueUI.GetComponent<Image>().sprite = CueUI.GetComponent<CueImage>().finish;
+            yield return StartCoroutine(CueUI.GetComponent<ScaleMove>().ScaleUp(CueUI.GetComponent<RectTransform>()));
+            CueUI.SetActive(false);
+        }
+        //タイムアップ文字
+        if (timeup)
+        {
+            CueUI.SetActive(true);
+            CueUI.GetComponent<Image>().sprite = CueUI.GetComponent<CueImage>().timeup;
+            yield return StartCoroutine(CueUI.GetComponent<ScaleMove>().ScaleUp(CueUI.GetComponent<RectTransform>()));
+            CueUI.SetActive(false);
+        }
+
         roundResult.SetActive(true);
         //ラウンド結果表示が終わったら、
-        yield return StartCoroutine(roundResult.GetComponent<RoundResultUI>().ScaleUp());
-        //しばらく表示
-        yield return new WaitForSeconds(1.0f);
-        StartCoroutine(roundResult.GetComponent<RoundResultUI>().ScaleDown());
+        RoundResultUI rou = roundResult.GetComponent<RoundResultUI>();
+        ScaleMove sca = roundResult.GetComponent<ScaleMove>();
+        yield return StartCoroutine(sca.ScaleUp(rou.RoundResult.GetComponent<RectTransform>()));
+        StartCoroutine(sca.ScaleDown(rou.RoundResult.GetComponent<RectTransform>()));
         yield return null;
 
         roundBall.SetActive(true);

@@ -267,10 +267,6 @@ public class Player : MonoBehaviour
     //悪魔のレベルを設定
     public void SetDemonLevel(int demonType, int level)
     {
-        ////レベル上限
-        //if (level >= 20)
-        //    return;
-
         demonsLevel[demonType] = level;
     }
 

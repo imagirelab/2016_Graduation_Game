@@ -81,9 +81,14 @@ public class Unit : MonoBehaviour
     protected SphereCollider sCollider;
 
     //特殊攻撃フラグ
-    protected bool refrecAttack = false;    //範囲攻撃フラグ
-    protected bool roundAttack = false;     //範囲攻撃フラグ
+    protected bool refrecAttack = false;        //反射攻撃フラグ
+    protected bool roundAttack = false;         //範囲攻撃フラグ
     public bool RoundAttack { get { return roundAttack; } }
+    protected bool penetrateAttack = false;     //貫通攻撃フラグ
+    public bool PenetrateAttack { get { return penetrateAttack; } }
+
+    [SerializeField, TooltipAttribute("貫通攻撃時の攻撃速度の上昇倍率")]
+    protected float penetAttackTimeRate = 2.0f;
 
     #endregion
 

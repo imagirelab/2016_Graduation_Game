@@ -25,9 +25,9 @@ public class MoveGainBar : MonoBehaviour
 	void Update ()
 	{
         float HPRate = (float)(house.HPpro + house.GetHP) / (float)(house.GetHP * 2.0f);
-        if (HPRate >= 1.0f)
+        if (HPRate > 1.0f)
             HPRate = 1.0f;
-        if (HPRate <= 0.0f)
+        if (HPRate < 0.0f)
             HPRate = 0.0f;
         float sub = max - min;
 

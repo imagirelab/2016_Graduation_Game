@@ -68,6 +68,10 @@ public class Soldier : Unit
 
             state = Enum.State.Search;
 
+            //もしターゲットをロストしていた場合だけ急きょ次に狙うものを索敵する
+            if (targetObject == null)
+                SetNearTargetObject();
+
             //無駄な処理を省くための条件
             if (targetDistance - targetColliderRadius < ATKRange + colliderScalingDiameter)
             {

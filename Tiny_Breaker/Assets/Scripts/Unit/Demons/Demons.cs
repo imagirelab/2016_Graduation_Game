@@ -28,6 +28,8 @@ public class Demons : Unit
                     roundAttack = true;         //範囲攻撃
                     break;
                 case Enum.Demon_TYPE.PIPI:
+                    penetrateAttack = true;     //貫通攻撃
+                    status.CurrentAtackTime /= penetAttackTimeRate;    //攻撃速度上昇
                     break;
             }
 

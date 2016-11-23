@@ -37,6 +37,11 @@ public class UnitAttack : MonoBehaviour
     [SerializeField, TooltipAttribute("範囲攻撃するときの範囲")]
     float roundRenge = 1.5f;
 
+    [SerializeField, TooltipAttribute("貫通攻撃が届く射程")]
+    float penetRenge = 20.0f;
+    [SerializeField, TooltipAttribute("貫通攻撃の横幅")]
+    float penetWight = 1.5f;
+
     Unit unit;
     Coroutine cor;
 
@@ -67,11 +72,28 @@ public class UnitAttack : MonoBehaviour
             {
                 //範囲攻撃に使うスフィア
                 int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //レイキャストが省くレイヤーのビット演算
+                if (target == null)
+                    target = unit.targetObject;
                 Collider[] allhit = Physics.OverlapSphere(target.transform.position, roundRenge, layerMask);
                 //中心攻撃対象の周りを登録
                 foreach (Collider e in allhit)
                     if(e.gameObject != target)
                         targetList.Add(e.gameObject);
+            }
+            //貫通攻撃
+            if (unit.PenetrateAttack)
+            {
+                //貫通攻撃に使うスフィア
+                int layerMask = ~(1 << transform.gameObject.layer | 1 << 18 | 1 << 21);  //レイキャストが省くレイヤーのビット演算
+                if (target == null)
+                    target = unit.targetObject;
+                Vector3 vec = target.transform.position - transform.position;
+                Ray ray = new Ray(transform.position, vec);
+                RaycastHit[] hitall = Physics.SphereCastAll(ray, penetWight, penetRenge, layerMask);
+                //中心攻撃対象の周りを登録
+                foreach (RaycastHit e in hitall)
+                    if (e.collider.gameObject != target)
+                        targetList.Add(e.collider.gameObject);
             }
 
             //種類によって攻撃処理
