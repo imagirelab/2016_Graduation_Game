@@ -6,6 +6,7 @@ using StaticClass;
 
 public class House : MonoBehaviour
 {
+    #region フィールド
 
     //家のステータス
     [SerializeField, TooltipAttribute("体力")]
@@ -36,6 +37,8 @@ public class House : MonoBehaviour
     [HideInInspector]
     public bool IsDamage = false;
     int oldHP = 0;
+
+    #endregion
 
     void Start()
     {

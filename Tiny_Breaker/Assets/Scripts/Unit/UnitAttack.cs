@@ -154,21 +154,24 @@ public class UnitAttack : MonoBehaviour
         GameObject rootObject = unit.transform.root.gameObject;
         House houseComp = _target.GetComponent<House>();
 
-        switch (rootObject.tag)
+        if (!houseComp.IsDead)
         {
-            case "Player1":
-                houseComp.HPpro += unit.status.CurrentATK;
-                break;
-            case "Player2":
-                houseComp.HPpro -= unit.status.CurrentATK;
-                break;
-            default:
-                break;
+            switch (rootObject.tag)
+            {
+                case "Player1":
+                    houseComp.HPpro += unit.status.CurrentATK;
+                    break;
+                case "Player2":
+                    houseComp.HPpro -= unit.status.CurrentATK;
+                    break;
+                default:
+                    break;
+            }
         }
 
         //親が小屋クラスを持っている(プレイヤー)場合のコスト処理
-        if (houseComp.HPpro <= -houseComp.GetHP ||
-            houseComp.HPpro >= houseComp.GetHP)
+        if ((rootObject.tag == "Player2" && houseComp.HPpro <= -houseComp.GetHP) ||
+            (rootObject.tag == "Player1" && houseComp.HPpro >= houseComp.GetHP))
         {
             //死んだフラグを立てる
             houseComp.IsDead = true;
@@ -186,7 +189,7 @@ public class UnitAttack : MonoBehaviour
                     houseComp.OldTag = _target.tag;
 
                     //倒した奴のタグにする
-                    _target.tag = player.transform.gameObject.tag;
+                    _target.tag = rootObject.tag;
                     //子供も一緒に
                     foreach (Transform child in _target.transform)
                         child.gameObject.tag = player.transform.gameObject.tag;

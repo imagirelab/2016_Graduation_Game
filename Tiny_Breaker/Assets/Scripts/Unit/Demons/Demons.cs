@@ -13,6 +13,9 @@ public class Demons : Unit
     [SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
     GameObject statusUI;
 
+    [SerializeField, TooltipAttribute("下ルートを通るときの加速倍率")]
+    float UnderSpeedRate = 3.0f;
+
     SpawnMove spawn;
     
     void Start()
@@ -46,7 +49,6 @@ public class Demons : Unit
         attack = GetComponent<UnitAttack>();
         move = GetComponent<UnitMove>();
         spawn = GetComponent<SpawnMove>();
-
         sCollider = GetComponent<SphereCollider>();
 
         //出現目標値を入れる
@@ -57,6 +59,9 @@ public class Demons : Unit
 
         //攻撃に関する設定
         attack.AtkTime = status.CurrentAtackTime;
+        //下ルート時の加速
+        if (rootNum == Enum.Direction_TYPE.Bottom)
+            status.CurrentSPEED *= UnderSpeedRate;
         //巡回速度
         loiteringSPEED = status.CurrentSPEED;
 
@@ -68,7 +73,7 @@ public class Demons : Unit
 
         //一番近くの敵を狙う
         SetNearTargetObject();
-
+        
         StartCoroutine(DemonLife());
         StartCoroutine(NearTarget());
     }

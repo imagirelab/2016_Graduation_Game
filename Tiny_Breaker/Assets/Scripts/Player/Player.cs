@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
     {
         //悪魔のレベルだけ初期化
         for(int i = 0; i < demonsLevel.Length; i++)
-            demonsLevel[i] = 10;
+            demonsLevel[i] = 0;
         //ステータスの作成
         for (int i = 0; i < demonsStatus.Length; i++)
         {

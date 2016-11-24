@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 using UnityEngine.SceneManagement;
 using StaticClass;
 
@@ -11,9 +12,6 @@ public class Title : MonoBehaviour
     //フラッシュさせるオブジェクト
     [SerializeField]
     GameObject flash;
-
-    //シーン終了フラグ
-    bool end = false;
 
     void Start()
     {
@@ -28,55 +26,42 @@ public class Title : MonoBehaviour
         if (flash == null)
             flash = new GameObject();
 
-        //シーン終了フラグの初期化
-        end = false;
-
-        //フェードイン開始
-        if (fade.GetComponent<FadeIn>())
-            fade.GetComponent<FadeIn>().enabled = true;
+        //コルーチンスタート
+        StartCoroutine(TitleUpdate());
     }
 
-    void Update()
+    IEnumerator TitleUpdate()
     {
         //フェードイン終了
-        if (fade.GetComponent<FadeIn>())
-            if (fade.GetComponent<FadeIn>().enabled && fade.GetComponent<FadeIn>().End)
-            {
-                //フェードインコンポーネントをオフにする
-                fade.GetComponent<FadeIn>().enabled = false;
+        yield return StartCoroutine(fade.GetComponent<Fade>().FadeInStart());
 
-                //フラッシュを開始する
+        //フラッシュを開始する
+        if (flash.GetComponent<Flash>())
+            if (!flash.GetComponent<Flash>().enabled)
+                flash.GetComponent<Flash>().enabled = true;
+
+        while (true)
+        {
+            //ボタンを押されたらフェードアウト開始
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                //フラッシュコンポーネントをオフにする
                 if (flash.GetComponent<Flash>())
-                    if (!flash.GetComponent<Flash>().enabled)
-                        flash.GetComponent<Flash>().enabled = true;
+                    if (flash.GetComponent<Flash>().enabled)
+                        flash.GetComponent<Flash>().enabled = false;
+
+                //フェードイン終了
+                yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
+
+                break;
             }
 
-        //ボタンを押されたらフェードアウト開始
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            //シーン終了フラグを立てる
-            end = true;
-
-            //仮にまだフェードインコンポーネントがあった場合はオフにする
-            if (fade.GetComponent<FadeIn>())
-                if (fade.GetComponent<FadeIn>().enabled)
-                    fade.GetComponent<FadeIn>().enabled = false;
-
-            //フェードアウトコンポーネントを立てる
-            if (fade.GetComponent<FadeOut>())
-                if (!fade.GetComponent<FadeOut>().enabled)
-                    fade.GetComponent<FadeOut>().enabled = true;
-
-            //フラッシュコンポーネントをオフにする
-            if (flash.GetComponent<Flash>())
-                if (flash.GetComponent<Flash>().enabled)
-                    flash.GetComponent<Flash>().enabled = false;
+            yield return null;
         }
 
         //フェードアウト終了時シーン切り替え
-        if (end && !fade.GetComponent<FadeOut>())           //フェードアウトコンポーネントが設定されていなかった場合
-            SceneManager.LoadScene("MainScene");
-        else if (end && fade.GetComponent<FadeOut>().End)   //フェードアウトコンポーネントが設定されている場合
-            SceneManager.LoadScene("MainScene");
+        SceneManager.LoadScene("MainScene");
+
+        yield return null;
     }
 }
