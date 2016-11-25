@@ -15,9 +15,4 @@ public class AmbientChange : MonoBehaviour
         RenderSettings.ambientLight = lightColor[roundNum];
         RenderSettings.ambientIntensity = lightIntensity[roundNum];
     }
-	
-	void Update ()
-	{
-		
-	}
 }

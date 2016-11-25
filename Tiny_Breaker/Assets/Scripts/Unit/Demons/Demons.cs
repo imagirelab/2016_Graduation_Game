@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using StaticClass;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Demons : Unit
 {
@@ -13,8 +14,8 @@ public class Demons : Unit
     [SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
     GameObject statusUI;
 
-    [SerializeField, TooltipAttribute("下ルートを通るときの加速倍率")]
-    float UnderSpeedRate = 3.0f;
+    [SerializeField, TooltipAttribute("下ルートを通るときの速度")]
+    float UnderSpeed = 20.0f;
 
     SpawnMove spawn;
     
@@ -61,7 +62,7 @@ public class Demons : Unit
         attack.AtkTime = status.CurrentAtackTime;
         //下ルート時の加速
         if (rootNum == Enum.Direction_TYPE.Bottom)
-            status.CurrentSPEED *= UnderSpeedRate;
+            status.CurrentSPEED = UnderSpeed;
         //巡回速度
         loiteringSPEED = status.CurrentSPEED;
 
@@ -85,6 +86,11 @@ public class Demons : Unit
 
         //ステータスUIを消す
         statusUI.SetActive(false);
+        //foreach (Transform child in statusUI.transform)
+        //    foreach (Transform groundChild in child)
+        //        if (groundChild.GetComponent<Image>())
+        //            groundChild.GetComponent<Image>().enabled = false;
+
         //無敵起動
         StartCoroutine(Invincible());
 
@@ -96,6 +102,10 @@ public class Demons : Unit
         spawn.enabled = false;
         //ステータスUIを表示
         statusUI.SetActive(true);
+        //foreach (Transform child in statusUI.transform)
+        //    foreach (Transform groundChild in child)
+        //        if (groundChild.GetComponent<Image>())
+        //            groundChild.GetComponent<Image>().enabled = true;
         //コライダーオン
         sCollider.enabled = true;
 

@@ -23,7 +23,7 @@ public class PlayerColor : MonoBehaviour
     //表示する色のプレイヤーID
     int playerID = 0;
 
-    void Start()
+    void OnEnable()
     {
         playerID = 0;
 
