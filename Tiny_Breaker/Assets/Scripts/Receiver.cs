@@ -37,6 +37,10 @@ public class Receiver : MonoBehaviour
     int counterLimit = 30;
     int counter = 0;
 
+    void Start()
+    {
+    }
+
     void Update()
     {
         //受信制御
@@ -63,7 +67,7 @@ public class Receiver : MonoBehaviour
             //処理したらリストから外す
             smaphoMsgList.Remove(smaphoMsgList[0]);
         }
-        
+
         if (DeathblowList.Count > 0)
         {
             //必殺技発動

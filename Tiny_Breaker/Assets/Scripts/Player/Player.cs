@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using NCMB;
 
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
 public class Player : MonoBehaviour
@@ -62,6 +61,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+
         //悪魔のレベルだけ初期化
         for(int i = 0; i < demonsLevel.Length; i++)
             demonsLevel[i] = 0;
@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
         {
             //送信がいらないときはしない
             if(IsPush)
-                PushSpirit(spiritsData[0]);
+                //PushSpirit(spiritsData[0]);
 
             spiritsData.Remove(spiritsData[0]);
         }
@@ -114,33 +114,33 @@ public class Player : MonoBehaviour
         {
             //送信がいらないときはしない
             if (IsPush)
-                PushCost(costData[0]);
+                //PushCost(costData[0]);
 
             costData.Remove(costData[0]);
         }
     }
     
-    //魂をサーバーに送信
-    void PushSpirit(Enum.Demon_TYPE _spiritData)
-    {
-        NCMBObject nbcObj = new NCMBObject("SpiritData");
+    ////魂をサーバーに送信
+    //void PushSpirit(Enum.Demon_TYPE _spiritData)
+    //{
+    //    NCMBObject nbcObj = new NCMBObject("SpiritData");
 
-        nbcObj["TYPE"] = _spiritData.ToString();
-        nbcObj["PlayerNo"] = playerID.ToString();
+    //    nbcObj["TYPE"] = _spiritData.ToString();
+    //    nbcObj["PlayerNo"] = playerID.ToString();
 
-        nbcObj.SaveAsync();
-    }
+    //    nbcObj.SaveAsync();
+    //}
 
-    //コストをサーバーに送信
-    void PushCost(int _costData)
-    {
-        NCMBObject nbcObj = new NCMBObject("CostData");
+    ////コストをサーバーに送信
+    //void PushCost(int _costData)
+    //{
+    //    NCMBObject nbcObj = new NCMBObject("CostData");
 
-        nbcObj["Cost"] = _costData.ToString();
-        nbcObj["PlayerNo"] = playerID.ToString();
+    //    nbcObj["Cost"] = _costData.ToString();
+    //    nbcObj["PlayerNo"] = playerID.ToString();
 
-        nbcObj.SaveAsync();
-    }
+    //    nbcObj.SaveAsync();
+    //}
 
     //魂リストへの追加
     public void AddSpiritList(Enum.Demon_TYPE spiritdata)
