@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using StaticClass;
 using NCMB;
+using SocketIO;
 
 public class Receiver : MonoBehaviour
 {
+    SocketIOComponent socket;
     public static bool getState = true;
 
     [SerializeField]
@@ -39,6 +41,10 @@ public class Receiver : MonoBehaviour
 
     void Start()
     {
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
+
+        socket.On("DemonPushed", GetDemon);
     }
 
     void Update()
@@ -78,84 +84,136 @@ public class Receiver : MonoBehaviour
         }
     }
 
+    public void GetDemon(SocketIOEvent e)
+    {
+        SmaphoMsg smaphoMsg = new SmaphoMsg();
+        string _PlayerNo = e.data.GetField("PlayerID").str;
+        string _Type = e.data.GetField("Type").str;
+        string _Direction = e.data.GetField("Direction").str;
+        string _Level = e.data.GetField("Level").str;
+
+        smaphoMsg.playerID = System.Convert.ToInt32(_PlayerNo);
+
+        switch(_Direction)
+        {
+            case "Top":
+                smaphoMsg.dirType = Enum.Direction_TYPE.Top;
+                break;
+            case "Middle":
+                smaphoMsg.dirType = Enum.Direction_TYPE.Middle;
+                break;
+            case "Bottom":
+                smaphoMsg.dirType = Enum.Direction_TYPE.Bottom;
+                break;
+            default:
+                Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
+                break;
+        }
+
+        switch(_Type)
+        {
+            case "POPO":
+                smaphoMsg.type = Enum.Demon_TYPE.POPO;
+                break;
+            case "PIPI":
+                smaphoMsg.type = Enum.Demon_TYPE.PIPI;
+                break;
+            case "PUPU":
+                smaphoMsg.type = Enum.Demon_TYPE.PUPU;
+                break;
+            default:
+                Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
+                break;
+        }
+
+        if(_Level != null)
+        {
+            smaphoMsg.level = System.Convert.ToInt32(_Level);
+        }
+
+        smaphoMsgList.Add(smaphoMsg);
+
+        getState = false;
+    }
+
     //受信したときの処理
     void Receive()
     {
         #region DemonData
 
-        //クエリを作成
-        NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
+        ////クエリを作成
+        //NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
 
-        //検索
-        demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            //検索失敗時
-            if (e != null)
-            {
-                Debug.Log(e.ToString());
-                return;
-            }
-            else
-            {
-                foreach (NCMBObject ncmbObj in objList)
-                {
-                    SmaphoMsg smaphoMsg = new SmaphoMsg();
+        ////検索
+        //demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        //{
+        //    //検索失敗時
+        //    if (e != null)
+        //    {
+        //        Debug.Log(e.ToString());
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        foreach (NCMBObject ncmbObj in objList)
+        //        {
+        //            SmaphoMsg smaphoMsg = new SmaphoMsg();
 
-                    //プレイヤーのID
-                    if (ncmbObj["PlayerNo"] != null)
-                        smaphoMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
+        //            //プレイヤーのID
+        //            if (ncmbObj["PlayerNo"] != null)
+        //                smaphoMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
 
-                    //方向
-                    Enum.Direction_TYPE dir = Enum.Direction_TYPE.Middle;
-                    switch (ncmbObj["Direction"].ToString())
-                    {
-                        case "Top":
-                            dir = Enum.Direction_TYPE.Top;
-                            break;
-                        case "Middle":
-                            dir = Enum.Direction_TYPE.Middle;
-                            break;
-                        case "Bottom":
-                            dir = Enum.Direction_TYPE.Bottom;
-                            break;
-                        default:
-                            Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
-                            break;
-                    }
-                    smaphoMsg.dirType = dir;
+        //            //方向
+        //            Enum.Direction_TYPE dir = Enum.Direction_TYPE.Middle;
+        //            switch (ncmbObj["Direction"].ToString())
+        //            {
+        //                case "Top":
+        //                    dir = Enum.Direction_TYPE.Top;
+        //                    break;
+        //                case "Middle":
+        //                    dir = Enum.Direction_TYPE.Middle;
+        //                    break;
+        //                case "Bottom":
+        //                    dir = Enum.Direction_TYPE.Bottom;
+        //                    break;
+        //                default:
+        //                    Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
+        //                    break;
+        //            }
+        //            smaphoMsg.dirType = dir;
 
-                    //タイプの振り分け
-                    Enum.Demon_TYPE type = Enum.Demon_TYPE.POPO;
-                    switch (ncmbObj["Type"].ToString())
-                    {
-                        case "POPO":
-                            type = Enum.Demon_TYPE.POPO;
-                            break;
-                        case "PUPU":
-                            type = Enum.Demon_TYPE.PUPU;
-                            break;
-                        case "PIPI":
-                            type = Enum.Demon_TYPE.PIPI;
-                            break;
-                        default:
-                            Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
-                            break;
-                    }
-                    smaphoMsg.type = type;
+        //            //タイプの振り分け
+        //            Enum.Demon_TYPE type = Enum.Demon_TYPE.POPO;
+        //            switch (ncmbObj["Type"].ToString())
+        //            {
+        //                case "POPO":
+        //                    type = Enum.Demon_TYPE.POPO;
+        //                    break;
+        //                case "PUPU":
+        //                    type = Enum.Demon_TYPE.PUPU;
+        //                    break;
+        //                case "PIPI":
+        //                    type = Enum.Demon_TYPE.PIPI;
+        //                    break;
+        //                default:
+        //                    Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
+        //                    break;
+        //            }
+        //            smaphoMsg.type = type;
 
-                    //レベルの代入
-                    if (ncmbObj["Level"] != null)
-                        smaphoMsg.level = System.Convert.ToInt32(ncmbObj["Level"].ToString());
+        //            //レベルの代入
+        //            if (ncmbObj["Level"] != null)
+        //                smaphoMsg.level = System.Convert.ToInt32(ncmbObj["Level"].ToString());
 
-                    smaphoMsgList.Add(smaphoMsg);
+        //            smaphoMsgList.Add(smaphoMsg);
 
-                    //記録を取ったら消す
-                    ncmbObj.DeleteAsync();
+        //            //記録を取ったら消す
+        //            ncmbObj.DeleteAsync();
 
-                    getState = false;
-                }
-            }
-        });
+        //            getState = false;
+        //        }
+        //    }
+        //});
 
         #endregion
 
