@@ -53,8 +53,6 @@ public class UnitAttack : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(atkTime * atkDamageDelayRate);
-
             //攻撃中心対象がいなくなったら再登録
             if (target == null)
                 target = unit.targetObject;
@@ -63,6 +61,10 @@ public class UnitAttack : MonoBehaviour
             if (target != null)
                 if (target.tag == transform.gameObject.tag)
                     target = null;
+
+            transform.LookAt(target.transform.position);
+
+            yield return new WaitForSeconds(atkTime * atkDamageDelayRate);
 
             List<GameObject> targetList = new List<GameObject>();
             //まずは中心攻撃対象だけを登録
@@ -102,8 +104,6 @@ public class UnitAttack : MonoBehaviour
                 //攻撃対象がいることを確認してから攻撃
                 if (e != null)
                 {
-                    transform.LookAt(e.transform.position);
-
                     if (e.GetComponent<Unit>())
                         AttackUnit(e);
                     else if (e.GetComponent<House>())

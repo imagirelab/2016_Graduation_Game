@@ -43,7 +43,7 @@ public class Unit : MonoBehaviour
     public List<GameObject> allTargetObject;       //複数攻撃目標
 
     public GameObject deadEffect;       //死亡エフェクト
-    
+
     [HideInInspector]
     public string targetTag;       //相手のタグ
 
@@ -73,7 +73,7 @@ public class Unit : MonoBehaviour
     [SerializeField]
     protected float invincibleTime = 1.3f;
     protected bool invincibleFlag = false;
-    
+
     //使うコンポーネント
     protected UnitSeach seach;
     protected UnitAttack attack;
@@ -115,7 +115,7 @@ public class Unit : MonoBehaviour
         GameObject nearestObject = DemonDataBase.getInstance().GetNearestObject(targetTag, this.transform.position, rootNum);
         GameObject nearSol = SolgierDataBase.getInstance().GetNearestObject(transform.gameObject.tag, this.transform.position, rootNum);
         GameObject nearBuild = BuildingDataBase.getInstance().GetNearestObject(this.transform.position);
-        
+
         if (nearestObject != null && targetObject != null)
             if (nearestObject.tag != transform.gameObject.tag)
                 if (Vector3.Distance(this.transform.position, nearestObject.transform.position) <
@@ -154,7 +154,7 @@ public class Unit : MonoBehaviour
     //ダメージを受けたか確認する
     public void DamageCheck(int nowHP)
     {
-        if(nowHP < oldHP)
+        if (nowHP < oldHP)
         {
             IsDamage = true;
         }
@@ -169,7 +169,7 @@ public class Unit : MonoBehaviour
     public Vector3 GetRootPosition()
     {
         Vector3 rootPosition = loiteringPointObj[currentRootPoint].transform.position;
-        
+
         return rootPosition;
     }
 

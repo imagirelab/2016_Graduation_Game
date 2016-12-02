@@ -128,17 +128,11 @@ public class Demons : Unit
             //もしターゲットをロストしていた場合だけ急きょ次に狙うものを索敵する
             if (targetObject == null)
                 SetNearTargetObject();
-
+            
             //無駄な処理を省くための条件
             if (targetDistance - targetColliderRadius < ATKRange + colliderScalingDiameter)
             {
-                if (targetDistance < colliderScalingDiameter) //重なっている時
-                {
-                    state = Enum.State.Attack;
-                    seach.enabled = false;
-                    attack.enabled = true;
-                }
-                else
+                if (targetDistance - targetColliderRadius > colliderScalingDiameter)
                 {
                     RaycastHit hit;
                     Vector3 vec = targetObject.transform.position - transform.position;
@@ -154,6 +148,13 @@ public class Demons : Unit
                             attack.enabled = true;
                         }
                     }
+                }
+                //重なっている時
+                else
+                {
+                    state = Enum.State.Attack;
+                    seach.enabled = false;
+                    attack.enabled = true;
                 }
             }
             else if (targetDistance - targetColliderRadius <= seach.findRange + colliderScalingDiameter &&

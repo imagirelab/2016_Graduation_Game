@@ -132,7 +132,7 @@ public class Receiver : MonoBehaviour
         }
 
         smaphoMsgList.Add(smaphoMsg);
-
+        
         getState = false;
     }
 

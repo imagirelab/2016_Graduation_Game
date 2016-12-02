@@ -24,6 +24,8 @@ public class ChangeAnimation : MonoBehaviour
 
         state = Enum.State.Search;
 
+
+
         while (true)
         {
             if (animator)
