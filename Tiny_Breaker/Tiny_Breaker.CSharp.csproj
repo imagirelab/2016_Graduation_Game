@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -188,6 +182,7 @@
     <Compile Include="Assets\Scripts\UI\ScaleMove.cs" />
     <Compile Include="Assets\Scripts\UI\SoldierColor.cs" />
     <Compile Include="Assets\Scripts\UI\StatusUI.cs" />
+    <Compile Include="Assets\Scripts\Unit\Demons\ChangeModel.cs" />
     <Compile Include="Assets\Scripts\Unit\Demons\Demons.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\DeadEffect.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\ShotEffect.cs" />

@@ -212,15 +212,7 @@ public class Demons : Unit
         if (transform.IsChildOf(transform))
             foreach (Transform child in transform)
             {
-                //Modelsの中の削除処理
-                if (child.name == "Models")
-                {
-                    //トランスフォーム以外のコンポーネント
-                    foreach (Component comp in child.GetComponents<Component>())
-                        if (comp != child.GetComponent<Transform>())
-                            Destroy(comp);
-                }
-                else
+                if (child.name != "Model")
                     Destroy(child.gameObject);
             }
 

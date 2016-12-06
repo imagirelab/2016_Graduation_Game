@@ -4,18 +4,12 @@ using System.Collections;
 public class ChangeAnimation : MonoBehaviour
 {
     Coroutine cor;
-    
+
+    [SerializeField]
+    Unit unit = null;
+
     IEnumerator Change()
     {
-        //親
-        GameObject parent;
-
-        if (gameObject.transform.parent.gameObject.transform.parent != null)
-            parent = gameObject.transform.parent.gameObject.transform.parent.gameObject;
-        else
-            parent = gameObject;
-
-        Unit unit = parent.GetComponent<Unit>();
         Animator animator = GetComponent<Animator>();
         AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
         AnimatorControllerParameter[] parameters = animator.parameters;
@@ -23,11 +17,12 @@ public class ChangeAnimation : MonoBehaviour
         Enum.State state;
 
         state = Enum.State.Search;
-
-
-
+        
         while (true)
         {
+            if (unit == null)
+                break;
+
             if (animator)
             {
                 foreach (AnimatorControllerParameter param in parameters)
@@ -64,7 +59,8 @@ public class ChangeAnimation : MonoBehaviour
                         {
                             case Enum.State.Attack:
                                 if (state != Enum.State.Attack &&
-                                   currentState.shortNameHash == Animator.StringToHash("attack"))
+                                   currentState.shortNameHash == Animator.StringToHash("Attack") ||
+                                   currentState.shortNameHash == Animator.StringToHash("AttackLevel2"))
                                 {
                                     state = unit.state;
 

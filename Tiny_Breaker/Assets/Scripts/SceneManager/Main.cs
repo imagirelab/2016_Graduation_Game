@@ -53,6 +53,11 @@ public class Main : MonoBehaviour
         //フレームレートを固定
         Application.targetFrameRate = 30;
 
+        if (Pot1 == null)
+            Pot1 = new GameObject();
+        if (Pot2 == null)
+            Pot2 = new GameObject();
+
         P1Base = Pot1.GetComponent<DefenseBase>();
         P2Base = Pot2.GetComponent<DefenseBase>();
 
