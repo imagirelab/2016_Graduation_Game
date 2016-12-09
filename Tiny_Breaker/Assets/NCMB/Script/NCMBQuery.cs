@@ -589,9 +589,7 @@ namespace NCMB
 				Platform.RunOnMainThread (delegate {
 					callback (resultList, error);
 				});
-
-                Receiver.getState = true;
-
+                
 				return;
 			});
 		}

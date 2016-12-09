@@ -53,14 +53,14 @@ public class UnitAttack : MonoBehaviour
 
         while (true)
         {
-            //攻撃中心対象がいなくなったら再登録
-            if (target == null)
-                target = unit.targetObject;
-
             //対象物が同じタグだったら仲間だから攻撃しない
             if (target != null)
                 if (target.tag == transform.gameObject.tag)
                     target = null;
+
+            //攻撃中心対象がいなくなったら再登録
+            if (target == null)
+                target = unit.targetObject;
 
             transform.LookAt(target.transform.position);
 
@@ -79,7 +79,7 @@ public class UnitAttack : MonoBehaviour
                 Collider[] allhit = Physics.OverlapSphere(target.transform.position, roundRenge, layerMask);
                 //中心攻撃対象の周りを登録
                 foreach (Collider e in allhit)
-                    if(e.gameObject != target)
+                    if (e.gameObject != target)
                         targetList.Add(e.gameObject);
             }
             //貫通攻撃
@@ -156,7 +156,7 @@ public class UnitAttack : MonoBehaviour
 
         if (!houseComp.IsDead)
         {
-            switch (rootObject.tag)
+            switch (gameObject.tag)
             {
                 case "Player1":
                     houseComp.HPpro += unit.status.CurrentATK;
@@ -170,41 +170,50 @@ public class UnitAttack : MonoBehaviour
         }
 
         //親が小屋クラスを持っている(プレイヤー)場合のコスト処理
-        if ((rootObject.tag == "Player2" && houseComp.HPpro <= -houseComp.GetHP) ||
-            (rootObject.tag == "Player1" && houseComp.HPpro >= houseComp.GetHP))
+        if ((gameObject.tag == "Player2" && houseComp.HPpro <= -houseComp.GetHP) ||
+            (gameObject.tag == "Player1" && houseComp.HPpro >= houseComp.GetHP))
         {
             //死んだフラグを立てる
             houseComp.IsDead = true;
             //リストからはずす
             BuildingDataBase.getInstance().RemoveList(_target);
 
-            if (rootObject.GetComponent<Player>() != null)
+            //スポナーがあるときPlayerIDを登録
+            if (_target.GetComponent<Spawner>() != null)
+            {
+                //事前にタグを保存しておく
+                houseComp.OldTag = _target.tag;
+
+                //倒した奴のタグにする
+                _target.tag = gameObject.tag;
+                //子供も一緒に
+                foreach (Transform child in _target.transform)
+                    child.gameObject.tag = gameObject.tag;
+
+                switch (gameObject.tag)
+                {
+                    case "Player1":
+                        _target.GetComponent<Spawner>().CurrentPlayerID = 1;
+                        _target.GetComponent<Spawner>().CurrentTargetID = 2;
+                        break;
+                    case "Player2":
+                        _target.GetComponent<Spawner>().CurrentPlayerID = 2;
+                        _target.GetComponent<Spawner>().CurrentTargetID = 1;
+                        break;
+                    default:
+                        _target.GetComponent<Spawner>().CurrentPlayerID = 0;
+                        _target.GetComponent<Spawner>().CurrentTargetID = 0;
+                        break;
+                }
+            }
+
+            //コストの計算
+            if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
             {
                 Player player = rootObject.GetComponent<Player>();
+                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
 
-                //スポナーがあるときPlayerIDを登録
-                if (_target.GetComponent<Spawner>() != null)
-                {
-                    //事前にタグを保存しておく
-                    houseComp.OldTag = _target.tag;
-
-                    //倒した奴のタグにする
-                    _target.tag = rootObject.tag;
-                    //子供も一緒に
-                    foreach (Transform child in _target.transform)
-                        child.gameObject.tag = player.transform.gameObject.tag;
-
-                    _target.GetComponent<Spawner>().CurrentPlayerID = player.playerID;
-                    _target.GetComponent<Spawner>().CurrentTargetID = player.targetID;
-                }
-
-                //コストの計算
-                if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
-                {
-                    PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
-
-                    player.AddCostList(playerCost.GetHouseCost);
-                }
+                player.AddCostList(playerCost.GetHouseCost);
             }
         }
     }

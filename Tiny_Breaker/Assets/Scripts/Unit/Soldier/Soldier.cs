@@ -145,40 +145,24 @@ public class Soldier : Unit
         if (transform.IsChildOf(transform))
             foreach (Transform child in transform)
             {
-                //Modelsの中の削除処理
-                if (child.name == "Models")
+                //兵士用
+                if (child.name == "Model")
                 {
                     //トランスフォーム以外のコンポーネント
                     foreach (Component comp in child.GetComponents<Component>())
                         if (comp != child.GetComponent<Transform>())
                             Destroy(comp);
 
-                    //孫の削除処理
-                    foreach (Transform grandson in child)
-                    {
-                        //兵士用
-                        if (grandson.name == "Model")
+                    //コライダーがついているものをONにする
+                    foreach (GameObject e in GetAllChildren.GetAll(child.gameObject))
+                        if (e.GetComponent<Collider>())
                         {
-                            //トランスフォーム以外のコンポーネント
-                            foreach (Component comp in grandson.GetComponents<Component>())
-                                if (comp != grandson.GetComponent<Transform>())
-                                    Destroy(comp);
-
-                            //コライダーがついているものをONにする
-                            foreach (GameObject e in GetAllChildren.GetAll(grandson.gameObject))
-                                if (e.GetComponent<Collider>())
-                                {
-                                    e.GetComponent<Collider>().enabled = true;
-                                    e.AddComponent<Rigidbody>();
-                                }
+                            e.GetComponent<Collider>().enabled = true;
+                            e.AddComponent<Rigidbody>();
                         }
-                        //Modelではなく、パーティクルでもないもの以外は消す
-                        else if (!grandson.gameObject.GetComponent<ParticleSystem>())
-                            Destroy(grandson.gameObject);
-                    }
-
                 }
-                else
+                //Modelではなく、パーティクルでもないもの以外は消す
+                else if (!child.gameObject.GetComponent<ParticleSystem>())
                     Destroy(child.gameObject);
             }
 

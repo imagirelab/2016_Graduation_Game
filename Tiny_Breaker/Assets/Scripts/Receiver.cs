@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using StaticClass;
-using NCMB;
 using SocketIO;
 
 public class Receiver : MonoBehaviour
 {
     SocketIOComponent socket;
-    public static bool getState = true;
 
     [SerializeField]
     Player[] players = new Player[GameRule.playerNum];
@@ -45,6 +43,7 @@ public class Receiver : MonoBehaviour
         socket = go.GetComponent<SocketIOComponent>();
 
         socket.On("DemonPushed", GetDemon);
+        socket.On("DeadlyPushed", GetDeathblow);
     }
 
     void Update()
@@ -127,13 +126,34 @@ public class Receiver : MonoBehaviour
         }
 
         if(_Level != null)
-        {
             smaphoMsg.level = System.Convert.ToInt32(_Level);
-        }
 
         smaphoMsgList.Add(smaphoMsg);
-        
-        getState = false;
+    }
+
+    public void GetDeathblow(SocketIOEvent e)
+    {
+        DeathblowMsg deathblowMsg = new DeathblowMsg();
+        string _PlayerNo = e.data.GetField("PlayerID").str;
+        string _Deadly = e.data.GetField("Deadly").str;
+
+        //プレイヤーのID
+        deathblowMsg.playerID = System.Convert.ToInt32(_PlayerNo);
+
+        //必殺技の種類
+        Enum.Deathblow_TYPE deathType = Enum.Deathblow_TYPE.Fire;
+        switch (_Deadly)
+        {
+            case "Fire":
+                deathType = Enum.Deathblow_TYPE.Fire;
+                break;
+            default:
+                Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
+                break;
+        }
+        deathblowMsg.type = deathType;
+
+        DeathblowList.Add(deathblowMsg);
     }
 
     //受信したときの処理
@@ -219,48 +239,48 @@ public class Receiver : MonoBehaviour
 
         #region Deathblow
 
-        //クエリを作成
-        NCMBQuery<NCMBObject> deathblow = new NCMBQuery<NCMBObject>("DeadlyData");
+        ////クエリを作成
+        //NCMBQuery<NCMBObject> deathblow = new NCMBQuery<NCMBObject>("DeadlyData");
 
-        //検索
-        deathblow.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            //検索失敗時
-            if (e != null)
-            {
-                Debug.Log(e.ToString());
-                return;
-            }
-            else
-            {
-                foreach (NCMBObject ncmbObj in objList)
-                {
-                    DeathblowMsg deathblowMsg = new DeathblowMsg();
+        ////検索
+        //deathblow.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        //{
+        //    //検索失敗時
+        //    if (e != null)
+        //    {
+        //        Debug.Log(e.ToString());
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        foreach (NCMBObject ncmbObj in objList)
+        //        {
+        //            DeathblowMsg deathblowMsg = new DeathblowMsg();
 
-                    //プレイヤーのID
-                    if (ncmbObj["PlayerNo"] != null)
-                        deathblowMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
+        //            //プレイヤーのID
+        //            if (ncmbObj["PlayerNo"] != null)
+        //                deathblowMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
 
-                    //必殺技の種類
-                    Enum.Deathblow_TYPE deathType = Enum.Deathblow_TYPE.Fire;
-                    switch (ncmbObj["Type"].ToString())
-                    {
-                        case "Fire":
-                            deathType = Enum.Deathblow_TYPE.Fire;
-                            break;
-                        default:
-                            Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
-                            break;
-                    }
-                    deathblowMsg.type = deathType;
+        //            //必殺技の種類
+        //            Enum.Deathblow_TYPE deathType = Enum.Deathblow_TYPE.Fire;
+        //            switch (ncmbObj["Type"].ToString())
+        //            {
+        //                case "Fire":
+        //                    deathType = Enum.Deathblow_TYPE.Fire;
+        //                    break;
+        //                default:
+        //                    Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
+        //                    break;
+        //            }
+        //            deathblowMsg.type = deathType;
                     
-                    DeathblowList.Add(deathblowMsg);
+        //            DeathblowList.Add(deathblowMsg);
 
-                    //記録を取ったら消す
-                    ncmbObj.DeleteAsync();
-                }
-            }
-        });
+        //            //記録を取ったら消す
+        //            ncmbObj.DeleteAsync();
+        //        }
+        //    }
+        //});
 
         #endregion
     }

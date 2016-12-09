@@ -6,18 +6,18 @@ public class DebugControl : MonoBehaviour
 {
     [SerializeField, TooltipAttribute("デバック表示するかどうか")]
     bool IsDebug = false;
-    
+
     [SerializeField]
     List<GameObject> DebugObject = new List<GameObject>();
     [SerializeField]
     Player player1 = null;
     [SerializeField]
     Player player2 = null;
-    
+
     void Start()
     {
         GameRule.getInstance().debugFlag = IsDebug;
-        
+
         SetDebugActive(GameRule.getInstance().debugFlag);
     }
 
@@ -29,7 +29,7 @@ public class DebugControl : MonoBehaviour
             GameRule.getInstance().debugFlag = !GameRule.getInstance().debugFlag;
             SetDebugActive(GameRule.getInstance().debugFlag);
         }
-        
+
         #region Player1の方の操作
 
         if (player1 != null)
@@ -39,6 +39,8 @@ public class DebugControl : MonoBehaviour
             //必殺技
             if (Input.GetKeyDown(KeyCode.LeftShift))
                 player.Deathblow();
+            if (Input.GetKeyDown(KeyCode.LeftControl))
+                player.DebugDeathblow();
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.Q))
@@ -84,6 +86,8 @@ public class DebugControl : MonoBehaviour
             //必殺技
             if (Input.GetKeyDown(KeyCode.RightShift))
                 player.Deathblow();
+            if (Input.GetKeyDown(KeyCode.RightControl))
+                player.DebugDeathblow();
 
             //パワーアップ
             if (Input.GetKeyDown(KeyCode.LeftBracket))
@@ -129,7 +133,7 @@ public class DebugControl : MonoBehaviour
 
     void SetDebugActive(bool flag)
     {
-        foreach(GameObject e in DebugObject)
+        foreach (GameObject e in DebugObject)
             e.SetActive(flag);
     }
 }

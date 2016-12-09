@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     #region フィールド
-    
+
     //送信が必要ないときにOFFにする
     [SerializeField]
     bool IsPush = true;
@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     List<int> costData = new List<int>();
     List<Enum.Demon_TYPE> spiritsData = new List<Enum.Demon_TYPE>();
     List<Enum.Demon_TYPE> spiritsDataCopy = new List<Enum.Demon_TYPE>();    //デバッグ用に使う魂データのコピー
-    
+
     //各種悪魔のプレファブ
     [SerializeField]
     GameObject[] demons = new GameObject[(int)Enum.Demon_TYPE.Num];
@@ -50,12 +50,26 @@ public class Player : MonoBehaviour
 
     //召喚する道番号 ０：下　１：真ん中　２：上
     Enum.Direction_TYPE rootNum = Enum.Direction_TYPE.Bottom;
-    
+
     [SerializeField]
     int maxSummonNum = 50;
 
     [SerializeField]
     GameObject deathbolwObj;
+
+    [SerializeField]
+    int startLevel = 0;
+
+    [SerializeField, HeaderAttribute("Deathblow"), TooltipAttribute("回復してから出撃するまでの間隔")]
+    float recoveryWaitTime = 1.0f;
+    [SerializeField, TooltipAttribute("悪魔軍団の出撃回数")]
+    int demonArmyWaveCount = 5;
+    [SerializeField, TooltipAttribute("悪魔軍団のレベル")]
+    int demonArmyLevel = 20;
+    [SerializeField, TooltipAttribute("悪魔軍団の出撃間隔")]
+    float demonArmyWaveWaitTime = 1.5f;
+    [SerializeField, TooltipAttribute("悪魔軍団の１匹ごとの出撃間隔")]
+    float demonArmyOneWaitTime = 0.3f;
 
     #endregion
 
@@ -63,8 +77,8 @@ public class Player : MonoBehaviour
     {
 
         //悪魔のレベルだけ初期化
-        for(int i = 0; i < demonsLevel.Length; i++)
-            demonsLevel[i] = 0;
+        for (int i = 0; i < demonsLevel.Length; i++)
+            demonsLevel[i] = startLevel;
         //ステータスの作成
         for (int i = 0; i < demonsStatus.Length; i++)
         {
@@ -89,7 +103,7 @@ public class Player : MonoBehaviour
                 rootPointes[i].Add(child);
             rootPointes[i].Add(target.transform); //最後に最終目的地
         }
-        
+
         if (spawnPoint == null)
             spawnPoint = new GameObject().transform;
 
@@ -103,10 +117,10 @@ public class Player : MonoBehaviour
         if (spiritsData.Count > 0)
         {
             //送信がいらないときはしない
-            if(IsPush)
+            if (IsPush)
                 //PushSpirit(spiritsData[0]);
 
-            spiritsData.Remove(spiritsData[0]);
+                spiritsData.Remove(spiritsData[0]);
         }
 
         //コストデータの送信
@@ -116,10 +130,10 @@ public class Player : MonoBehaviour
             if (IsPush)
                 //PushCost(costData[0]);
 
-            costData.Remove(costData[0]);
+                costData.Remove(costData[0]);
         }
     }
-    
+
     ////魂をサーバーに送信
     //void PushSpirit(Enum.Demon_TYPE _spiritData)
     //{
@@ -156,19 +170,19 @@ public class Player : MonoBehaviour
     public void AddCostList(int costdata)
     {
         costData.Add(costdata);
-        
+
         //デバック表示用
         PlayerCost playerCost = gameObject.GetComponent<PlayerCost>();
         playerCost.AddCost(costdata);
     }
-    
+
     //パワーアップ
     public void DebugPowerUP(int demonType)
     {
         //魂がなければそのまま返す
         if (spiritsDataCopy.Count == 0)
             return;
-        
+
         //レベル上限
         if (demonsLevel[demonType] >= 20)
             return;
@@ -200,10 +214,10 @@ public class Player : MonoBehaviour
         //召喚できない条件なら何もしないで返す
         if (childDemonsCount > maxSummonNum)
             return;
-        
+
         //適当な値を入れて重なることを避ける
         Vector3 randVac;
-        switch(rootNum)
+        switch (rootNum)
         {
             case Enum.Direction_TYPE.Bottom:
                 randVac = new Vector3(Random.Range(-5.5f, 5.5f), 0.0f, Random.Range(-4.0f, 10.0f));
@@ -218,10 +232,10 @@ public class Player : MonoBehaviour
                 randVac = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
                 break;
         }
-        
+
         //召喚コストの計算
         int demonCost = GetComponent<PlayerCost>().GetCurrentDemonCost(demonsLevel[demonType]);
-        
+
         if (GetComponent<PlayerCost>().UseableCost(demonCost))
         {
             //悪魔を出す
@@ -263,7 +277,7 @@ public class Player : MonoBehaviour
         else
             return spiritsDataCopy[0];
     }
-    
+
     //悪魔のレベルを設定
     public void SetDemonLevel(int demonType, int level)
     {
@@ -273,13 +287,19 @@ public class Player : MonoBehaviour
     //必殺技の発動
     public void Deathblow()
     {
+        StartCoroutine(SummonDemonArmy());
+    }
+
+    //必殺技の発動(デバッグ用)
+    public void DebugDeathblow()
+    {
         GameObject instace = (GameObject)Instantiate(deathbolwObj,
                                                     spawnPoint.position,
                                                     Quaternion.identity);
         instace.GetComponent<Missile>().Target = target;
         instace.GetComponent<Missile>().enabled = true;
     }
-    
+
     //終了時の処理
     public IEnumerator ChildDead()
     {
@@ -288,6 +308,90 @@ public class Player : MonoBehaviour
             if (child.gameObject.GetComponent<Unit>())
                 child.gameObject.GetComponent<Unit>().status.CurrentHP = 0;
 
+        foreach (GameObject e in FindObjectsOfType(typeof(GameObject)))
+        {
+            if (e.GetComponent<Unit>())
+                if (e.tag == gameObject.tag)
+                    e.GetComponent<Unit>().status.CurrentHP = 0;
+        }
+
         yield return null;
+    }
+
+    //悪魔軍団の召喚
+    IEnumerator SummonDemonArmy()
+    {
+        //コスト全回復
+        PlayerCost playerCost = gameObject.GetComponent<PlayerCost>();
+        AddCostList(playerCost.GetMaxCost);
+        yield return null;
+        yield return new WaitForSeconds(recoveryWaitTime);
+
+        //ルート出撃候補
+        //一度しか使わない技ということでローカルで宣言
+        //ルートの数でパターンを作る
+        int[,] rootCandidate = {
+            { 0, 1, 2 } ,
+            { 0, 2, 1 } ,
+            { 1, 0, 2 } ,
+            { 1, 2, 0 } ,
+            { 2, 0, 1 } ,
+            { 2, 1, 0 }
+        };
+
+        //出撃する回数分回す
+        for (int i = 0; i < demonArmyWaveCount; i++)
+        {
+            //ルート出撃候補からランダムでパターンを選ぶ
+            int rand = Random.Range(0, rootCandidate.GetLength(0) - 1);
+
+            for (int j = 0; j < (int)Enum.Direction_TYPE.Num; j++)
+            {
+                int randDemonType = Random.Range(0, (int)Enum.Demon_TYPE.Num);
+
+                //適当な値を入れて重なることを避ける
+                Vector3 randVac;
+                switch ((Enum.Direction_TYPE)rootCandidate[rand, j])
+                {
+                    case Enum.Direction_TYPE.Bottom:
+                        randVac = new Vector3(Random.Range(-5.5f, 5.5f), 0.0f, Random.Range(-4.0f, 10.0f));
+                        break;
+                    case Enum.Direction_TYPE.Middle:
+                        randVac = new Vector3(Random.Range(-5.0f, 5.0f), 0.0f, Random.Range(-9.0f, 9.0f));
+                        break;
+                    case Enum.Direction_TYPE.Top:
+                        randVac = new Vector3(Random.Range(-6.0f, 6.0f), 0.0f, Random.Range(-9.0f, 9.0f));
+                        break;
+                    default:
+                        randVac = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
+                        break;
+                }
+
+                //悪魔を出す
+                GameObject instace = (GameObject)Instantiate(demons[randDemonType],
+                                                                spawnPoint.position,
+                                                                Quaternion.identity);
+                //レベル上げ
+                instace.GetComponent<Unit>().status.SetStatus(demonArmyLevel);
+                instace.GetComponent<Unit>().level = demonArmyLevel;
+                Vector3 summonVec = (rootPointes[rootCandidate[rand, j]].ToArray()[0].position - rootes[rootCandidate[rand, j]].transform.position).normalized;   //初めの向き
+                Quaternion rotation = Quaternion.LookRotation(summonVec);
+                instace.transform.rotation = rotation;    //出た瞬間の向き
+                instace.tag = transform.gameObject.tag;    //自分のタグを設定
+                instace.layer = transform.gameObject.layer;    //レイヤーを設定
+                instace.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定
+                instace.GetComponent<Unit>().goalObject = target; //最終目標
+                instace.GetComponent<Unit>().LoiteringPointObj = rootPointes[rootCandidate[rand, j]].ToArray();  //巡回ルート地点配列
+                instace.GetComponent<Unit>().rootNum = (Enum.Direction_TYPE)rootCandidate[rand, j];   //ルート番号
+                instace.GetComponent<Unit>().SpawnTargetPosition = rootes[rootCandidate[rand, j]].transform.position + randVac;
+
+                //出るとき重なる瞬間は回らないように
+                instace.GetComponent<Rigidbody>().freezeRotation = true;
+
+                yield return new WaitForSeconds(demonArmyOneWaitTime);
+            }
+
+            yield return new WaitForSeconds(demonArmyWaveWaitTime - demonArmyOneWaitTime * (int)Enum.Direction_TYPE.Num);
+        }
     }
 }

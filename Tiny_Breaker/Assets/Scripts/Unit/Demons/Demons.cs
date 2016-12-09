@@ -67,7 +67,7 @@ public class Demons : Unit
         loiteringSPEED = status.CurrentSPEED;
 
         ////設定がなされていなかった時の仮置き
-        if (gameObject.transform.parent == null)
+        if (loiteringPointObj == null)
             loiteringPointObj = new Transform[] { goalObject.transform };
         if (goalObject == null)
             goalObject = GameObject.Find("DummyTarget");
