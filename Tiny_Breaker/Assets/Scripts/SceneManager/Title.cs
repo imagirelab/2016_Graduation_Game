@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using StaticClass;
+using SocketIO;
 
 public class Title : MonoBehaviour
 {
@@ -9,9 +10,10 @@ public class Title : MonoBehaviour
     [SerializeField]
     GameObject fade;
 
-    //フラッシュさせるオブジェクト
     [SerializeField]
-    GameObject flash;
+    GameObject[] ok = new GameObject[GameRule.playerNum];
+
+    SocketIOComponent socket;
 
     void Start()
     {
@@ -22,10 +24,7 @@ public class Title : MonoBehaviour
         //オブジェクトの設定し忘れ
         if (fade == null)
             fade = new GameObject();
-
-        if (flash == null)
-            flash = new GameObject();
-
+        
         //コルーチンスタート
         StartCoroutine(TitleUpdate());
     }
@@ -34,22 +33,21 @@ public class Title : MonoBehaviour
     {
         //フェードイン終了
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeInStart());
-
-        //フラッシュを開始する
-        if (flash.GetComponent<Flash>())
-            if (!flash.GetComponent<Flash>().enabled)
-                flash.GetComponent<Flash>().enabled = true;
-
+        
         while (true)
         {
             //ボタンを押されたらフェードアウト開始
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                //フラッシュコンポーネントをオフにする
-                if (flash.GetComponent<Flash>())
-                    if (flash.GetComponent<Flash>().enabled)
-                        flash.GetComponent<Flash>().enabled = false;
+                //フェードイン終了
+                yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
 
+                break;
+            }
+
+            //プレイヤーがログインしたらフェード
+            if (ok[0].activeInHierarchy && ok[1].activeInHierarchy)
+            {
                 //フェードイン終了
                 yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
 
@@ -58,6 +56,12 @@ public class Title : MonoBehaviour
 
             yield return null;
         }
+        
+        //終了リクエスト
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
+
+        socket.Emit("StopRequest");
 
         //フェードアウト終了時シーン切り替え
         SceneManager.LoadScene("MainScene");
