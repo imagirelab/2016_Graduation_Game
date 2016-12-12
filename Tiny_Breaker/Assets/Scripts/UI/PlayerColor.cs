@@ -29,14 +29,10 @@ public class PlayerColor : MonoBehaviour
 
     void Start()
     {
-        //playerID = 0;
+        if (target == null)
+            target = new GameObject();
 
-        ////根底がプレイヤーだったらplayerIDの取得
-        //GameObject rootObject = transform.root.gameObject;
-        //if (rootObject.GetComponent<Player>() != null)
-        //    playerID = rootObject.GetComponent<Player>().playerID;
-
-        switch(target.tag)
+        switch (target.tag)
         {
             case "Player1":
                 playerID = 1;
@@ -57,17 +53,5 @@ public class PlayerColor : MonoBehaviour
         //バーとスライダーの色変化
         frame.sprite = frameSprites[playerID];
         HP.sprite = HPSprites[playerID];
-    }
-
-    void Update()
-    {
-        ////根底がスポナーの時playerIDの取得
-        //GameObject rootObject = transform.root.gameObject;
-        //if (rootObject.GetComponent<Spawner>() != null)
-        //    playerID = rootObject.GetComponent<Spawner>().CurrentPlayerID;
-
-        ////バーとスライダーの色変化
-        //frame.sprite = frameSprites[playerID];
-        //HP.sprite = HPSprites[playerID];
     }
 }

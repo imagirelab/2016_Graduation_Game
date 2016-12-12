@@ -258,6 +258,7 @@ public class Main : MonoBehaviour
 
         //フェードを始める、
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
+
         //シーン推移
         if (GameRule.getInstance().round.Count >= GameRule.roundCount ||
             p1wincount >= Mathf.CeilToInt(GameRule.roundCount / 2.0f) ||

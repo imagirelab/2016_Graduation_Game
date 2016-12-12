@@ -1,0 +1,269 @@
+fileFormatVersion: 2
+guid: a933b36ba4805c54baf3349e1929a868
+timeCreated: 1481457175
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: riza_number_0
+    21300002: riza_number_1
+    21300004: riza_number_2
+    21300006: riza_number_3
+    21300008: riza_number_4
+    21300010: riza_number_5
+    21300012: riza_number_6
+    21300014: riza_number_7
+    21300016: riza_number_8
+    21300018: riza_number_9
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: riza_number_0
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 728
+        width: 194
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 43.846558, y: 88.84412}
+        - {x: -47.153442, y: 88.84412}
+        - {x: -50.153442, y: 87.84412}
+        - {x: -66.15344, y: 42.844116}
+        - {x: -66.15344, y: -48.155884}
+        - {x: -42.153442, y: -87.15588}
+        - {x: 33.846558, y: -87.15588}
+        - {x: 66.84656, y: -51.155884}
+        - {x: 66.84656, y: 81.84412}
+    - name: riza_number_1
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 732
+        width: 130
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -10.298187, y: 88.074036}
+        - {x: -44.298187, y: 72.074036}
+        - {x: -44.298187, y: 1.0740356}
+        - {x: -21.298187, y: -68.925964}
+        - {x: -10.298187, y: -86.925964}
+        - {x: 34.701813, y: -86.925964}
+        - {x: 45.701813, y: -79.925964}
+        - {x: 45.701813, y: 73.074036}
+        - {x: 31.701813, y: 88.074036}
+    - name: riza_number_2
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 733
+        width: 190
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -49.917297, y: 87.2565}
+        - {x: -64.9173, y: 80.2565}
+        - {x: -64.9173, y: -86.7435}
+        - {x: 66.0827, y: -86.7435}
+        - {x: 66.0827, y: 64.2565}
+        - {x: 44.082703, y: 87.2565}
+    - name: riza_number_3
+      rect:
+        serializedVersion: 2
+        x: 2030
+        y: 730
+        width: 171
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -40.569336, y: 88.209076}
+        - {x: -58.569336, y: 71.209076}
+        - {x: -58.569336, y: -75.790924}
+        - {x: -22.569336, y: -87.790924}
+        - {x: 47.430664, y: -87.790924}
+        - {x: 59.430664, y: -82.790924}
+        - {x: 59.430664, y: 76.209076}
+        - {x: 35.430664, y: 88.209076}
+    - name: riza_number_4
+      rect:
+        serializedVersion: 2
+        x: 2670
+        y: 728
+        width: 214
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -73.2832, y: -62.155884}
+        - {x: -29.283203, y: -86.15588}
+        - {x: 41.716797, y: -86.15588}
+        - {x: 73.7168, y: -63.155884}
+        - {x: 73.7168, y: 31.844116}
+        - {x: 54.716797, y: 75.84412}
+        - {x: 31.716797, y: 87.84412}
+        - {x: -14.283203, y: 87.84412}
+        - {x: -73.2832, y: 35.844116}
+    - name: riza_number_5
+      rect:
+        serializedVersion: 2
+        x: 58
+        y: 68
+        width: 172
+        height: 251
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -56.416264, y: 86.408516}
+        - {x: -58.416264, y: 77.408516}
+        - {x: -58.416264, y: -78.591484}
+        - {x: -42.416264, y: -85.591484}
+        - {x: 57.583736, y: -85.591484}
+        - {x: 59.583736, y: -84.591484}
+        - {x: 59.583736, y: 85.408516}
+        - {x: 56.583736, y: 86.408516}
+    - name: riza_number_6
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 71
+        width: 177
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 30.55951, y: 86.45595}
+        - {x: -25.44049, y: 86.45595}
+        - {x: -32.44049, y: 82.45595}
+        - {x: -60.44049, y: 38.455948}
+        - {x: -60.44049, y: -59.544052}
+        - {x: -31.44049, y: -85.54405}
+        - {x: 39.55951, y: -85.54405}
+        - {x: 61.55951, y: -62.544052}
+        - {x: 61.55951, y: 66.45595}
+        - {x: 60.55951, y: 71.45595}
+    - name: riza_number_7
+      rect:
+        serializedVersion: 2
+        x: 1365
+        y: 73
+        width: 193
+        height: 246
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -51.917297, y: 85.32091}
+        - {x: -56.917297, y: 84.32091}
+        - {x: -65.9173, y: 67.32091}
+        - {x: -65.9173, y: -1.6790924}
+        - {x: -28.917297, y: -12.679092}
+        - {x: -17.917297, y: 0.3209076}
+        - {x: -10.917297, y: 9.320908}
+        - {x: -29.917297, y: -44.679092}
+        - {x: -31.917297, y: -64.67909}
+        - {x: -26.917297, y: -83.67909}
+        - {x: 23.082703, y: -83.67909}
+        - {x: 67.0827, y: 11.320908}
+        - {x: 67.0827, y: 73.32091}
+        - {x: 59.082703, y: 85.32091}
+    - name: riza_number_8
+      rect:
+        serializedVersion: 2
+        x: 2030
+        y: 68
+        width: 177
+        height: 255
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -39.569336, y: 87.908516}
+        - {x: -60.569336, y: 63.908516}
+        - {x: -60.569336, y: -78.091484}
+        - {x: -46.569336, y: -87.091484}
+        - {x: 40.430664, y: -87.091484}
+        - {x: 61.430664, y: -82.091484}
+        - {x: 61.430664, y: 69.908516}
+        - {x: 55.430664, y: 87.908516}
+    - name: riza_number_9
+      rect:
+        serializedVersion: 2
+        x: 2690
+        y: 68
+        width: 173
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: 52.366333, y: 87.408516}
+        - {x: -25.633667, y: 87.408516}
+        - {x: -55.633667, y: 67.408516}
+        - {x: -58.633667, y: 55.408516}
+        - {x: -58.633667, y: -5.591484}
+        - {x: -24.633667, y: -81.591484}
+        - {x: -10.633667, y: -86.591484}
+        - {x: 19.366333, y: -86.591484}
+        - {x: 32.366333, y: -75.591484}
+        - {x: 60.366333, y: -22.591484}
+        - {x: 60.366333, y: 58.408516}
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -10,7 +10,7 @@ public class RoundCountUI : MonoBehaviour
     [SerializeField]
     float distance = -55.0f;
 
-    void Start ()
+    void Start()
     {
         if (image == null)
             image = new GameObject();

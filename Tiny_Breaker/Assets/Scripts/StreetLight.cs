@@ -6,7 +6,7 @@ public class StreetLight : MonoBehaviour
     [SerializeField]
     bool[] roundLighting = new bool[GameRule.roundCount];
 
-	void Start ()
+    void Start()
     {
         foreach (Transform child in transform)
             child.gameObject.SetActive(false);
@@ -16,5 +16,5 @@ public class StreetLight : MonoBehaviour
             foreach (Transform child in transform)
                 child.gameObject.SetActive(true);
         }
-	}
+    }
 }

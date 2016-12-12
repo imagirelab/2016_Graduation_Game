@@ -22,7 +22,7 @@ public class FadeIn : MonoBehaviour
                                                 alpha);
         end = false;
     }
-    
+
     void Update()
     {
         if (count < fadeTime)

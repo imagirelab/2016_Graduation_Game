@@ -330,10 +330,10 @@ namespace SocketIO
 			try {
 				ws.Send(encoder.Encode(packet));
 			} catch(SocketIOException ex) {
-				#if SOCKET_IO_DEBUG
+#if SOCKET_IO_DEBUG
 				debugMethod.Invoke(ex.ToString());
-				#endif
-			}
+#endif
+            }
 		}
 
 		private void OnOpen(object sender, EventArgs e)
@@ -421,10 +421,10 @@ namespace SocketIO
 				try{
 					handler(ev);
 				} catch(Exception ex){
-					#if SOCKET_IO_DEBUG
+#if SOCKET_IO_DEBUG
 					debugMethod.Invoke(ex.ToString());
-					#endif
-				}
+#endif
+                }
 			}
 		}
 

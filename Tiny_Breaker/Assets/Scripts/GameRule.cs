@@ -44,7 +44,7 @@ public class Enum : MonoBehaviour
         Top,
         Num
     }
-    
+
     //必殺技の種類
     public enum Deathblow_TYPE
     {
@@ -69,7 +69,7 @@ namespace StaticClass
         public bool debugFlag;
         public const int playerNum = 2;
         public const int roundCount = 3;
-        
+
         //最終結果
         public Enum.ResultType result = Enum.ResultType.None;
         //ラウンド結果

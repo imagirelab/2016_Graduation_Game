@@ -167,7 +167,7 @@ public class Unit : MonoBehaviour
     public Vector3 GetRootPosition()
     {
         Vector3 rootPosition = loiteringPointObj[currentRootPoint].transform.position;
-        
+
         return rootPosition;
     }
 

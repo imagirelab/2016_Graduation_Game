@@ -4,28 +4,29 @@ using StaticClass;
 
 public class ResultText : MonoBehaviour
 {
+    [SerializeField]
+    Sprite[] resultUI = new Sprite[(int)Enum.ResultType.Num];
+
 	void Start ()
 	{
+        Image image = GetComponent<Image>();
+
 		switch(GameRule.getInstance().result)
         {
             case Enum.ResultType.Player1Win:
-                GetComponent<Text>().text = "Player1 Win";
-                GetComponent<Text>().color = Color.red;
+                image.sprite = resultUI[0];
                 break;
 
             case Enum.ResultType.Player2Win:
-                GetComponent<Text>().text = "Player2 Win";
-                GetComponent<Text>().color = Color.blue;
+                image.sprite = resultUI[1];
                 break;
 
             case Enum.ResultType.Draw:
-                GetComponent<Text>().text = "Draw";
-                GetComponent<Text>().color = Color.green;
+                image.sprite = resultUI[2];
                 break;
                 
             default:
-                GetComponent<Text>().text = "None";
-                GetComponent<Text>().color = Color.white;
+                image.sprite = resultUI[2];
                 break;
         }
 	}
