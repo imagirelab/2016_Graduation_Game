@@ -61,7 +61,7 @@ public class Title : MonoBehaviour
         GameObject go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
 
-        socket.Emit("StopRequest");
+        socket.Emit("MatchingEndRequest");
 
         //フェードアウト終了時シーン切り替え
         SceneManager.LoadScene("MainScene");

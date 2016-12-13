@@ -137,13 +137,21 @@ public class UnitAttack : MonoBehaviour
         //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
         if (unitComp.status.CurrentHP <= 0)
         {
-            if (_target.GetComponent<Soldier>() && unit.transform.root.gameObject.GetComponent<PlayerCost>())
+            //倒した数をカウントする
+            if (unitComp.state != Enum.State.Dead)
             {
-                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
-                Player player = unit.transform.root.gameObject.GetComponent<Player>();
+                unitComp.state = Enum.State.Dead;
 
-                //parent.transform.root は　悪魔のRootつまりプレイヤー
-                player.AddCostList(playerCost.GetSoldierCost);
+                RoundDataBase.getInstance().AddPassesKnockDownCount(gameObject.tag);
+
+                if (_target.GetComponent<Soldier>() && unit.transform.root.gameObject.GetComponent<PlayerCost>())
+                {
+                    PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+                    Player player = unit.transform.root.gameObject.GetComponent<Player>();
+
+                    //parent.transform.root は　悪魔のRootつまりプレイヤー
+                    player.AddCostList(playerCost.GetSoldierCost);
+                }
             }
         }
     }

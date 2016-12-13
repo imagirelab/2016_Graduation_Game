@@ -200,9 +200,16 @@ public class Main : MonoBehaviour
         }
 
         //ラウンド終了時に持っていたコストを保存しておく
-        if (GameRule.getInstance().round.Count < GameRule.roundCount)
-            for (int i = 0; i < GameRule.playerNum; i++)
-                RoundDataBase.getInstance().PassesCost[i] = player[i].GetComponent<PlayerCost>().CurrentCost;
+        //if (GameRule.getInstance().round.Count < GameRule.roundCount)
+        for (int i = 0; i < GameRule.playerNum; i++)
+        {
+            RoundDataBase.getInstance().PassesCost[i] = player[i].GetComponent<PlayerCost>().CurrentCost;
+
+            RoundDataBase.getInstance().SetDemonLevel(player[i].tag,
+                player[i].GetComponent<Player>().DemonsLevel[(int)Enum.Demon_TYPE.POPO],
+                player[i].GetComponent<Player>().DemonsLevel[(int)Enum.Demon_TYPE.PUPU],
+                player[i].GetComponent<Player>().DemonsLevel[(int)Enum.Demon_TYPE.PIPI]);
+        }
 
         //ゲームに使うものをオフにする
         //プレイヤーが悪魔たちを消えるのを少し待つ
@@ -258,6 +265,15 @@ public class Main : MonoBehaviour
 
         //フェードを始める、
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
+
+        for (int i = 0; i < GameRule.playerNum; i++)
+        {
+            Debug.Log("PassesCost : " + RoundDataBase.getInstance().PassesCost[i]);
+            Debug.Log("PassesDeadCount : " + RoundDataBase.getInstance().PassesDeadCount[i]);
+            Debug.Log("POPO : " + RoundDataBase.getInstance().POPOLevel[i]);
+            Debug.Log("PUPU : " + RoundDataBase.getInstance().PUPULevel[i]);
+            Debug.Log("PIPI : " + RoundDataBase.getInstance().PIPILevel[i]);
+        }
 
         //シーン推移
         if (GameRule.getInstance().round.Count >= GameRule.roundCount ||

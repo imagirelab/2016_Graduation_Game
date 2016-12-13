@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using StaticClass;
 
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
 public class Player : MonoBehaviour
@@ -75,10 +76,11 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-
         //悪魔のレベルだけ初期化
-        for (int i = 0; i < demonsLevel.Length; i++)
-            demonsLevel[i] = startLevel;
+        demonsLevel[(int)Enum.Demon_TYPE.POPO] = RoundDataBase.getInstance().POPOLevel[playerID - 1];
+        demonsLevel[(int)Enum.Demon_TYPE.PUPU] = RoundDataBase.getInstance().PUPULevel[playerID - 1];
+        demonsLevel[(int)Enum.Demon_TYPE.PIPI] = RoundDataBase.getInstance().PIPILevel[playerID - 1];
+
         //ステータスの作成
         for (int i = 0; i < demonsStatus.Length; i++)
         {
@@ -212,7 +214,7 @@ public class Player : MonoBehaviour
                 childDemonsCount++;
 
         //召喚できない条件なら何もしないで返す
-        if (childDemonsCount > maxSummonNum)
+        if (childDemonsCount >= maxSummonNum)
             return;
 
         //適当な値を入れて重なることを避ける

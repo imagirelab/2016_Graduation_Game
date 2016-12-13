@@ -191,7 +191,7 @@ public class Unit : MonoBehaviour
     public void AnyDamage(int damage, Unit attaker)
     {
         //通常ダメージ処理
-        status.CurrentHP -= damage;
+        AnyDamage(damage);
 
         //反射ダメージオンの状態の処理
         if (refrecAttack)

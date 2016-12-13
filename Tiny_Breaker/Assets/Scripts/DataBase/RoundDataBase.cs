@@ -1,7 +1,4 @@
 ﻿//ラウンド間で受け渡すデータを集める場所
-
-using UnityEngine;
-
 namespace StaticClass
 {
     public class RoundDataBase
@@ -30,17 +27,68 @@ namespace StaticClass
         public int[] PUPULevel = new int[GameRule.playerNum];
         public int[] PIPILevel = new int[GameRule.playerNum];
 
+        int startLevel = 0;
 
         public void Reset()
         {
             for (int i = 0; i < GameRule.playerNum; i++)
             {
                 passesCost[i] = 0;
+
                 passesDeadCount[i] = 0;
                 passesKnockDownCount[i] = 0;
-                POPOLevel[i] = 0;
-                PUPULevel[i] = 0;
-                PIPILevel[i] = 0;
+                POPOLevel[i] = startLevel;
+                PUPULevel[i] = startLevel;
+                PIPILevel[i] = startLevel;
+            }
+        }
+
+        public void AddPassesDeadCount(string tag)
+        {
+            switch(tag)
+            {
+                case "Player1":
+                    passesDeadCount[0]++;
+                    break;
+                case "Player2":
+                    passesDeadCount[1]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void AddPassesKnockDownCount(string tag)
+        {
+            switch (tag)
+            {
+                case "Player1":
+                    passesKnockDownCount[0]++;
+                    break;
+                case "Player2":
+                    passesKnockDownCount[1]++;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        public void SetDemonLevel(string tag, int popo, int pupu, int pipi)
+        {
+            switch (tag)
+            {
+                case "Player1":
+                    POPOLevel[0] = popo;
+                    PUPULevel[0] = pupu;
+                    PIPILevel[0] = pipi;
+                    break;
+                case "Player2":
+                    POPOLevel[1] = popo;
+                    PUPULevel[1] = pupu;
+                    PIPILevel[1] = pipi;
+                    break;
+                default:
+                    break;
             }
         }
     }
