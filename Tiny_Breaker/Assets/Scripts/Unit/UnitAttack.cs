@@ -8,6 +8,9 @@ using System.Collections.Generic;
 public class UnitAttack : MonoBehaviour
 {
     [SerializeField]
+    GameObject effect = null;
+
+    [SerializeField]
     Enum.Color_Type adType = Enum.Color_Type.White;
     [SerializeField]
     float admag = 1.5f;
@@ -53,6 +56,11 @@ public class UnitAttack : MonoBehaviour
 
         while (true)
         {
+            if(effect != null)
+                Instantiate(effect,
+                            gameObject.transform.position,
+                            Quaternion.identity);
+
             //対象物が同じタグだったら仲間だから攻撃しない
             if (target != null)
                 if (target.tag == transform.gameObject.tag)

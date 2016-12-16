@@ -172,7 +172,7 @@ public class Main : MonoBehaviour
         #endregion
 
         #region ゲーム終了後の処理
-
+        
         //残り体力判定（ラウンド結果判定）
         if (P1Base.HPpro > P2Base.HPpro)
         {
@@ -265,16 +265,7 @@ public class Main : MonoBehaviour
 
         //フェードを始める、
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
-
-        for (int i = 0; i < GameRule.playerNum; i++)
-        {
-            Debug.Log("PassesCost : " + RoundDataBase.getInstance().PassesCost[i]);
-            Debug.Log("PassesDeadCount : " + RoundDataBase.getInstance().PassesDeadCount[i]);
-            Debug.Log("POPO : " + RoundDataBase.getInstance().POPOLevel[i]);
-            Debug.Log("PUPU : " + RoundDataBase.getInstance().PUPULevel[i]);
-            Debug.Log("PIPI : " + RoundDataBase.getInstance().PIPILevel[i]);
-        }
-
+        
         //シーン推移
         if (GameRule.getInstance().round.Count >= GameRule.roundCount ||
             p1wincount >= Mathf.CeilToInt(GameRule.roundCount / 2.0f) ||

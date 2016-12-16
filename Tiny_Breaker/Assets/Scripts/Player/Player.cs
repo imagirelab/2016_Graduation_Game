@@ -57,10 +57,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     GameObject deathbolwObj;
-
-    [SerializeField]
-    int startLevel = 0;
-
+    
     [SerializeField, HeaderAttribute("Deathblow"), TooltipAttribute("回復してから出撃するまでの間隔")]
     float recoveryWaitTime = 1.0f;
     [SerializeField, TooltipAttribute("悪魔軍団の出撃回数")]
@@ -71,6 +68,8 @@ public class Player : MonoBehaviour
     float demonArmyWaveWaitTime = 1.5f;
     [SerializeField, TooltipAttribute("悪魔軍団の１匹ごとの出撃間隔")]
     float demonArmyOneWaitTime = 0.3f;
+    
+    public Coroutine deathblowcor;
 
     #endregion
 
@@ -289,7 +288,7 @@ public class Player : MonoBehaviour
     //必殺技の発動
     public void Deathblow()
     {
-        StartCoroutine(SummonDemonArmy());
+        deathblowcor = StartCoroutine(SummonDemonArmy());
     }
 
     //必殺技の発動(デバッグ用)
@@ -305,6 +304,10 @@ public class Player : MonoBehaviour
     //終了時の処理
     public IEnumerator ChildDead()
     {
+        //必殺技終了
+        if (deathblowcor != null)
+            StopCoroutine(deathblowcor);
+
         //出してる悪魔を全て殺す
         foreach (Transform child in transform)
             if (child.gameObject.GetComponent<Unit>())

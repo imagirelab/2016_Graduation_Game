@@ -164,6 +164,7 @@
     <Compile Include="Assets\Scripts\SceneManager\Main.cs" />
     <Compile Include="Assets\Scripts\SceneManager\Result.cs" />
     <Compile Include="Assets\Scripts\SceneManager\Title.cs" />
+    <Compile Include="Assets\Scripts\SelfDestroy.cs" />
     <Compile Include="Assets\Scripts\SkyChange.cs" />
     <Compile Include="Assets\Scripts\SoundManager.cs" />
     <Compile Include="Assets\Scripts\StreetLight.cs" />
