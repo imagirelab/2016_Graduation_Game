@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using StaticClass;
+using SocketIO;
 
 //大きい画面でのプレイヤークラス(スマホの情報の受け渡しとかプレイヤー番号とか送受信の解析とか)
 public class Player : MonoBehaviour
 {
     #region フィールド
+
+    SocketIOComponent socket;
 
     //送信が必要ないときにOFFにする
     [SerializeField]
@@ -75,6 +78,9 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
+
         //悪魔のレベルだけ初期化
         demonsLevel[(int)Enum.Demon_TYPE.POPO] = RoundDataBase.getInstance().POPOLevel[playerID - 1];
         demonsLevel[(int)Enum.Demon_TYPE.PUPU] = RoundDataBase.getInstance().PUPULevel[playerID - 1];
@@ -119,7 +125,7 @@ public class Player : MonoBehaviour
         {
             //送信がいらないときはしない
             if (IsPush)
-                //PushSpirit(spiritsData[0]);
+                PushSpirit(spiritsData[0]);
 
                 spiritsData.Remove(spiritsData[0]);
         }
@@ -129,33 +135,31 @@ public class Player : MonoBehaviour
         {
             //送信がいらないときはしない
             if (IsPush)
-                //PushCost(costData[0]);
+                PushCost(costData[0]);
 
                 costData.Remove(costData[0]);
         }
     }
 
-    ////魂をサーバーに送信
-    //void PushSpirit(Enum.Demon_TYPE _spiritData)
-    //{
-    //    NCMBObject nbcObj = new NCMBObject("SpiritData");
+    //魂をサーバーに送信
+    void PushSpirit(Enum.Demon_TYPE _spiritData)
+    {
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        jsonObject.AddField("Type", _spiritData.ToString());
+        jsonObject.AddField("PlayerID", playerID);
 
-    //    nbcObj["TYPE"] = _spiritData.ToString();
-    //    nbcObj["PlayerNo"] = playerID.ToString();
+        socket.Emit("SpiritPush", jsonObject);
+    }
 
-    //    nbcObj.SaveAsync();
-    //}
+    //コストをサーバーに送信
+    void PushCost(int _costData)
+    {
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        jsonObject.AddField("Cost", _costData);
+        jsonObject.AddField("PlayerID", playerID);
 
-    ////コストをサーバーに送信
-    //void PushCost(int _costData)
-    //{
-    //    NCMBObject nbcObj = new NCMBObject("CostData");
-
-    //    nbcObj["Cost"] = _costData.ToString();
-    //    nbcObj["PlayerNo"] = playerID.ToString();
-
-    //    nbcObj.SaveAsync();
-    //}
+        socket.Emit("AddCost", jsonObject);
+    }
 
     //魂リストへの追加
     public void AddSpiritList(Enum.Demon_TYPE spiritdata)
