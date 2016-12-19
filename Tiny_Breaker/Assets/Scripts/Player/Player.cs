@@ -144,9 +144,9 @@ public class Player : MonoBehaviour
     //魂をサーバーに送信
     void PushSpirit(Enum.Demon_TYPE _spiritData)
     {
-        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.STRING);
         jsonObject.AddField("Type", _spiritData.ToString());
-        jsonObject.AddField("PlayerID", playerID);
+        jsonObject.AddField("PlayerID", playerID - 1);
 
         socket.Emit("SpiritPush", jsonObject);
     }
@@ -154,9 +154,9 @@ public class Player : MonoBehaviour
     //コストをサーバーに送信
     void PushCost(int _costData)
     {
-        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.STRING);
         jsonObject.AddField("Cost", _costData);
-        jsonObject.AddField("PlayerID", playerID);
+        jsonObject.AddField("PlayerID", playerID - 1);
 
         socket.Emit("AddCost", jsonObject);
     }
