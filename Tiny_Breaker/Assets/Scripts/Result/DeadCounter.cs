@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using StaticClass;
 
 public class DeadCounter : MonoBehaviour
@@ -11,17 +10,12 @@ public class DeadCounter : MonoBehaviour
     Sprite[] numbars = new Sprite[10];
 
     [SerializeField]
-    Image ones = null;
+    SpriteRenderer ones = null;
     [SerializeField]
-    Image tens = null;
+    SpriteRenderer tens = null;
     [SerializeField]
-    Image hundreds = null;
-
-    void Start ()
-	{
-		
-	}
-	
+    SpriteRenderer hundreds = null;
+    
 	void Update ()
 	{
         int value = RoundDataBase.getInstance().PassesDeadCount[PlayerID];

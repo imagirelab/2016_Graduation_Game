@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using StaticClass;
 
 public class PIPIDemonLevel : MonoBehaviour
@@ -11,15 +10,10 @@ public class PIPIDemonLevel : MonoBehaviour
     Sprite[] numbars = new Sprite[10];
 
     [SerializeField]
-    Image ones = null;
+    SpriteRenderer ones = null;
     [SerializeField]
-    Image tens = null;
-
-    void Start()
-    {
-
-    }
-
+    SpriteRenderer tens = null;
+    
     void Update()
     {
         int value = RoundDataBase.getInstance().PIPILevel[PlayerID];

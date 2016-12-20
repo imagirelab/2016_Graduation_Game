@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using StaticClass;
 
 public class ResultText : MonoBehaviour
@@ -9,7 +8,7 @@ public class ResultText : MonoBehaviour
 
 	void Start ()
 	{
-        Image image = GetComponent<Image>();
+        SpriteRenderer image = GetComponent<SpriteRenderer>();
 
 		switch(GameRule.getInstance().result)
         {
