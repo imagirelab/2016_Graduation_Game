@@ -31,6 +31,10 @@ public class Title : MonoBehaviour
 
     IEnumerator TitleUpdate()
     {
+        //終了リクエスト
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
+
         //フェードイン終了
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeInStart());
         
@@ -57,10 +61,6 @@ public class Title : MonoBehaviour
             yield return null;
         }
         
-        //終了リクエスト
-        GameObject go = GameObject.Find("SocketIO");
-        socket = go.GetComponent<SocketIOComponent>();
-
         socket.Emit("MatchingEndRequest");
 
         //フェードアウト終了時シーン切り替え

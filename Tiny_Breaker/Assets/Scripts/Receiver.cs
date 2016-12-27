@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using StaticClass;
 using SocketIO;
+using UnityEngine.UI;
 
 public class Receiver : MonoBehaviour
 {
@@ -9,10 +10,7 @@ public class Receiver : MonoBehaviour
 
     [SerializeField]
     Player[] players = new Player[GameRule.playerNum];
-
-    [SerializeField]
-    bool IsReceive = true;  //受信が必要ないときにOFFにする
-
+    
     //スマホからのメッセージ一覧
     struct SmaphoMsg
     {
@@ -31,35 +29,23 @@ public class Receiver : MonoBehaviour
         public Enum.Deathblow_TYPE type;
     }
     List<DeathblowMsg> DeathblowList = new List<DeathblowMsg>();
-
-    //スマホ側から受け取る情報を抑制するためのカウンター
-    [SerializeField]
-    int counterLimit = 30;
-    int counter = 0;
+    
+    public Text connect;
+    public Text getDemon;
+    public Text getDeathblow;
 
     void Start()
     {
         GameObject go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
 
+        socket.On("connect", TextOpen);
         socket.On("DemonPushed", GetDemon);
         socket.On("DeadlyPushed", GetDeathblow);
     }
 
     void Update()
     {
-        //受信制御
-        counter++;
-
-        if (counter > counterLimit)
-        {
-            counter = 0;
-
-            //受信後の処理
-            if (IsReceive)   //trueの時だけ受信する
-                Receive();
-        }
-
         //リストの初めのやつから処理を行う
         if (smaphoMsgList.Count > 0)
         {
@@ -90,6 +76,12 @@ public class Receiver : MonoBehaviour
         string _Type = e.data.GetField("Type").str;
         string _Direction = e.data.GetField("Direction").str;
         string _Level = e.data.GetField("Level").str;
+
+        getDemon.text = "GetDemon\n" +
+                        "PlayerID : " + _PlayerNo + "\n" +
+                        "Type : " + _Type + "\n" +
+                        "Direction : " + _Direction + "\n" +
+                        "Level : " + _Level;
 
         smaphoMsg.playerID = System.Convert.ToInt32(_PlayerNo);
 
@@ -137,6 +129,10 @@ public class Receiver : MonoBehaviour
         string _PlayerNo = e.data.GetField("PlayerID").str;
         string _Deadly = e.data.GetField("Deadly").str;
 
+        getDeathblow.text = "GetDeathblow\n" +
+                        "PlayerID : " + _PlayerNo + "\n" +
+                        "Deadly : " + _Deadly + "\n";
+
         //プレイヤーのID
         deathblowMsg.playerID = System.Convert.ToInt32(_PlayerNo);
 
@@ -156,132 +152,8 @@ public class Receiver : MonoBehaviour
         DeathblowList.Add(deathblowMsg);
     }
 
-    //受信したときの処理
-    void Receive()
+    void TextOpen(SocketIOEvent e)
     {
-        #region DemonData
-
-        ////クエリを作成
-        //NCMBQuery<NCMBObject> demonStatus = new NCMBQuery<NCMBObject>("DemonData");
-
-        ////検索
-        //demonStatus.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        //{
-        //    //検索失敗時
-        //    if (e != null)
-        //    {
-        //        Debug.Log(e.ToString());
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        foreach (NCMBObject ncmbObj in objList)
-        //        {
-        //            SmaphoMsg smaphoMsg = new SmaphoMsg();
-
-        //            //プレイヤーのID
-        //            if (ncmbObj["PlayerNo"] != null)
-        //                smaphoMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
-
-        //            //方向
-        //            Enum.Direction_TYPE dir = Enum.Direction_TYPE.Middle;
-        //            switch (ncmbObj["Direction"].ToString())
-        //            {
-        //                case "Top":
-        //                    dir = Enum.Direction_TYPE.Top;
-        //                    break;
-        //                case "Middle":
-        //                    dir = Enum.Direction_TYPE.Middle;
-        //                    break;
-        //                case "Bottom":
-        //                    dir = Enum.Direction_TYPE.Bottom;
-        //                    break;
-        //                default:
-        //                    Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
-        //                    break;
-        //            }
-        //            smaphoMsg.dirType = dir;
-
-        //            //タイプの振り分け
-        //            Enum.Demon_TYPE type = Enum.Demon_TYPE.POPO;
-        //            switch (ncmbObj["Type"].ToString())
-        //            {
-        //                case "POPO":
-        //                    type = Enum.Demon_TYPE.POPO;
-        //                    break;
-        //                case "PUPU":
-        //                    type = Enum.Demon_TYPE.PUPU;
-        //                    break;
-        //                case "PIPI":
-        //                    type = Enum.Demon_TYPE.PIPI;
-        //                    break;
-        //                default:
-        //                    Debug.Log("Player.cs Receive() ncmbObj[Type] Exception");
-        //                    break;
-        //            }
-        //            smaphoMsg.type = type;
-
-        //            //レベルの代入
-        //            if (ncmbObj["Level"] != null)
-        //                smaphoMsg.level = System.Convert.ToInt32(ncmbObj["Level"].ToString());
-
-        //            smaphoMsgList.Add(smaphoMsg);
-
-        //            //記録を取ったら消す
-        //            ncmbObj.DeleteAsync();
-
-        //            getState = false;
-        //        }
-        //    }
-        //});
-
-        #endregion
-
-        #region Deathblow
-
-        ////クエリを作成
-        //NCMBQuery<NCMBObject> deathblow = new NCMBQuery<NCMBObject>("DeadlyData");
-
-        ////検索
-        //deathblow.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        //{
-        //    //検索失敗時
-        //    if (e != null)
-        //    {
-        //        Debug.Log(e.ToString());
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        foreach (NCMBObject ncmbObj in objList)
-        //        {
-        //            DeathblowMsg deathblowMsg = new DeathblowMsg();
-
-        //            //プレイヤーのID
-        //            if (ncmbObj["PlayerNo"] != null)
-        //                deathblowMsg.playerID = System.Convert.ToInt32(ncmbObj["PlayerNo"].ToString());
-
-        //            //必殺技の種類
-        //            Enum.Deathblow_TYPE deathType = Enum.Deathblow_TYPE.Fire;
-        //            switch (ncmbObj["Type"].ToString())
-        //            {
-        //                case "Fire":
-        //                    deathType = Enum.Deathblow_TYPE.Fire;
-        //                    break;
-        //                default:
-        //                    Debug.Log("Player.cs Receive() ncmbObj[Direction] Exception");
-        //                    break;
-        //            }
-        //            deathblowMsg.type = deathType;
-                    
-        //            DeathblowList.Add(deathblowMsg);
-
-        //            //記録を取ったら消す
-        //            ncmbObj.DeleteAsync();
-        //        }
-        //    }
-        //});
-
-        #endregion
+        connect.text = "Connect";
     }
 }

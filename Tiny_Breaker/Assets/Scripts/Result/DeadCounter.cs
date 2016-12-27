@@ -18,7 +18,7 @@ public class DeadCounter : MonoBehaviour
     
 	void Update ()
 	{
-        int value = RoundDataBase.getInstance().PassesDeadCount[PlayerID];
+        int value = RoundDataBase.getInstance().PassesPopCount[PlayerID];
 
         int hundredsNum = (Mathf.FloorToInt(value) % 1000) / 100;
         int tensNum = (Mathf.FloorToInt(value) % 100) / 10;

@@ -190,10 +190,7 @@ public class Demons : Unit
     IEnumerator Dead()
     {
         IsDead = true;
-
-        //死んだ数をカウントする
-        RoundDataBase.getInstance().AddPassesDeadCount(gameObject.tag);
-
+        
         //リストから外す
         DemonDataBase.getInstance().RemoveList(this.gameObject);
 

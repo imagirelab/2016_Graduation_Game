@@ -323,17 +323,17 @@ namespace SocketIO
 
 		private void EmitPacket(Packet packet)
 		{
-			#if SOCKET_IO_DEBUG
-			debugMethod.Invoke("[SocketIO] " + packet);
-			#endif
-			
-			try {
-				ws.Send(encoder.Encode(packet));
-			} catch(SocketIOException ex) {
 #if SOCKET_IO_DEBUG
-				debugMethod.Invoke(ex.ToString());
+			debugMethod.Invoke("[SocketIO] " + packet);
 #endif
-            }
+
+            ws.Send(encoder.Encode(packet));
+//            try {
+//			} catch(SocketIOException ex) {
+//#if SOCKET_IO_DEBUG
+//				debugMethod.Invoke(ex.ToString());
+//#endif
+//            }
 		}
 
 		private void OnOpen(object sender, EventArgs e)
@@ -417,14 +417,16 @@ namespace SocketIO
 		private void EmitEvent(SocketIOEvent ev)
 		{
 			if (!handlers.ContainsKey(ev.name)) { return; }
-			foreach (Action<SocketIOEvent> handler in this.handlers[ev.name]) {
-				try{
-					handler(ev);
-				} catch(Exception ex){
-#if SOCKET_IO_DEBUG
-					debugMethod.Invoke(ex.ToString());
-#endif
-                }
+			foreach (Action<SocketIOEvent> handler in this.handlers[ev.name])
+            {
+                handler(ev);
+//                try
+//                {
+//				} catch(Exception ex){
+//#if SOCKET_IO_DEBUG
+//					debugMethod.Invoke(ex.ToString());
+//#endif
+//                }
 			}
 		}
 

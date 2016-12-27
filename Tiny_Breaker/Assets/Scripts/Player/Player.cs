@@ -264,6 +264,9 @@ public class Player : MonoBehaviour
 
             //出るとき重なる瞬間は回らないように
             instace.GetComponent<Rigidbody>().freezeRotation = true;
+            
+            //生まれた数をカウントする
+            RoundDataBase.getInstance().AddPassesPopCount(gameObject.tag);
 
             //強さに応じてスケールを変える処理
             //float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
@@ -396,6 +399,9 @@ public class Player : MonoBehaviour
 
                 //出るとき重なる瞬間は回らないように
                 instace.GetComponent<Rigidbody>().freezeRotation = true;
+
+                //生まれた数をカウントする
+                RoundDataBase.getInstance().AddPassesPopCount(gameObject.tag);
 
                 yield return new WaitForSeconds(demonArmyOneWaitTime);
             }

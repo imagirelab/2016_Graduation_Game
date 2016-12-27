@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using StaticClass;
+using UnityEngine.UI;
 using SocketIO;
 
 public class ReceiverTitle : MonoBehaviour
@@ -8,6 +9,8 @@ public class ReceiverTitle : MonoBehaviour
 
     [SerializeField]
     GameObject[] ok = new GameObject[GameRule.playerNum];
+    
+    public Text text;
 
     void Start ()
 	{
@@ -15,6 +18,7 @@ public class ReceiverTitle : MonoBehaviour
         socket = go.GetComponent<SocketIOComponent>();
         
         socket.On("PushRobbyID", SetOkActive);
+        socket.On("connect", TextOpen);
     }
 
     public void SetOkActive(SocketIOEvent e)
@@ -27,5 +31,10 @@ public class ReceiverTitle : MonoBehaviour
 
         //プレイヤーのID
         ok[System.Convert.ToInt32(_PlayerNo)].SetActive(true);
+    }
+
+    void TextOpen(SocketIOEvent e)
+    {
+        text.text = "Connect";
     }
 }

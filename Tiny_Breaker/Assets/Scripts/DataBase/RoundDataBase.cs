@@ -14,9 +14,9 @@ namespace StaticClass
         int[] passesCost = new int[GameRule.playerNum];
         public int[] PassesCost { get { return passesCost; } set { passesCost = value; } }
 
-        //倒された数
-        int[] passesDeadCount = new int[GameRule.playerNum];
-        public int[] PassesDeadCount { get { return passesDeadCount; } set { passesDeadCount = value; } }
+        //生まれた数
+        int[] passesPopCount = new int[GameRule.playerNum];
+        public int[] PassesPopCount { get { return passesPopCount; } set { passesPopCount = value; } }
 
         //倒した数
         int[] passesKnockDownCount = new int[GameRule.playerNum];
@@ -35,7 +35,7 @@ namespace StaticClass
             {
                 passesCost[i] = 0;
 
-                passesDeadCount[i] = 0;
+                passesPopCount[i] = 0;
                 passesKnockDownCount[i] = 0;
                 POPOLevel[i] = startLevel;
                 PUPULevel[i] = startLevel;
@@ -43,15 +43,15 @@ namespace StaticClass
             }
         }
 
-        public void AddPassesDeadCount(string tag)
+        public void AddPassesPopCount(string tag)
         {
             switch(tag)
             {
                 case "Player1":
-                    passesDeadCount[0]++;
+                    passesPopCount[0]++;
                     break;
                 case "Player2":
-                    passesDeadCount[1]++;
+                    passesPopCount[1]++;
                     break;
                 default:
                     break;
