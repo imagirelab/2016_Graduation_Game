@@ -4,7 +4,16 @@ using UnityEngine.UI;
 public class TimeLimit : MonoBehaviour
 {
     [SerializeField]
+    int stateTime = 120;
+
+    //普通の数字画像
+    [SerializeField]
     Sprite[] numbars = new Sprite[10];
+    //ラスト～秒のときの数字画像
+    [SerializeField]
+    Sprite[] lastNumbars = new Sprite[10];
+    //番号スプライト配列の入れ物
+    Sprite[] spriteNumbars = new Sprite[10];
 
     [SerializeField]
     Image ones = null;
@@ -13,8 +22,6 @@ public class TimeLimit : MonoBehaviour
     [SerializeField]
     Image hundreds = null;
 
-    [SerializeField]
-    int stateTime = 120;
     float currentTime = 0.0f;
 
     bool IsCounting = false;
@@ -22,29 +29,72 @@ public class TimeLimit : MonoBehaviour
     bool end = false;
     public bool End { get { return end; } }
 
+    //最後何秒を知らせるオブジェクト
+    public GameObject lastMessageObj;
+    bool lastMessageFlag = false;
+
+    public GameObject[] lastNumObj = new GameObject[10];
+    bool[] lastNumFlag = new bool[10];
+
     void Start ()
     {
         end = false;
+        lastMessageFlag = false;
+
+        for (int i = 0; i < lastNumFlag.Length; i++)
+            lastNumFlag[i] = false;
 
         if (!IsCounting)
         {
             IsCounting = true;
             currentTime = (float)stateTime;
         }
+
+        //基本のナンバー配列を設定
+        spriteNumbars = numbars;
     }
 	
 	void Update ()
     {
-	    if(IsCounting)
+        if (IsCounting)
         {
             currentTime -= Time.deltaTime;
 
-            if (currentTime <= 0)
+            //０秒をきったときの処理
+            if (currentTime <= 1)
             {
                 end = true;
 
                 currentTime = 0.0f;
                 IsCounting = false;
+            }
+
+            //１０秒をきったときの処理
+            if (currentTime < 11)
+            {
+                //基本のナンバー配列を設定
+                spriteNumbars = lastNumbars;
+
+                if (!lastNumFlag[0])
+                {
+                    lastNumFlag[0] = true;
+
+                    GameObject instace = (GameObject)Instantiate(lastNumObj[0],
+                                                             lastNumObj[0].transform.position,
+                                                             Quaternion.identity);
+                    StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
+                }
+            }
+            
+            //３０秒をきったときの処理
+            if (currentTime <= 31 && !lastMessageFlag)
+            {
+                lastMessageFlag = true;
+
+                GameObject instace = (GameObject)Instantiate(lastMessageObj,
+                                                             lastMessageObj.transform.position,
+                                                             Quaternion.identity);
+                StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
             }
         }
 
@@ -53,10 +103,21 @@ public class TimeLimit : MonoBehaviour
         int onesNum = Mathf.FloorToInt(currentTime) % 10;
 
         if (hundredsNum < 10)
-            hundreds.sprite = numbars[hundredsNum];
+            hundreds.sprite = spriteNumbars[hundredsNum];
         if (tensNum < 10)
-            tens.sprite = numbars[tensNum];
+            tens.sprite = spriteNumbars[tensNum];
         if (onesNum < 10)
-            ones.sprite = numbars[onesNum];
+            ones.sprite = spriteNumbars[onesNum];
+        
+        //９秒をきったときの処理
+        if (!lastNumFlag[onesNum] && currentTime < 10)
+        {
+            lastNumFlag[onesNum] = true;
+
+            GameObject instace = (GameObject)Instantiate(lastNumObj[onesNum],
+                                                         lastNumObj[onesNum].transform.position,
+                                                         Quaternion.identity);
+            StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
+        }
     }
 }

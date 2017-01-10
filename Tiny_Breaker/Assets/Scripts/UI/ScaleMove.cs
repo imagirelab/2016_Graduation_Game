@@ -68,4 +68,69 @@ public class ScaleMove : MonoBehaviour
 
         Destroy(this.transform.gameObject);
     }
+
+    public IEnumerator ScaleUp()
+    {
+        bool end = false;
+        float expansionCount = 0.0f;
+
+        transform.localScale = Vector3.zero;
+
+        while (!end)
+        {
+            if (expansionCount < expansionTime)
+            {
+                expansionCount += Time.deltaTime;
+            }
+            else
+            {
+                expansionCount = expansionTime;
+                end = true;
+            }
+
+            float rate = expansionCount / expansionTime;
+
+            transform.localScale = new Vector3(rate, rate, rate);
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(expansionWaitTime);
+    }
+
+    public IEnumerator ScaleDown()
+    {
+        bool end = false;
+        float expansionCount = 0.0f;
+
+        transform.localScale = Vector3.one;
+
+        while (!end)
+        {
+            if (expansionCount < reductionTime)
+            {
+                expansionCount += Time.deltaTime;
+            }
+            else
+            {
+                expansionCount = reductionTime;
+                end = true;
+            }
+
+            float rate = expansionCount / reductionTime;
+            rate = 1.0f - rate;
+
+            transform.localScale = new Vector3(rate, rate, rate);
+
+            yield return null;
+        }
+
+        Destroy(this.transform.gameObject);
+    }
+
+    public IEnumerator ScaleUpDown()
+    {
+        yield return StartCoroutine(ScaleUp());
+        StartCoroutine(ScaleDown());
+    }
 }
