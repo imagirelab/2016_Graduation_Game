@@ -10,10 +10,10 @@ public class UnitMove : MonoBehaviour
     bool setFlag = false;   //構えたどうかのフラグ
 
     //unit.setSpawnTargetFlagを読み取るためStart()からスタート
-    void Start()
-    {
-        cor = StartCoroutine(Move());
-    }
+    //void Start()
+    //{
+    //    cor = StartCoroutine(Move());
+    //}
     
     IEnumerator Move()
     {
@@ -81,7 +81,12 @@ public class UnitMove : MonoBehaviour
             yield return null;
         }
     }
-    
+
+    void OnEnable()
+    {
+        cor = StartCoroutine(Move());
+    }
+
     void OnDisable()
     {
         if(cor != null)

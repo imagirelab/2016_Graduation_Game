@@ -42,8 +42,8 @@ public class House : MonoBehaviour
 
     void Start()
     {
-        // 作られたときにリストに追加する
-        BuildingDataBase.getInstance().AddList(this.gameObject);
+        //// 作られたときにリストに追加する
+        //BuildingDataBase.getInstance().AddList(this.gameObject);
         
         currentHP = 0;
         regeneCount = 0;
@@ -55,6 +55,12 @@ public class House : MonoBehaviour
 
         //初めのタグ登録
         oldTag = transform.gameObject.tag;
+    }
+
+    void OnEnable()
+    {
+        // 作られたときにリストに追加する
+        BuildingDataBase.getInstance().AddList(this.gameObject);
     }
 
     //破壊されたときにリストから外す

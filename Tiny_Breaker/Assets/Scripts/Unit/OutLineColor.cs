@@ -6,6 +6,9 @@ public class OutLineColor : MonoBehaviour
     [SerializeField]
     Color[] color = new Color[GameRule.playerNum + 1];
 
+    //対象
+    public GameObject target;
+
     void Start ()
     {
         if (!GetComponent<SkinnedMeshRenderer>())
@@ -13,7 +16,7 @@ public class OutLineColor : MonoBehaviour
 
         SkinnedMeshRenderer mesh = GetComponent<SkinnedMeshRenderer>();
 
-        switch (transform.root.gameObject.tag)
+        switch (target.tag)
         {
             case "Player1":
                 foreach (Material e in mesh.materials)

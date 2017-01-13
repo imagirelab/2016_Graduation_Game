@@ -30,6 +30,6 @@ public class LookAtCamera : MonoBehaviour
     void OnDisable()
     {
         StopCoroutine(cor);
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 }

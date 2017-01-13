@@ -152,10 +152,10 @@ public class UnitAttack : MonoBehaviour
 
                 RoundDataBase.getInstance().AddPassesKnockDownCount(gameObject.tag);
 
-                if (_target.GetComponent<Soldier>() && unit.transform.root.gameObject.GetComponent<PlayerCost>())
+                if (_target.GetComponent<Soldier>() && unit.transform.parent.gameObject.GetComponent<PlayerCost>())
                 {
-                    PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
-                    Player player = unit.transform.root.gameObject.GetComponent<Player>();
+                    PlayerCost playerCost = unit.transform.parent.gameObject.GetComponent<PlayerCost>();
+                    Player player = unit.transform.parent.gameObject.GetComponent<Player>();
 
                     //parent.transform.root は　悪魔のRootつまりプレイヤー
                     player.AddCostList(playerCost.GetSoldierCost);
@@ -167,7 +167,7 @@ public class UnitAttack : MonoBehaviour
     //建物への攻撃はこっち
     void AttackHouse(GameObject _target)
     {
-        GameObject rootObject = unit.transform.root.gameObject;
+        GameObject rootObject = unit.transform.parent.gameObject;
         House houseComp = _target.GetComponent<House>();
 
         if (!houseComp.IsDead)
@@ -224,10 +224,10 @@ public class UnitAttack : MonoBehaviour
             }
 
             //コストの計算
-            if (unit.transform.root.gameObject.GetComponent<PlayerCost>())
+            if (rootObject.GetComponent<PlayerCost>())
             {
                 Player player = rootObject.GetComponent<Player>();
-                PlayerCost playerCost = unit.transform.root.gameObject.GetComponent<PlayerCost>();
+                PlayerCost playerCost = rootObject.GetComponent<PlayerCost>();
 
                 player.AddCostList(playerCost.GetHouseCost);
             }

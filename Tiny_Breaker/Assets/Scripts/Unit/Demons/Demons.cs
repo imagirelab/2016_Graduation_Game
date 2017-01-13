@@ -18,7 +18,9 @@ public class Demons : Unit
     float UnderSpeed = 20.0f;
 
     SpawnMove spawn;
-    
+
+    IEnumerator ien;
+
     void Start()
     {
         //パワーアップ条件
@@ -74,8 +76,9 @@ public class Demons : Unit
 
         //一番近くの敵を狙う
         SetNearTargetObject();
-        
-        StartCoroutine(DemonLife());
+
+        ien = DemonLife();
+        StartCoroutine(ien);
         StartCoroutine(NearTarget());
     }
 
@@ -197,8 +200,8 @@ public class Demons : Unit
         //死んだ直後に成長値とコストを回収してみる
         if (transform.parent != null)
         {
-            PlayerCost playerCost = transform.root.gameObject.GetComponent<PlayerCost>();
-            Player player = transform.root.gameObject.GetComponent<Player>();
+            PlayerCost playerCost = transform.parent.gameObject.GetComponent<PlayerCost>();
+            Player player = transform.parent.gameObject.GetComponent<Player>();
 
             player.AddCostList(playerCost.GetReturnCost);
             player.AddSpiritList(DemonType);
@@ -248,9 +251,22 @@ public class Demons : Unit
         yield return null;
     }
 
+    void OnEnable()
+    {
+        if (ien != null)
+        {
+            // リストに追加する
+            DemonDataBase.getInstance().AddList(this.gameObject);
+
+            StartCoroutine(ien);
+        }
+    }
+
     //破壊されたときにリストから外す
     void OnDisable()
     {
+        if (ien != null)
+            StopCoroutine(ien);
         DemonDataBase.getInstance().RemoveList(this.gameObject);
     }
 }

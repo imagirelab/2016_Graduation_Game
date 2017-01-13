@@ -32,9 +32,9 @@ public class Unit : MonoBehaviour
     public bool IsDamage;   //ダメージ確認
     protected int oldHP = 0;    //直前の体力確認用
 
-    [HideInInspector]
+//    [HideInInspector]
     public GameObject goalObject;       //ゴール
-    [HideInInspector]
+//    [HideInInspector]
     public GameObject targetObject;       //目標
     protected float targetDistance = 0.0f;
     protected float targetColliderRadius = 0.0f;

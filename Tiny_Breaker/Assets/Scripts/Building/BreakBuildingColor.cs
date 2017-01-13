@@ -5,15 +5,15 @@ public class BreakBuildingColor : MonoBehaviour
 {
     [SerializeField]
     Material[] mat = new Material[3];
-
-    GameObject root;
+    
+    House house;
 
     void Start()
     {
-        root = transform.root.gameObject;
+        house = transform.parent.parent.parent.parent.gameObject.GetComponent<House>();
 
-        if (GetComponent<MeshRenderer>() != null && root.GetComponent<House>())
-            switch (root.GetComponent<House>().OldTag)
+        if (GetComponent<MeshRenderer>() != null && house)
+            switch (house.OldTag)
             {
                 case "Player1":
                     GetComponent<MeshRenderer>().material = mat[0];
@@ -25,9 +25,5 @@ public class BreakBuildingColor : MonoBehaviour
                     GetComponent<MeshRenderer>().material = mat[2];
                     break;
             }
-    }
-    
-    void Update()
-    {
     }
 }

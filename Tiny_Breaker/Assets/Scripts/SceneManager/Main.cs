@@ -8,6 +8,9 @@ public class Main : MonoBehaviour
 {
     #region フィールド
 
+    //ラウンド中かどうかのフラグ
+    public static bool roundEndFlag = false;
+
     [SerializeField]
     bool startFlag = true;  //スタート時の演出をするかしないかのフラグ
 
@@ -152,6 +155,10 @@ public class Main : MonoBehaviour
         //終了条件
         bool finish = false;
         bool timeup = false;
+
+        //ラウンド開始時は roundEndFlag を false
+        roundEndFlag = false;
+
         while (true)
         {
             if (P1Base.HPpro <= 0 || P2Base.HPpro <= 0)
@@ -167,6 +174,9 @@ public class Main : MonoBehaviour
 
             yield return null;
         }
+
+        //ラウンド終了時は roundEndFlag を true
+        roundEndFlag = true;
 
         yield return null;
         #endregion

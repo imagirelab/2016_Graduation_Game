@@ -4,19 +4,18 @@ public class BuildingColor : MonoBehaviour
 {
     [SerializeField]
     Material[] mat = new Material[3];
-
-    GameObject root;
+    
+    GameObject house;
 
     void Start()
     {
-        root = transform.root.gameObject;
-
+        house = transform.parent.parent.parent.gameObject;
     }
 
     void Update()
     {
         if (GetComponent<MeshRenderer>() != null)
-            switch (root.tag)
+            switch (house.tag)
             {
                 case "Player1":
                     GetComponent<MeshRenderer>().material = mat[0];

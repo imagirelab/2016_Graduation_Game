@@ -12,20 +12,17 @@ public class GainGauge : MonoBehaviour
     [SerializeField]
     RectTransform Player2Color = new RectTransform();
 
-    void Start ()
+    void Start()
     {
-        if (transform.root.gameObject.GetComponent<House>())
-            house = transform.root.gameObject.GetComponent<House>();
-        else
-            house = new House();
+        house = transform.parent.gameObject.GetComponent<House>();
     }
-	
-	void Update ()
-	{
+
+    void Update()
+    {
         float HPRate = (float)(house.HPpro + house.GetHP) / (float)(house.GetHP * 2.0f);
         if (HPRate >= 1.0f)
             HPRate = 1.0f;
-        if(HPRate <= 0.0f)
+        if (HPRate <= 0.0f)
             HPRate = 0.0f;
 
         //プレイヤー１側

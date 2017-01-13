@@ -8,6 +8,8 @@ public class Soldier : Unit
 {
     public int powerUPCount = 0;
 
+    IEnumerator ien;
+
     void Start()
     {
         Initialize();
@@ -40,7 +42,8 @@ public class Soldier : Unit
         //一番近くの敵を狙う
         SetNearTargetObject();
 
-        StartCoroutine(SoldierLife());
+        ien = SoldierLife();
+        StartCoroutine(ien);
         StartCoroutine(NearTarget());
     }
 
@@ -177,9 +180,22 @@ public class Soldier : Unit
         yield return new WaitForSeconds(deadTime);
     }
 
+    void OnEnable()
+    {
+        if (ien != null)
+        {
+            // 作られたときにリストに追加する
+            SolgierDataBase.getInstance().AddList(this.gameObject, transform.gameObject.tag);
+
+            StartCoroutine(ien);
+        }
+    }
+
     //破壊されたときにリストから外す
     void OnDisable()
     {
+        if (ien != null)
+            StopCoroutine(ien);
         SolgierDataBase.getInstance().RemoveList(this.gameObject);
     }
 }

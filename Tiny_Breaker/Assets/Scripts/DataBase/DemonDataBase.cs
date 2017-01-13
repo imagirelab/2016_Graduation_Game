@@ -23,9 +23,12 @@ namespace StaticClass
 
         public void AddList(GameObject key)
         {
-            string value = key.tag;
+            if (!ChackKey(key))
+            {
+                string value = key.tag;
 
-            dictionary.Add(key, value);
+                dictionary.Add(key, value);
+            }
         }
 
         public void RemoveList(GameObject key)

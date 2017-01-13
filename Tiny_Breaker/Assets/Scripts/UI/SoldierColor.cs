@@ -21,7 +21,7 @@ public class SoldierColor : MonoBehaviour
     void Update()
     {
         //根底がスポナーの時playerIDの取得
-        GameObject rootObject = transform.root.gameObject;
+        GameObject rootObject = transform.parent.gameObject;
         if (rootObject.GetComponent<Spawner>() != null)
         {
             int playerID = rootObject.GetComponent<Spawner>().CurrentPlayerID;

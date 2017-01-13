@@ -15,11 +15,8 @@ public class MoveGainBar : MonoBehaviour
     float max = 230;
 
     void Start ()
-	{
-        if (transform.root.gameObject.GetComponent<House>())
-            house = transform.root.gameObject.GetComponent<House>();
-        else
-            house = new House();
+    {
+        house = transform.parent.gameObject.GetComponent<House>();
     }
 	
 	void Update ()

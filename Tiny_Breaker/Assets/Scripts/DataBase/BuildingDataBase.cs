@@ -23,13 +23,20 @@ namespace StaticClass
 
         public void AddList(GameObject item)
         {
-            list.Add(item);
+            if(!ChackKey(item))
+                list.Add(item);
         }
 
         public void RemoveList(GameObject item)
         {
             if(list.Contains(item))
                 list.Remove(item);
+        }
+
+        //渡されたオブジェクトがリストにあるかどうかチェックする
+        public bool ChackKey(GameObject item)
+        {
+            return list.Contains(item);
         }
 
         //一番近い魂を返す

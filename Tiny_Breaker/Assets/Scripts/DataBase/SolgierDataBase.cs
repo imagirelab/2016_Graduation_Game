@@ -25,7 +25,8 @@ namespace StaticClass
 
         public void AddList(GameObject key, string value)
         {
-            dictionary.Add(key, value);
+            if (!ChackKey(key))
+                dictionary.Add(key, value);
         }
 
         public void RemoveList(GameObject key)
@@ -38,6 +39,12 @@ namespace StaticClass
         public int GetCount()
         {
             return dictionary.Count;
+        }
+
+        //渡されたオブジェクトがリストにあるかどうかチェックする
+        public bool ChackKey(GameObject key)
+        {
+            return dictionary.ContainsKey(key);
         }
 
         //指定したvalueの要素だけを取得
