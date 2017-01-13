@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using StaticClass;
+using SocketIO;
 
 public class Main : MonoBehaviour
 {
@@ -124,6 +125,13 @@ public class Main : MonoBehaviour
     {
         #region ゲーム開始前の処理
 
+        SocketIOComponent socket;
+
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
+
+        socket.Emit("StopRequest");
+
         while (!load.LoadEnd)
             yield return null;
 
@@ -151,6 +159,8 @@ public class Main : MonoBehaviour
         #endregion
 
         #region ゲーム中の処理
+
+        socket.Emit("StopEndRequest");
 
         //終了条件
         bool finish = false;
@@ -182,7 +192,9 @@ public class Main : MonoBehaviour
         #endregion
 
         #region ゲーム終了後の処理
-        
+
+        socket.Emit("StopRequest");
+
         //残り体力判定（ラウンド結果判定）
         if (P1Base.HPpro > P2Base.HPpro)
         {
