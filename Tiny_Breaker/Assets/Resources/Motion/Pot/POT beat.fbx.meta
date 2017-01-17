@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 783c950c855b48b4595a4db987050d1f
-timeCreated: 1477983770
+guid: ae65cd8e68a83ed4d8aa966302eab666
+timeCreated: 1484639066
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -43,11 +43,53 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 20
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: atk4
+        weight: 1
+      - path: Hips
+        weight: 1
+      - path: Hips/middle
+        weight: 1
+      - path: Hips/middle/mouth
+        weight: 1
+      - path: Hips/middle/top
+        weight: 1
+      - path: Hips/under
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 80
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1

@@ -7,7 +7,11 @@ public class SpawnMove : MonoBehaviour
 {
     bool end;
     public bool End { get { return end; } }
-
+    
+    //スポーンを開始するアニメーター
+    public Animator animator;
+    [SerializeField]
+    float spawnTime = 0.0f;     //召喚時の動く時間
     [SerializeField]
     float moveTime = 0.0f;     //召喚時の動く時間
     [SerializeField]
@@ -21,18 +25,16 @@ public class SpawnMove : MonoBehaviour
     public IEnumerator Spawn()
     {
         end = false;
-        //召喚時の動きがあるもの
-        //if (unit.setSpawnTargetFlag)
-        //{
-        ////ステータスUIを消す
-        //if (statusUI == null)
-        //    statusUI = new GameObject();
-        //statusUI.SetActive(false);
 
         bool moveEnd = false;
         Vector3 startPosition = transform.position;
         float time = 0.0f;
-        
+
+        yield return new WaitForSeconds(spawnTime);
+        //スポーンアニメーションに切り替え
+        if (animator != null)
+            animator.SetTrigger("StartBorn");
+
         while (moveEnd == false)
         {
             time += Time.deltaTime;
@@ -47,13 +49,7 @@ public class SpawnMove : MonoBehaviour
             yield return null;
         }
         yield return new WaitForSeconds(stopTime);
-
-        //    //ステータスUIを表示
-        //    statusUI.SetActive(true);
-        //}
-        //GetComponent<SphereCollider>().enabled = true;
-        //gameObject.GetComponent<Rigidbody>().freezeRotation = true;
-
+        
         end = true;
     }
 

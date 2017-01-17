@@ -74,6 +74,8 @@ public class Player : MonoBehaviour
     
     public Coroutine deathblowcor;
 
+    public Animator potAnimator;
+
     #endregion
 
     void Start()
@@ -268,12 +270,8 @@ public class Player : MonoBehaviour
             //生まれた数をカウントする
             RoundDataBase.getInstance().AddPassesPopCount(gameObject.tag);
 
-            //強さに応じてスケールを変える処理
-            //float growScale = demon.transform.localScale.magnitude + ((float)growPoint.GetCost() - 1.0f) * powerUpScale;
-            ////制限
-            //if (growScale >= 4.0f)
-            //    growScale = 4.0f;
-            //instaceObject.transform.localScale = new Vector3(growScale, growScale, growScale);
+            potAnimator.SetTrigger("StopSpawn");
+            potAnimator.SetTrigger("Spawn");
         }
     }
 
