@@ -167,7 +167,6 @@ public class UnitAttack : MonoBehaviour
     //建物への攻撃はこっち
     void AttackHouse(GameObject _target)
     {
-        GameObject rootObject = unit.transform.parent.gameObject;
         House houseComp = _target.GetComponent<House>();
 
         if (!houseComp.IsDead)
@@ -224,6 +223,7 @@ public class UnitAttack : MonoBehaviour
             }
 
             //コストの計算
+            GameObject rootObject = unit.transform.parent.gameObject;
             if (rootObject.GetComponent<PlayerCost>())
             {
                 Player player = rootObject.GetComponent<Player>();

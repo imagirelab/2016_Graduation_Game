@@ -160,6 +160,7 @@
     <Compile Include="Assets\Scripts\UI\StatusUI.cs" />
     <Compile Include="Assets\Scripts\Unit\ChangeAnimation.cs" />
     <Compile Include="Assets\Scripts\Unit\ChangeMaterialColor.cs" />
+    <Compile Include="Assets\Scripts\Unit\Demons\AttackLocus.cs" />
     <Compile Include="Assets\Scripts\Unit\Demons\ChangeModel.cs" />
     <Compile Include="Assets\Scripts\Unit\Demons\Demons.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\DeadEffect.cs" />
