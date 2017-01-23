@@ -123,12 +123,12 @@ public class Main : MonoBehaviour
 
     IEnumerator MainUpdate()
     {
-        #region ゲーム開始前の処理
-
         SocketIOComponent socket;
 
         GameObject go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
+
+        #region ゲーム開始前の処理
 
         socket.Emit("StopRequest");
 
@@ -308,6 +308,7 @@ public class Main : MonoBehaviour
             }
 
             //リザルトシーンへ
+            socket.Emit("GameEndRequest");
             SceneManager.LoadScene("ResultScene");
         }
         else
