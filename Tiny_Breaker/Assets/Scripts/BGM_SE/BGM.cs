@@ -13,22 +13,15 @@ public class BGM : MonoBehaviour
     public float loopEndtMeasure;
 
     AudioSource _auido;
-
-    private float Oneminuts = 60;
-
-    private float oneBeatTime;
-
-	// Use this for initialization
+    
+    private float oneBeatTime = 0.0f;
+    
 	void Start ()
     {
-        //oneBeatTime = Oneminuts / BPM;
-
         _auido = GetComponent<AudioSource>();
 
         _auido.time = 0;
-
-        //_auido.Play();
-
+        
         int i = GameRule.getInstance().round.Count;
 
         switch (GameRule.getInstance().round.Count)
@@ -66,7 +59,6 @@ public class BGM : MonoBehaviour
         }
     }
 	
-	// Update is called once per frame
 	void Update ()
     {
         
