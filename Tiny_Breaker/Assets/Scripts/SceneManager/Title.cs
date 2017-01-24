@@ -60,8 +60,10 @@ public class Title : MonoBehaviour
 
             yield return null;
         }
-        
+
         socket.Emit("MatchingEndRequest");
+
+        socket.Emit("StopRequest");
 
         //フェードアウト終了時シーン切り替え
         SceneManager.LoadScene("MainScene");
