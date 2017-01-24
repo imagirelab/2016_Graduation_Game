@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
 - path: Assets/Scenes/MainScene.unity
-=======
-- path: Assets/Scenes/SPMovie.unity
->>>>>>> origin/master
   isLoaded: 1
   isActive: 1
