@@ -5,6 +5,9 @@ public class DeadlyCamera : MonoBehaviour
 {
     public GameObject targetObj;
 
+    public GameObject[] particle;
+    private GameObject[] _particle = { null, null, null};
+
     public float moveYSpeed = 1;
     public float moveRotateSpeed = 1;
     public float rotateTime = 1;
@@ -12,12 +15,14 @@ public class DeadlyCamera : MonoBehaviour
     float timer;
     float nowSpeed;
 
+    int frame = 0;
+
     bool StopFlag = false;
 
     // Use this for initialization
     void Start ()
     {
-	    
+
 	}
 	
 	// Update is called once per frame
@@ -48,5 +53,23 @@ public class DeadlyCamera : MonoBehaviour
         transform.RotateAround(targetObj.transform.position + new Vector3(0, 10, 0), axis, nowSpeed);    
 
         transform.LookAt(targetObj.transform.position + new Vector3(0, 10, 0));
+
+        if(frame > 66 && _particle[0] == null)
+        {
+            _particle[0] = Instantiate(particle[0]);
+            _particle[0].transform.position = targetObj.transform.position + new Vector3(0, 17, 0);
+        }
+        if (frame > 138 && _particle[1] == null)
+        {
+            _particle[1] = Instantiate(particle[1]);
+            _particle[1].transform.position = targetObj.transform.position + new Vector3(0, 17, 0);
+        }
+        if (frame > 234 && _particle[2] == null)
+        {
+            _particle[2] = Instantiate(particle[2]);
+            _particle[2].transform.position = targetObj.transform.position + new Vector3(0, 17, 0);
+        }
+
+        frame++;
     }
 }
