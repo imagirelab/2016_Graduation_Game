@@ -2,7 +2,7 @@ Shader "Sprites/Custom"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+		_MainTex("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
@@ -66,7 +66,7 @@ Shader "Sprites/Custom"
 
 			fixed4 SampleSpriteTexture (float2 uv)
 			{
-				fixed4 color = tex2D (_MainTex, uv);
+				fixed4 color = tex2D(_MainTex, uv);
 
 #if ETC1_EXTERNAL_ALPHA
 				// get the color from an external texture (usecase: Alpha support for ETC1 on android)

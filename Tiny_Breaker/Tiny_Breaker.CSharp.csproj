@@ -58,6 +58,12 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -280,7 +286,9 @@
     <None Include="Assets\Editor\SimplygonReadMe.txt" />
     <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Plugins\Android\res\values\version.xml" />
+    <None Include="Assets\Resources\Music\SE\Free\credit.txt" />
     <None Include="Assets\Resources\Shader\Diffuse_ZWrite.shader" />
+    <None Include="Assets\Resources\Shader\KamiFubuki.shader" />
     <None Include="Assets\Resources\Shader\Scroll.shader" />
     <None Include="Assets\Resources\Shader\Sprites-Custom.shader" />
     <None Include="Assets\Resources\Shader\Toon\ToonLit.shader" />
