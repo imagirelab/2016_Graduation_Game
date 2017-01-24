@@ -14,6 +14,8 @@ public class DebugControl : MonoBehaviour
     [SerializeField]
     Player player2 = null;
 
+    public Pause pause;
+
     void Start()
     {
         GameRule.getInstance().debugFlag = IsDebug;
@@ -28,6 +30,11 @@ public class DebugControl : MonoBehaviour
         {
             GameRule.getInstance().debugFlag = !GameRule.getInstance().debugFlag;
             SetDebugActive(GameRule.getInstance().debugFlag);
+        }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            pause.pausing = !pause.pausing;
         }
 
         #region Player1の方の操作

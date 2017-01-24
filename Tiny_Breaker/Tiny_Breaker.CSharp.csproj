@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -123,6 +117,7 @@
     <Compile Include="Assets\Scripts\LoadData\LoadManager.cs" />
     <Compile Include="Assets\Scripts\LoadData\ParamData.cs" />
     <Compile Include="Assets\Scripts\Pausable.cs" />
+    <Compile Include="Assets\Scripts\Pause.cs" />
     <Compile Include="Assets\Scripts\Player\DemonArmy.cs" />
     <Compile Include="Assets\Scripts\Player\Missile.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
