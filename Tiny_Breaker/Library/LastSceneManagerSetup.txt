@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/DeadlyScene.unity
+- path: Assets/Scenes/SPMovie.unity
   isLoaded: 1
   isActive: 1
