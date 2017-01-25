@@ -42,7 +42,8 @@ public class Unit : MonoBehaviour
     [HideInInspector]
     public List<GameObject> allTargetObject;       //複数攻撃目標
 
-    public GameObject deadEffect;       //死亡エフェクト
+    public GameObject bluedeadEffect;       //死亡エフェクト
+    public GameObject reddeadEffect;       //死亡エフェクト
 
     [HideInInspector]
     public string targetTag;       //相手のタグ
@@ -82,6 +83,7 @@ public class Unit : MonoBehaviour
 
     //特殊攻撃フラグ
     protected bool refrecAttack = false;        //反射攻撃フラグ
+    public bool RefrecAttack {get { return refrecAttack; } }
     protected bool roundAttack = false;         //範囲攻撃フラグ
     public bool RoundAttack { get { return roundAttack; } }
     protected bool penetrateAttack = false;     //貫通攻撃フラグ
@@ -195,6 +197,9 @@ public class Unit : MonoBehaviour
 
         //反射ダメージオンの状態の処理
         if (refrecAttack)
+        {
+            DemonRefrectSE.refrectSEFlag = true;
             attaker.AnyDamage(100);
+        }
     }
 }

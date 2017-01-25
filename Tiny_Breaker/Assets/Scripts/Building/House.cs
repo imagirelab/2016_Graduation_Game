@@ -38,6 +38,9 @@ public class House : MonoBehaviour
     public bool IsDamage = false;
     int oldHP = 0;
 
+    public GameObject deadEffect;
+    public GameObject reviveEffect;
+
     #endregion
 
     void Start()
@@ -75,17 +78,23 @@ public class House : MonoBehaviour
         {
             //死んだとされていて死んでいるフラグが立っていないときの処理
             if(!IsDying)
+            {
                 Dead();
+            }               
             //死んでいる間の処理
             else
             {
                 DyingCount += Time.deltaTime;
 
+                //復活時間に到達したら
                 if(DyingCount >= DyingTime)
                 {
                     IsDead = false;
                     IsDying = false;
                     DyingCount = 0.0f;
+
+                    //復活エフェクト表示
+                    Instantiate(reviveEffect, this.gameObject.transform.position + Vector3.up * -3, this.gameObject.transform.rotation);
 
                     //壊れない小屋を表示
                     foreach (Transform child in transform)
@@ -153,6 +162,9 @@ public class House : MonoBehaviour
     {
         //死んでいるフラグを立てる
         IsDying = true;
+
+        //死亡エフェクト生成
+        Instantiate(deadEffect, this.gameObject.transform.position, this.gameObject.transform.rotation);
 
         BuildingDataBase.getInstance().RemoveList(this.gameObject);
 

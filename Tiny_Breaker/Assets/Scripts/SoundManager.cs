@@ -5,19 +5,22 @@ public class SoundManager : MonoBehaviour
 {
     public enum AUDIOTYPE
     {
-        find,
         atack,
         dead,
+        summon,
+        refrect,
     }
     public AUDIOTYPE modeType = AUDIOTYPE.atack;
 
-    public AudioClip findSE;
     public AudioClip atackSE;
     public AudioClip deadSE;
+    public AudioClip summonSE;
+    public AudioClip refrectSE;
 
-    public static bool findSEFlag = false;
     public static bool atackSEFlag = false;
     public static bool deadSEFlag = false;
+    public static bool summonSEFlag = false;
+    public static bool refrectSEFlag = false;
 
     private AudioSource _audioSource;   //音楽再生用
 
@@ -49,11 +52,18 @@ public class SoundManager : MonoBehaviour
             timer = 0;
         }
 
-        if (findSEFlag && timer > cancelTime && modeType == AUDIOTYPE.find)
+        if (summonSEFlag && timer > cancelTime && modeType == AUDIOTYPE.summon)
         {
-            findSEFlag = false;
-            _audioSource.PlayOneShot(findSE);
+            summonSEFlag = false;
+            _audioSource.PlayOneShot(summonSE);
             timer = 0;
         }
-	}
+
+        if (refrectSEFlag && timer > cancelTime && modeType == AUDIOTYPE.refrect)
+        {
+            refrectSEFlag = false;
+            _audioSource.PlayOneShot(refrectSE);
+            timer = 0;
+        }
+    }
 }

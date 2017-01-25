@@ -149,6 +149,43 @@ public class Demons : Unit
                             state = Enum.State.Attack;
                             seach.enabled = false;
                             attack.enabled = true;
+
+                            //SE再生フラグ
+                            switch(DemonType)
+                            {
+                                case Enum.Demon_TYPE.PUPU:
+                                    if(level >= powerupLevel)
+                                    {
+                                        BUBUAttackSE.BUBUattackSEFlag = true;
+                                    }
+                                    else
+                                    {
+                                        PUPUAttackSE.PUPUattackSEFlag = true;
+                                    }
+                                    break;
+                                case Enum.Demon_TYPE.POPO:
+                                    if (level >= powerupLevel)
+                                    {
+                                        BOBOAttackSE.BOBOattackSEFlag = true;
+                                    }
+                                    else
+                                    {
+                                        POPOAttackSE.POPOattackSEFlag = true;
+                                    }
+                                    break;
+                                case Enum.Demon_TYPE.PIPI:
+                                    if (level >= powerupLevel)
+                                    {
+                                        BIBIAttackSE.BIBIattackSEFlag = true;
+                                    }
+                                    else
+                                    {
+                                        PIPIAttackSE.PIPIattackSEFlag = true;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                     }
                 }
@@ -193,6 +230,7 @@ public class Demons : Unit
     IEnumerator Dead()
     {
         IsDead = true;
+        DemonDeadSE.deadSEFlag = true;
         
         //リストから外す
         DemonDataBase.getInstance().RemoveList(this.gameObject);
@@ -208,7 +246,15 @@ public class Demons : Unit
         }
 
         //死亡エフェクト
-        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+        if(this.gameObject.tag == "Player1")
+        {
+            Instantiate(reddeadEffect, this.gameObject.transform.position, reddeadEffect.transform.rotation);
+        }
+        else if(this.gameObject.tag == "Player2")
+        {
+            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
+        }
+        
         SoundManager.deadSEFlag = true;
 
         //いらない子供から消していく

@@ -77,6 +77,7 @@ public class UnitAttack : MonoBehaviour
             List<GameObject> targetList = new List<GameObject>();
             //まずは中心攻撃対象だけを登録
             targetList.Add(target);
+
             //範囲攻撃
             if (unit.RoundAttack)
             {

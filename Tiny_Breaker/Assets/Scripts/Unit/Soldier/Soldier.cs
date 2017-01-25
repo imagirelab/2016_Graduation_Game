@@ -8,6 +8,9 @@ public class Soldier : Unit
 {
     public int powerUPCount = 0;
 
+    public GameObject dashParticle;
+    private GameObject _dashParticle = null;
+
     IEnumerator ien;
 
     void Start()
@@ -97,6 +100,20 @@ public class Soldier : Unit
                         if (hit.collider.gameObject == targetObject)
                         {
                             state = Enum.State.Attack;
+                            switch(type)
+                            {
+                                case Enum.Color_Type.Red:
+                                    AxAttackSE.AxattackSEFlag = true;
+                                    break;
+                                case Enum.Color_Type.Green:
+                                    ShieldAttackSE.ShieldattackSEFlag = true;
+                                    break;
+                                case Enum.Color_Type.Blue:
+                                    GunAttackSE.GunattackSEFlag = true;
+                                    break;
+                                default:
+                                    break;
+                            }
                             seach.enabled = false;
                             attack.enabled = true;
                         }
@@ -120,7 +137,25 @@ public class Soldier : Unit
                 if (seach.IsLose)
                     seach.enabled = false;
                 if (seach.IsFind)
+                {
                     state = Enum.State.Find;
+                    if(type == Enum.Color_Type.Green && _dashParticle == null)
+                    {
+                        _dashParticle = Instantiate(dashParticle);
+                        _dashParticle.transform.position = this.gameObject.transform.position + Vector3.up * 1;
+                        _dashParticle.transform.rotation = this.gameObject.transform.rotation;
+                    }
+                    else if(type == Enum.Color_Type.Green && _dashParticle != null)
+                    {
+                        _dashParticle.transform.position = this.gameObject.transform.position + Vector3.up * 1;
+                        _dashParticle.transform.rotation = this.gameObject.transform.rotation;
+                    }                    
+                }                
+            }
+
+            if(_dashParticle != null && state != Enum.State.Find)
+            {
+                Destroy(_dashParticle);
             }
 
             yield return null;
@@ -137,8 +172,24 @@ public class Soldier : Unit
     {
         IsDead = true;
 
+        if(_dashParticle != null && state == Enum.State.Dead)
+        {
+            Destroy(_dashParticle);
+        }
+
         //死亡エフェクト出現
-        Instantiate(deadEffect, this.gameObject.transform.position, deadEffect.transform.rotation);
+        if(this.gameObject.tag == "Player1")
+        {
+            Instantiate(reddeadEffect, this.gameObject.transform.position, reddeadEffect.transform.rotation);
+        }
+        else if(this.gameObject.tag == "Player2")
+        {
+            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
+        } 
+        else
+        {
+            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
+        }
         SoundManager.deadSEFlag = true;
 
         //リストから外すタイミングを死んだ条件の中に入れる
