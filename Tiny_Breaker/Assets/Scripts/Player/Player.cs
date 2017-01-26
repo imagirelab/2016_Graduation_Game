@@ -390,6 +390,7 @@ public class Player : MonoBehaviour
                 Vector3 summonVec = (rootPointes[rootCandidate[rand, j]].ToArray()[0].position - rootes[rootCandidate[rand, j]].transform.position).normalized;   //初めの向き
                 Quaternion rotation = Quaternion.LookRotation(summonVec);
                 instace.transform.rotation = rotation;    //出た瞬間の向き
+                instace.transform.SetParent(this.transform, false);   //親を出したプレイヤーに設定
                 instace.tag = transform.gameObject.tag;    //自分のタグを設定
                 instace.layer = transform.gameObject.layer;    //レイヤーを設定
                 instace.GetComponent<Unit>().targetTag = tergetTag;   //相手のタグを設定

@@ -7,12 +7,7 @@ public class ResultJingle : MonoBehaviour
     public AudioSource loop;
 
     bool loopstart = false;
-
-    void Start ()
-	{
-		
-	}
-	
+    
 	void Update ()
 	{
 		if(!start.isPlaying && !loopstart)
