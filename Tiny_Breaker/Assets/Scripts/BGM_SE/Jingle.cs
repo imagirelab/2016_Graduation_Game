@@ -20,8 +20,6 @@ public class Jingle : MonoBehaviour
     {
 	    if(Main.roundEndFlag)
         {
-            Debug.Log("call");
-
             if(_auido.clip != musicList && jingleStop)
             {
                 _auido.clip = musicList;

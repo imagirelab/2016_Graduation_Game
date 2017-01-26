@@ -32,9 +32,9 @@ public class Unit : MonoBehaviour
     public bool IsDamage;   //ダメージ確認
     protected int oldHP = 0;    //直前の体力確認用
 
-//    [HideInInspector]
+    [HideInInspector]
     public GameObject goalObject;       //ゴール
-//    [HideInInspector]
+    [HideInInspector]
     public GameObject targetObject;       //目標
     protected float targetDistance = 0.0f;
     protected float targetColliderRadius = 0.0f;
@@ -91,6 +91,8 @@ public class Unit : MonoBehaviour
 
     [SerializeField, TooltipAttribute("貫通攻撃時の攻撃速度の上昇倍率")]
     protected float penetAttackTimeRate = 2.0f;
+
+    public GameObject refrecEffect;
 
     #endregion
 
@@ -199,6 +201,12 @@ public class Unit : MonoBehaviour
         if (refrecAttack)
         {
             DemonRefrectSE.refrectSEFlag = true;
+
+            GameObject instace = (GameObject)Instantiate(refrecEffect,
+                refrecEffect.transform.position,
+                transform.rotation);
+            instace.transform.SetParent(this.transform, false);   //親を出した悪魔に設定
+
             attaker.AnyDamage(100);
         }
     }

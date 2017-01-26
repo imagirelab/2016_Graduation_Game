@@ -244,16 +244,6 @@ public class Demons : Unit
             player.AddCostList(playerCost.GetReturnCost);
             player.AddSpiritList(DemonType);
         }
-
-        //死亡エフェクト
-        if(this.gameObject.tag == "Player1")
-        {
-            Instantiate(reddeadEffect, this.gameObject.transform.position, reddeadEffect.transform.rotation);
-        }
-        else if(this.gameObject.tag == "Player2")
-        {
-            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
-        }
         
         SoundManager.deadSEFlag = true;
 
@@ -270,15 +260,41 @@ public class Demons : Unit
             if (comp != GetComponent<Transform>() && comp != GetComponent<Demons>() && comp != GetComponent<Rigidbody>())
                 Destroy(comp);
 
+        //死亡エフェクト
+        if (this.gameObject.tag == "Player1")
+        {
+            GameObject instace = (GameObject)Instantiate(reddeadEffect, reddeadEffect.transform.position, reddeadEffect.transform.rotation);
+            instace.transform.SetParent(this.transform, false);   //親を出した悪魔に設定
+        }
+        else if (this.gameObject.tag == "Player2")
+        {
+            GameObject instace = (GameObject)Instantiate(bluedeadEffect, bluedeadEffect.transform.position, bluedeadEffect.transform.rotation);
+            instace.transform.SetParent(this.transform, false);   //親を出した悪魔に設定
+        }
+
         yield return null;
 
         //死んでいる時の処理
+        StartCoroutine(DeadScale());
+
         while (deadcount <= deadTime)
         {
             deadcount += Time.deltaTime;
 
             GetComponent<Rigidbody>().velocity = transform.forward * -1 * deadMoveSpeed;
+            
+            yield return null;
+        }
+    }
 
+    //だんだん小さくなって死んでいく
+    IEnumerator DeadScale()
+    {
+        yield return new WaitForSeconds(2.0f);
+        
+        while (true)
+        {
+            transform.localScale *= 0.9f;
             yield return null;
         }
     }
