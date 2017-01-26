@@ -27,6 +27,8 @@ public class DeadCounter : MonoBehaviour
 
     float counter = 0.0f;
 
+    bool oneCall = false;
+
     void Start()
     {
         int value = RoundDataBase.getInstance().PassesPopCount[PlayerID];
@@ -42,6 +44,11 @@ public class DeadCounter : MonoBehaviour
 
         if (counter >= enabledTime)
         {
+            if (!oneCall && counter >= enabledTime + rotationTime / 2)
+            {
+                oneCall = true;
+                RollEnd.rollEndSEFlag = true;
+            }
             hundreds.enabled = true;
             tens.enabled = true;
             ones.enabled = true;

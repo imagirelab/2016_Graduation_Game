@@ -24,6 +24,8 @@ public class PUPUDemonLevel : MonoBehaviour
 
     float counter = 0.0f;
 
+    bool oneCall = false;
+
     void Start()
     {
         int value = RoundDataBase.getInstance().PUPULevel[PlayerID];
@@ -38,6 +40,11 @@ public class PUPUDemonLevel : MonoBehaviour
 
         if (counter >= enabledTime)
         {
+            if (!oneCall && counter >= enabledTime + rotationTime / 2)
+            {
+                oneCall = true;
+                RollEnd.rollEndSEFlag = true;
+            }
             tens.enabled = true;
             ones.enabled = true;
 

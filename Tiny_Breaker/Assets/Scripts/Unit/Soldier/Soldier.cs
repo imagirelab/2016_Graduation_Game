@@ -139,7 +139,17 @@ public class Soldier : Unit
                 if (seach.IsFind)
                 {
                     state = Enum.State.Find;
-                    if(type == Enum.Color_Type.Green && _dashParticle == null)
+
+                    switch(type)
+                    {
+                        case Enum.Color_Type.Green:
+                            SoldierDashSE.SoldierDashSEFlag = true;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (type == Enum.Color_Type.Green && _dashParticle == null)
                     {
                         _dashParticle = Instantiate(dashParticle);
                         _dashParticle.transform.position = this.gameObject.transform.position + Vector3.up * 1;
@@ -190,7 +200,7 @@ public class Soldier : Unit
         {
             Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
         }
-        SoundManager.deadSEFlag = true;
+        SoldierDeadSE.soldierDeadSEFlag = true;
 
         //リストから外すタイミングを死んだ条件の中に入れる
         SolgierDataBase.getInstance().RemoveList(this.gameObject);

@@ -249,6 +249,9 @@ public class Player : MonoBehaviour
             GameObject instace = (GameObject)Instantiate(demons[demonType],
                                                             spawnPoint.position,
                                                             Quaternion.identity);
+
+            SummonSE.SummonSEFlag = true;
+
             //レベル上げ
             instace.GetComponent<Unit>().status.SetStatus(demonsLevel[demonType]);
             instace.GetComponent<Unit>().level = demonsLevel[demonType];

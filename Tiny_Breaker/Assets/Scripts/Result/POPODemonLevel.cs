@@ -24,6 +24,8 @@ public class POPODemonLevel : MonoBehaviour
 
     float counter = 0.0f;
 
+    bool oneCall = false;
+
     void Start()
     {
         int value = RoundDataBase.getInstance().POPOLevel[PlayerID];
@@ -38,12 +40,17 @@ public class POPODemonLevel : MonoBehaviour
 
         if (counter >= enabledTime)
         {
+            if (!oneCall && counter >= enabledTime + rotationTime / 2)
+            {
+                oneCall = true;
+                RollEnd.rollEndSEFlag = true;
+            }
             tens.enabled = true;
             ones.enabled = true;
 
 
             if (counter >= enabledTime + rotationTime)
-            {
+            {              
                 if (tensNum < 10)
                     tens.sprite = numbars[tensNum];
                 if (onesNum < 10)

@@ -5,6 +5,8 @@ public class Jingle : MonoBehaviour
 {
     public AudioClip musicList;
 
+    public float jingleVolume = 0.7f;
+
     AudioSource _auido;
 
     bool jingleStop = false;
@@ -20,11 +22,10 @@ public class Jingle : MonoBehaviour
     {
 	    if(Main.roundEndFlag)
         {
-            Debug.Log("call");
-
             if(_auido.clip != musicList && jingleStop)
             {
                 _auido.clip = musicList;
+                _auido.volume = jingleVolume;
                 _auido.Play();
                 jingleStop = false;
             }            

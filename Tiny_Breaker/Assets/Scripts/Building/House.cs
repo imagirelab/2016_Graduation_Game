@@ -38,8 +38,15 @@ public class House : MonoBehaviour
     public bool IsDamage = false;
     int oldHP = 0;
 
-    public GameObject deadEffect;
-    public GameObject reviveEffect;
+    public GameObject deadEffect;   //死んだエフェクト
+    public GameObject reviveEffect; //復活エフェクト
+
+    public AudioClip deadSE;        //死ぬSE
+    public AudioClip reviveSE;      //復活SE
+
+    bool reviveFlag = false;
+
+    AudioSource _audio;
 
     #endregion
 
@@ -58,6 +65,8 @@ public class House : MonoBehaviour
 
         //初めのタグ登録
         oldTag = transform.gameObject.tag;
+
+        _audio = GetComponent<AudioSource>();
     }
 
     void OnEnable()
@@ -95,6 +104,14 @@ public class House : MonoBehaviour
 
                     //復活エフェクト表示
                     Instantiate(reviveEffect, this.gameObject.transform.position + Vector3.up * -3, this.gameObject.transform.rotation);
+
+                    //復活SE再生
+                    if(!_audio.isPlaying && reviveFlag)
+                    {
+                        reviveFlag = false;
+                        _audio.clip = reviveSE;
+                        _audio.Play();
+                    }
 
                     //壊れない小屋を表示
                     foreach (Transform child in transform)
@@ -165,6 +182,13 @@ public class House : MonoBehaviour
 
         //死亡エフェクト生成
         Instantiate(deadEffect, this.gameObject.transform.position, this.gameObject.transform.rotation);
+
+        if(!_audio.isPlaying && !reviveFlag)
+        {
+            _audio.clip = deadSE;
+            _audio.Play();
+            reviveFlag = true;
+        }
 
         BuildingDataBase.getInstance().RemoveList(this.gameObject);
 

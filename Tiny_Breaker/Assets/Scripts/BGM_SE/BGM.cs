@@ -3,20 +3,12 @@ using StaticClass;
 
 public class BGM : MonoBehaviour
 {
-    public AudioClip[] BackMusics;
-
-    public float beatType = 4;
-
-    public float BPM;
-
-    public float loopStartMeasure;
-    public float loopEndtMeasure;
+    public AudioClip[] HeadMusics;
+    public AudioClip[] BodyMusics;
 
     AudioSource _auido;
-    
-    private float oneBeatTime = 0.0f;
 
-    int oldCount = 0;
+    public float volume = 0.6f;
 
 
     void Start ()
@@ -24,28 +16,24 @@ public class BGM : MonoBehaviour
         _auido = GetComponent<AudioSource>();
 
         _auido.time = 0;
+        _auido.loop = false;
+        _auido.volume = volume;
         
         int i = GameRule.getInstance().round.Count;
 
+        //ラウンド数を見て頭部分の再生
         switch (GameRule.getInstance().round.Count)
         {
             case 0:
-                _auido.clip = BackMusics[i];
-
+                _auido.clip = HeadMusics[i];
                 _auido.Play();
-
-                if (_auido.time > oneBeatTime * (loopEndtMeasure + 1) * beatType && _auido.isPlaying)
-                {
-                    _auido.time = oneBeatTime * loopStartMeasure * beatType;
-                    _auido.Play();
-                }
                 break;
             case 1:
-                _auido.clip = BackMusics[i];
+                _auido.clip = HeadMusics[i];
                 _auido.Play();
                 break;
             case 2:
-                _auido.clip = BackMusics[i];
+                _auido.clip = HeadMusics[i];
                 _auido.Play();
                 break;
             default:
@@ -55,6 +43,30 @@ public class BGM : MonoBehaviour
 	
 	void Update ()
     {
+        if(!_auido.isPlaying)
+        {
+            _auido.loop = true;
 
+            int i = GameRule.getInstance().round.Count;
+
+            //ラウンド数を見て体部分の再生
+            switch (GameRule.getInstance().round.Count)
+            {
+                case 0:
+                    _auido.clip = BodyMusics[i];
+                    _auido.Play();
+                    break;
+                case 1:
+                    _auido.clip = BodyMusics[i];
+                    _auido.Play();
+                    break;
+                case 2:
+                    _auido.clip = BodyMusics[i];
+                    _auido.Play();
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 }
