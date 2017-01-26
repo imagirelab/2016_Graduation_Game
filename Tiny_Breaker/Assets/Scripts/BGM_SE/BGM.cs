@@ -15,8 +15,11 @@ public class BGM : MonoBehaviour
     AudioSource _auido;
     
     private float oneBeatTime = 0.0f;
-    
-	void Start ()
+
+    int oldCount = 0;
+
+
+    void Start ()
     {
         _auido = GetComponent<AudioSource>();
 
@@ -29,10 +32,7 @@ public class BGM : MonoBehaviour
             case 0:
                 _auido.clip = BackMusics[i];
 
-                if (!_auido.isPlaying)
-                {
-                    _auido.Play();
-                }
+                _auido.Play();
 
                 if (_auido.time > oneBeatTime * (loopEndtMeasure + 1) * beatType && _auido.isPlaying)
                 {
@@ -41,18 +41,12 @@ public class BGM : MonoBehaviour
                 }
                 break;
             case 1:
-                if (!_auido.isPlaying)
-                {
-                    _auido.clip = BackMusics[i];
-                    _auido.Play();
-                }
+                _auido.clip = BackMusics[i];
+                _auido.Play();
                 break;
             case 2:
-                if (!_auido.isPlaying)
-                {
-                    _auido.clip = BackMusics[i];
-                    _auido.Play();
-                }
+                _auido.clip = BackMusics[i];
+                _auido.Play();
                 break;
             default:
                 break;
@@ -61,6 +55,6 @@ public class BGM : MonoBehaviour
 	
 	void Update ()
     {
-        
-	}
+
+    }
 }
