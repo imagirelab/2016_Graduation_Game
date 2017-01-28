@@ -78,6 +78,10 @@ public class Player : MonoBehaviour
 
     #endregion
 
+    public Pause pause;
+    public GameObject catin;
+    public GameObject movie;
+
     void Start()
     {
         GameObject go = GameObject.Find("SocketIO");
@@ -250,6 +254,7 @@ public class Player : MonoBehaviour
                                                             spawnPoint.position,
                                                             Quaternion.identity);
 
+            //出現SE再生
             SummonSE.SummonSEFlag = true;
 
             //レベル上げ
@@ -334,6 +339,25 @@ public class Player : MonoBehaviour
     //悪魔軍団の召喚
     IEnumerator SummonDemonArmy()
     {
+        //ムービーの再生
+        Instantiate(catin, catin.transform.position, catin.transform.rotation);
+        yield return new WaitForSeconds(1.3f);
+
+        pause.pausing = true;
+        movie.SetActive(true);
+        yield return null;
+
+        while (pause.pausing)
+        {
+
+            if (!movie.GetComponent<Movie_On_UI>().IsPlaying)
+            {
+                movie.SetActive(false);
+                pause.pausing = false;
+            }
+            yield return null;
+        }
+
         //コスト全回復
         PlayerCost playerCost = gameObject.GetComponent<PlayerCost>();
         AddCostList(playerCost.GetMaxCost);
@@ -384,6 +408,10 @@ public class Player : MonoBehaviour
                 GameObject instace = (GameObject)Instantiate(demons[randDemonType],
                                                                 spawnPoint.position,
                                                                 Quaternion.identity);
+
+                //出現SE再生
+                SummonSE.SummonSEFlag = true;
+
                 //レベル上げ
                 instace.GetComponent<Unit>().status.SetStatus(demonArmyLevel);
                 instace.GetComponent<Unit>().level = demonArmyLevel;

@@ -13,6 +13,8 @@ public class Soldier : Unit
 
     IEnumerator ien;
 
+    public GameObject arriveEffect;
+
     void Start()
     {
         Initialize();
@@ -48,6 +50,8 @@ public class Soldier : Unit
         ien = SoldierLife();
         StartCoroutine(ien);
         StartCoroutine(NearTarget());
+
+        Instantiate(arriveEffect, transform.position, arriveEffect.transform.rotation);
     }
 
     IEnumerator SoldierLife()
@@ -187,19 +191,7 @@ public class Soldier : Unit
             Destroy(_dashParticle);
         }
 
-        //死亡エフェクト出現
-        if(this.gameObject.tag == "Player1")
-        {
-            Instantiate(reddeadEffect, this.gameObject.transform.position, reddeadEffect.transform.rotation);
-        }
-        else if(this.gameObject.tag == "Player2")
-        {
-            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
-        } 
-        else
-        {
-            Instantiate(bluedeadEffect, this.gameObject.transform.position, bluedeadEffect.transform.rotation);
-        }
+        //死亡SE再生
         SoldierDeadSE.soldierDeadSEFlag = true;
 
         //リストから外すタイミングを死んだ条件の中に入れる

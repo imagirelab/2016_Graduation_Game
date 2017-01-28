@@ -6,17 +6,17 @@ using System.Collections;
 [RequireComponent(typeof(AudioSource))]
 public class Movie_On_UI : MonoBehaviour
 {
-    [SerializeField]
-    string m_moviePath;
+    //[SerializeField]
+    //string m_moviePath;
 
-    MovieTexture m_movieTexture = null;
+    public MovieTexture m_movieTexture;
 
     RawImage m_rawImage = null;
     AudioSource m_audioSource = null;
 
     public bool IsPlaying
     {
-        get { return m_movieTexture != null && m_movieTexture.isPlaying; }
+        get { return m_movieTexture.isPlaying; }
     }
 
     public void Play()
@@ -26,11 +26,9 @@ public class Movie_On_UI : MonoBehaviour
             Stop();
         }
 
-        m_movieTexture = (MovieTexture)Resources.Load<MovieTexture>(m_moviePath);
-
         if (m_movieTexture == null)
         {
-            Debug.LogError("movie is nothing:" + m_moviePath);
+            Debug.LogError("movie is nothing:"/* + m_moviePath*/);
             return;
         }
 
@@ -53,20 +51,20 @@ public class Movie_On_UI : MonoBehaviour
         m_movieTexture.Stop();
         m_audioSource.Stop();
     }
-
-    void Start()
+    
+    void OnEnable()
     {
+        //m_movieTexture = (MovieTexture)Resources.Load<MovieTexture>(m_moviePath);
+
         m_rawImage = this.GetComponent<RawImage>();
         m_audioSource = this.GetComponent<AudioSource>();
 
         Play(); // テスト用
     }
 
-    void Update()
+        void OnDisable()
     {
-        if (m_movieTexture != null && !m_movieTexture.isPlaying)
-        {
-            m_movieTexture = null;
-        }
+        m_movieTexture.Stop();
+        //m_movieTexture = null;
     }
 }

@@ -36,6 +36,10 @@ public class TimeLimit : MonoBehaviour
     public GameObject[] lastNumObj = new GameObject[10];
     bool[] lastNumFlag = new bool[10];
 
+    public AudioClip[] lastVoices;
+
+    AudioSource _audio;
+
     void Start ()
     {
         end = false;
@@ -52,6 +56,8 @@ public class TimeLimit : MonoBehaviour
 
         //基本のナンバー配列を設定
         spriteNumbars = numbars;
+
+        _audio = GetComponent<AudioSource>();
     }
 	
 	void Update ()
@@ -83,6 +89,9 @@ public class TimeLimit : MonoBehaviour
                                                              lastNumObj[0].transform.position,
                                                              Quaternion.identity);
                     StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
+
+                    _audio.clip = lastVoices[0];
+                    _audio.Play();
                 }
             }
             
@@ -118,6 +127,9 @@ public class TimeLimit : MonoBehaviour
                                                          lastNumObj[onesNum].transform.position,
                                                          Quaternion.identity);
             StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
+
+            _audio.clip = lastVoices[onesNum];
+            _audio.Play();
         }
     }
 }

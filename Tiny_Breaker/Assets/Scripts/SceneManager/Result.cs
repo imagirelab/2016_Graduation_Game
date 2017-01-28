@@ -4,14 +4,18 @@ using SocketIO;
 
 public class Result : MonoBehaviour
 {
+    int count = 0;
+
 	void Start ()
     {
+        count = 0;
+
         SocketIOComponent socket;
 
         GameObject go = GameObject.Find("SocketIO");
         socket = go.GetComponent<SocketIOComponent>();
 
-        socket.On("GameEndRequest", GameEnd);
+        socket.On("FinalEnd", GameEnd);
 
         socket.Emit("StopEndRequest");
     }
@@ -26,7 +30,10 @@ public class Result : MonoBehaviour
 
     void GameEnd(SocketIOEvent e)
     {
-        LodaScene();
+        count++;
+
+        if(count >= 2)
+            LodaScene();
     }
 
     void LodaScene()
