@@ -50,12 +50,17 @@ public class Main : MonoBehaviour
     [SerializeField]
     GameObject roundBall;
 
+    SocketIOComponent socket;
+
     #endregion
 
     void Start()
     {
         //フレームレートを固定
         Application.targetFrameRate = 30;
+
+        GameObject go = GameObject.Find("SocketIO");
+        socket = go.GetComponent<SocketIOComponent>();
 
         if (Pot1 == null)
             Pot1 = new GameObject();
@@ -123,11 +128,6 @@ public class Main : MonoBehaviour
 
     IEnumerator MainUpdate()
     {
-        SocketIOComponent socket;
-
-        GameObject go = GameObject.Find("SocketIO");
-        socket = go.GetComponent<SocketIOComponent>();
-
         #region ゲーム開始前の処理
 
         socket.Emit("StopRequest");
@@ -334,5 +334,15 @@ public class Main : MonoBehaviour
         foreach (var e in spawer)
             e.enabled = value;
         receiver.SetActive(value);
+    }
+
+    public void StopRequest()
+    {
+        socket.Emit("StopRequest");
+    }
+
+    public void StopEndRequest()
+    {
+        socket.Emit("StopEndRequest");
     }
 }

@@ -83,7 +83,7 @@ public class Spawner : MonoBehaviour
         Shield.GetComponent<Unit>().status.SetStatus(houseLevel);
 
         soldiers = new GameObject[] { Ax, Gun, Shield };
-        //soldiers = new GameObject[] { Shield, Shield, Shield };
+        //soldiers = new GameObject[] { Gun, Gun, Gun };
     }
 
     void Update()

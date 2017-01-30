@@ -76,11 +76,14 @@ public class Player : MonoBehaviour
 
     public Animator potAnimator;
 
-    #endregion
-
     public Pause pause;
     public GameObject catin;
     public GameObject movie;
+
+    public Main main;
+
+    #endregion
+
 
     void Start()
     {
@@ -122,6 +125,10 @@ public class Player : MonoBehaviour
 
         if (deathbolwObj == null)
             deathbolwObj = new GameObject();
+
+        //スタートに得られるコスト
+        PlayerCost palyerCost = GetComponent<PlayerCost>();
+        AddCostList(palyerCost.GetStateCost);
     }
 
     void Update()
@@ -222,9 +229,16 @@ public class Player : MonoBehaviour
             if (child.GetComponent<Demons>())
                 childDemonsCount++;
 
+        //召喚コストの計算
+        PlayerCost palyerCost = GetComponent<PlayerCost>();
+        int demonCost = palyerCost.GetCurrentDemonCost(demonsLevel[demonType]);
+
         //召喚できない条件なら何もしないで返す
         if (childDemonsCount >= maxSummonNum)
+        {
+            AddCostList(demonCost);
             return;
+        }
 
         //適当な値を入れて重なることを避ける
         Vector3 randVac;
@@ -243,10 +257,7 @@ public class Player : MonoBehaviour
                 randVac = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
                 break;
         }
-
-        //召喚コストの計算
-        int demonCost = GetComponent<PlayerCost>().GetCurrentDemonCost(demonsLevel[demonType]);
-
+        
         if (GetComponent<PlayerCost>().UseableCost(demonCost))
         {
             //悪魔を出す
@@ -278,8 +289,11 @@ public class Player : MonoBehaviour
             //生まれた数をカウントする
             RoundDataBase.getInstance().AddPassesPopCount(gameObject.tag);
 
-            potAnimator.SetTrigger("StopSpawn");
-            potAnimator.SetTrigger("Spawn");
+            if (!potAnimator.GetBool("DeathblowFlag"))
+            {
+                potAnimator.SetTrigger("StopSpawn");
+                potAnimator.SetTrigger("Spawn");
+            }
         }
     }
 
@@ -339,6 +353,12 @@ public class Player : MonoBehaviour
     //悪魔軍団の召喚
     IEnumerator SummonDemonArmy()
     {
+        while (pause.pausing)
+            yield return null;
+
+        //操作不能
+        main.StopRequest();
+
         //ムービーの再生
         Instantiate(catin, catin.transform.position, catin.transform.rotation);
         yield return new WaitForSeconds(1.3f);
@@ -349,7 +369,6 @@ public class Player : MonoBehaviour
 
         while (pause.pausing)
         {
-
             if (!movie.GetComponent<Movie_On_UI>().IsPlaying)
             {
                 movie.SetActive(false);
@@ -357,6 +376,15 @@ public class Player : MonoBehaviour
             }
             yield return null;
         }
+
+        if (!pause.pausing)
+            movie.SetActive(false);
+
+        //操作可能
+        main.StopEndRequest();
+
+        //ポットモーション
+        potAnimator.SetBool("DeathblowFlag", true);
 
         //コスト全回復
         PlayerCost playerCost = gameObject.GetComponent<PlayerCost>();
@@ -413,8 +441,8 @@ public class Player : MonoBehaviour
                 SummonSE.SummonSEFlag = true;
 
                 //レベル上げ
-                instace.GetComponent<Unit>().status.SetStatus(demonArmyLevel);
-                instace.GetComponent<Unit>().level = demonArmyLevel;
+                instace.GetComponent<Unit>().status.SetStatus(demonsLevel[randDemonType]);
+                instace.GetComponent<Unit>().level = demonsLevel[randDemonType];
                 Vector3 summonVec = (rootPointes[rootCandidate[rand, j]].ToArray()[0].position - rootes[rootCandidate[rand, j]].transform.position).normalized;   //初めの向き
                 Quaternion rotation = Quaternion.LookRotation(summonVec);
                 instace.transform.rotation = rotation;    //出た瞬間の向き
@@ -438,5 +466,8 @@ public class Player : MonoBehaviour
 
             yield return new WaitForSeconds(demonArmyWaveWaitTime - demonArmyOneWaitTime * (int)Enum.Direction_TYPE.Num);
         }
+
+        //ポットモーション
+        potAnimator.SetBool("DeathblowFlag", false);
     }
 }

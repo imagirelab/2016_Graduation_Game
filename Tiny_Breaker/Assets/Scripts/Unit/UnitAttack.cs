@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class UnitAttack : MonoBehaviour
 {
+    #region フィールド
+
     [SerializeField]
     GameObject effect = null;
 
@@ -48,6 +50,11 @@ public class UnitAttack : MonoBehaviour
     Unit unit;
     Coroutine cor;
 
+    public GameObject hitEffect;
+    public GameObject criticalHitEffect;
+
+    #endregion
+
     IEnumerator Attack()
     {
         unit = gameObject.GetComponent<Unit>();
@@ -56,10 +63,13 @@ public class UnitAttack : MonoBehaviour
 
         while (true)
         {
-            if(effect != null)
-                Instantiate(effect,
-                            gameObject.transform.position,
-                            Quaternion.identity);
+            if (effect != null)
+            {
+                GameObject instance = (GameObject)Instantiate(effect,
+                                        gameObject.transform.position,
+                                        gameObject.transform.rotation);
+                instance.transform.parent = gameObject.transform;   //親
+            }
 
             //対象物が同じタグだったら仲間だから攻撃しない
             if (target != null)
@@ -137,11 +147,36 @@ public class UnitAttack : MonoBehaviour
 
         //倍率計算
         if (unitComp.type == adType)
+        {
             mag = admag;
+
+            //クリティカルヒットエフェクト
+            if (criticalHitEffect != null && _target != null)
+            {
+                Instantiate(criticalHitEffect,
+                            _target.transform.position + criticalHitEffect.transform.position,
+                            criticalHitEffect.transform.rotation);
+            }
+        }
         if (unitComp.type == unadType)
             mag = unadmag;
 
         unitComp.AnyDamage(Mathf.RoundToInt(unit.status.CurrentATK * mag), unit);
+        
+        //ヒットエフェクト
+        if (hitEffect != null && _target != null)
+        {
+            if (_target.GetComponent<SphereCollider>())
+            {
+                float targetColliderRadius = _target.GetComponent<SphereCollider>().radius * _target.transform.localScale.x;
+                Vector3 vec = (gameObject.transform.position - _target.transform.position).normalized;
+                vec *= targetColliderRadius;
+
+                Instantiate(hitEffect,
+                            _target.transform.position + vec + hitEffect.transform.position,
+                            _target.transform.rotation);
+            }
+        }
 
         //親にプレイヤーコストを持っている(プレイヤー)場合のコスト処理
         if (unitComp.status.CurrentHP <= 0)
@@ -239,7 +274,21 @@ public class UnitAttack : MonoBehaviour
     void AttackDefenseBase(GameObject _target)
     {
         if (_target.GetComponent<DefenseBase>())
+        {
             _target.GetComponent<DefenseBase>().HPpro -= unit.status.CurrentATK;
+            
+            //ヒットエフェクト
+            if (hitEffect != null && _target != null)
+            {
+                float targetColliderRadius = _target.GetComponent<SphereCollider>().radius * _target.transform.localScale.x;
+                Vector3 vec = (gameObject.transform.position - _target.transform.position).normalized;
+                vec *= targetColliderRadius;
+
+                Instantiate(hitEffect,
+                            _target.transform.position + vec + hitEffect.transform.position,
+                            _target.transform.rotation);
+            }
+        }
     }
 
     void OnEnable()

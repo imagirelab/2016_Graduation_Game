@@ -182,6 +182,7 @@
     <Compile Include="Assets\Scripts\Unit\Demons\ChangeModel.cs" />
     <Compile Include="Assets\Scripts\Unit\Demons\Demons.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\DeadEffect.cs" />
+    <Compile Include="Assets\Scripts\Unit\Effects\DeadParticleToObject.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\LoopTimeParticle.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\RefrectEffect.cs" />
     <Compile Include="Assets\Scripts\Unit\Effects\ShotEffect.cs" />

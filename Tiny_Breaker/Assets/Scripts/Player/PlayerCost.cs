@@ -10,6 +10,7 @@ public class PlayerCost : MonoBehaviour
 
     [SerializeField, TooltipAttribute("初期コスト")]
     int StateCost = 0;
+    public int GetStateCost { get { return StateCost; } }
 
     [SerializeField, TooltipAttribute("毎秒上がるコスト")]
     int CostParSecond = 0;
@@ -29,6 +30,10 @@ public class PlayerCost : MonoBehaviour
     [SerializeField, TooltipAttribute("還元コスト")]
     int ReturnCost = 0;
     public int GetReturnCost { get { return ReturnCost; } }
+
+    [SerializeField, TooltipAttribute("ポットを攻撃して得られるコスト")]
+    int PotAttackCost = 0;
+    public int GetPotAttackCost { get { return PotAttackCost; } }
 
     //現在のコスト
     int currentCost = 0;

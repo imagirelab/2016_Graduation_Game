@@ -15,6 +15,10 @@ public class DefenseBase : MonoBehaviour
     public bool IsDamage = false;
 
     int oldHP = 0;
+
+    //ポットの持ち主
+    public Player potPlayer;
+    public int damageCost = 25;
     
     void Start()
     {
@@ -23,15 +27,24 @@ public class DefenseBase : MonoBehaviour
 
     void Update()
     {
-        DmageCheck(currentHP);
+        DamageCheck(currentHP);
 
         if (currentHP <= 0)
         {
             currentHP = 0;
         }
+
+        if(IsDamage)
+        {
+            //コストの計算
+            if (potPlayer != null)
+            {
+                potPlayer.AddCostList(damageCost);
+            }
+        }
     }
 
-    public void DmageCheck(int nowHP)
+    public void DamageCheck(int nowHP)
     {
         if (nowHP < oldHP)
         {
