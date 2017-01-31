@@ -218,6 +218,21 @@ public class UnitAttack : MonoBehaviour
                 default:
                     break;
             }
+
+            //ヒットエフェクト
+            if (hitEffect != null && _target != null)
+            {
+                if (_target.GetComponent<BoxCollider>())
+                {
+                    float targetColliderRadius = _target.GetComponent<BoxCollider>().size.magnitude * 0.5f;
+                    Vector3 vec = (gameObject.transform.position - _target.transform.position).normalized;
+                    vec *= targetColliderRadius;
+
+                    Instantiate(hitEffect,
+                                _target.transform.position + vec + hitEffect.transform.position,
+                                _target.transform.rotation);
+                }
+            }
         }
 
         //親が小屋クラスを持っている(プレイヤー)場合のコスト処理

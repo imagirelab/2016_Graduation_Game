@@ -61,6 +61,7 @@ ModelImporter:
     400052: rig_out:Tale3
     4300000: polySurface11
     7400000: Take 001
+    7400002: Take 0010
     9500000: //RootNode
     13700000: polySurface11
   materials:
@@ -83,7 +84,89 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 40
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: polySurface11
+        weight: 1
+      - path: rig_out:Master
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Back
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:L_Leg
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:L_Leg/rig_out:L_Foot
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:R_Leg
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:R_Leg/rig_out:R_Foot
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:Tale
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:Tale/rig_out:Tale1
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:Tale/rig_out:Tale1/rig_out:Tale2
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Body/rig_out:Tale/rig_out:Tale1/rig_out:Tale2/rig_out:Tale3
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Face
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Head
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:Head/rig_out:Ring
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:L_Shoulder
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:L_Shoulder/rig_out:L_Arm
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:L_Shoulder/rig_out:L_Arm/rig_out:L_Hand
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:L_Shoulder/rig_out:L_Arm/rig_out:L_Hand/rig_out:L_fingering
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:L_Shoulder/rig_out:L_Arm/rig_out:L_Hand/rig_out:L_fingering/rig_out:L_Finger
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:R_Shoulder
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:R_Shoulder/rig_out:R_Arm
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:R_Shoulder/rig_out:R_Arm/rig_out:R_Hand
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:R_Shoulder/rig_out:R_Arm/rig_out:R_Hand/rig_out:R_fingering
+        weight: 1
+      - path: rig_out:Master/rig_out:Hips/rig_out:R_Shoulder/rig_out:R_Arm/rig_out:R_Hand/rig_out:R_fingering/rig_out:R_Finger
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []

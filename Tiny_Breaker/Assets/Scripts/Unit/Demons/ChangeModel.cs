@@ -21,7 +21,7 @@ public class ChangeModel : MonoBehaviour
         foreach (GameObject e in models)
             e.SetActive(false);
         
-        if (unit.level >= 10)
+        if (unit.level >= unit.powerupLevel)
         {
             anim.avatar = avatars[1];
             models[1].SetActive(true);

@@ -10,7 +10,7 @@ public class Alarm : MonoBehaviour
     string targetTag = "";
 
     SphereCollider col;
-
+    
     void Start()
     {
         col = GetComponent<SphereCollider>();
@@ -35,11 +35,17 @@ public class Alarm : MonoBehaviour
                     nearestObj = nearDem;
                 else
                     nearestObj = nearSol;
+            
 
-            alarmObj[i].SetActive(false);
             if (nearestObj != null)
                 if (Vector3.Distance(this.transform.position, nearestObj.transform.position) < col.radius)
+                {
                     alarmObj[i].SetActive(true);
+                }
+                else
+                    alarmObj[i].SetActive(false);
+            else
+                alarmObj[i].SetActive(false);
         }
     }
 }

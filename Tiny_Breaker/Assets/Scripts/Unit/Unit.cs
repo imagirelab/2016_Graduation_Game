@@ -19,6 +19,8 @@ public class Unit : MonoBehaviour
     public Status status;
     [HideInInspector]
     public int level = 0;
+    //パワーアップレベル
+    public int powerupLevel = 10;
     //攻撃範囲
     [SerializeField]
     public float ATKRange = 10.0f;
@@ -140,6 +142,9 @@ public class Unit : MonoBehaviour
         targetDistance = Vector3.Distance(this.transform.position, targetObject.transform.position);
         if (targetObject.GetComponent<SphereCollider>())
             targetColliderRadius = targetObject.GetComponent<SphereCollider>().radius * targetObject.transform.localScale.x;
+        //小屋
+        if (targetObject.GetComponent<BoxCollider>())
+            targetColliderRadius = targetObject.GetComponent<BoxCollider>().size.magnitude * 0.5f;
     }
 
     protected IEnumerator NearTarget()

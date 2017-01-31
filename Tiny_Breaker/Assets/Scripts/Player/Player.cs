@@ -65,8 +65,8 @@ public class Player : MonoBehaviour
     float recoveryWaitTime = 1.0f;
     [SerializeField, TooltipAttribute("悪魔軍団の出撃回数")]
     int demonArmyWaveCount = 5;
-    [SerializeField, TooltipAttribute("悪魔軍団のレベル")]
-    int demonArmyLevel = 20;
+    //[SerializeField, TooltipAttribute("悪魔軍団のレベル")]
+    //int demonArmyLevel = 20;
     [SerializeField, TooltipAttribute("悪魔軍団の出撃間隔")]
     float demonArmyWaveWaitTime = 1.5f;
     [SerializeField, TooltipAttribute("悪魔軍団の１匹ごとの出撃間隔")]
@@ -83,8 +83,7 @@ public class Player : MonoBehaviour
     public Main main;
 
     #endregion
-
-
+    
     void Start()
     {
         GameObject go = GameObject.Find("SocketIO");

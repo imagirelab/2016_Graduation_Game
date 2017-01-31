@@ -6,12 +6,7 @@ public class TitleDebug : MonoBehaviour
     public Text text;
 
     bool flag = false;
-
-    void Start ()
-	{
-		
-	}
-	
+    
 	void Update ()
 	{
 		if(Input.GetKeyDown(KeyCode.Keypad0))

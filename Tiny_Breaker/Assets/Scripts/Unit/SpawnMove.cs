@@ -10,6 +10,9 @@ public class SpawnMove : MonoBehaviour
     
     //スポーンを開始するアニメーター
     public Animator animator;
+    //着地エフェクト
+    public GameObject effect;
+
     [SerializeField]
     float spawnTime = 0.0f;     //召喚時の動く時間
     [SerializeField]
@@ -40,6 +43,11 @@ public class SpawnMove : MonoBehaviour
             time += Time.deltaTime;
             if (time >= moveTime)
             {
+                if (effect != null)
+                    Instantiate(effect,
+                        gameObject.transform.position + effect.transform.position,
+                        effect.transform.rotation);
+
                 moveEnd = true;
                 time = moveTime;
             }

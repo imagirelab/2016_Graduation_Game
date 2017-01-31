@@ -9,7 +9,7 @@ public class AttackLocus : MonoBehaviour
     void Update ()
 	{
         //進化前の攻撃エフェクト
-        if (unit.level < 10)
+        if (unit.level < unit.powerupLevel)
         {
             if (powerUpAttackEffect != null)
                 powerUpAttackEffect.SetActive(false);
@@ -22,7 +22,7 @@ public class AttackLocus : MonoBehaviour
         }
 
         //進化後の攻撃エフェクト
-        if (unit.level >= 10)
+        if (unit.level >= unit.powerupLevel)
         {
             if (normalAttackEffect != null)
                 normalAttackEffect.SetActive(false);

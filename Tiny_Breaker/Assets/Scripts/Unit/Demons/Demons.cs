@@ -7,10 +7,7 @@ public class Demons : Unit
 {
     [SerializeField, TooltipAttribute("種類")]
     Enum.Demon_TYPE DemonType = Enum.Demon_TYPE.POPO;
-
-    [SerializeField]
-    int powerupLevel = 10;
-
+    
     [SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
     GameObject statusUI;
 
@@ -89,10 +86,6 @@ public class Demons : Unit
 
         //ステータスUIを消す
         statusUI.SetActive(false);
-        //foreach (Transform child in statusUI.transform)
-        //    foreach (Transform groundChild in child)
-        //        if (groundChild.GetComponent<Image>())
-        //            groundChild.GetComponent<Image>().enabled = false;
 
         //無敵起動
         StartCoroutine(Invincible());
@@ -105,10 +98,7 @@ public class Demons : Unit
         spawn.enabled = false;
         //ステータスUIを表示
         statusUI.SetActive(true);
-        //foreach (Transform child in statusUI.transform)
-        //    foreach (Transform groundChild in child)
-        //        if (groundChild.GetComponent<Image>())
-        //            groundChild.GetComponent<Image>().enabled = true;
+
         //コライダーオン
         sCollider.enabled = true;
 
