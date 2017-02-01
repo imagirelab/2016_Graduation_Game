@@ -30,8 +30,10 @@ public class TimeLimit : MonoBehaviour
     public bool End { get { return end; } }
 
     //最後何秒を知らせるオブジェクト
-    public GameObject lastMessageObj;
-    bool lastMessageFlag = false;
+    public GameObject thirtyObj;
+    bool thirtyFlag = false;
+    public GameObject sixtyObj;
+    bool sixtyFlag = false;
 
     public GameObject[] lastNumObj = new GameObject[10];
     bool[] lastNumFlag = new bool[10];
@@ -43,7 +45,8 @@ public class TimeLimit : MonoBehaviour
     void Start ()
     {
         end = false;
-        lastMessageFlag = false;
+        thirtyFlag = false;
+        sixtyFlag = false;
 
         for (int i = 0; i < lastNumFlag.Length; i++)
             lastNumFlag[i] = false;
@@ -96,12 +99,23 @@ public class TimeLimit : MonoBehaviour
             }
             
             //３０秒をきったときの処理
-            if (currentTime <= 31 && !lastMessageFlag)
+            if (currentTime <= 31 && !thirtyFlag)
             {
-                lastMessageFlag = true;
+                thirtyFlag = true;
 
-                GameObject instace = (GameObject)Instantiate(lastMessageObj,
-                                                             lastMessageObj.transform.position,
+                GameObject instace = (GameObject)Instantiate(thirtyObj,
+                                                             thirtyObj.transform.position,
+                                                             Quaternion.identity);
+                StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
+            }
+
+            //６０秒をきったときの処理
+            if (currentTime <= 61 && !sixtyFlag)
+            {
+                sixtyFlag = true;
+
+                GameObject instace = (GameObject)Instantiate(sixtyObj,
+                                                             sixtyObj.transform.position,
                                                              Quaternion.identity);
                 StartCoroutine(instace.GetComponent<ScaleMove>().ScaleUpDown());
             }

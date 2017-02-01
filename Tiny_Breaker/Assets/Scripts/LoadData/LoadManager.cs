@@ -72,7 +72,7 @@ public class LoadManager : MonoBehaviour
 
             ////プロジェクト内のファイルを取得
             //string paramtext = GetCSVString("/Resources/CSVData/ParamData.csv");
-            //string growtext = GetCSVString("/Resources/CSVData/GrowData.csv");
+            //string huttext = GetCSVString("/Resources/CSVData/HutData.csv");
             //string costtext = GetCSVString("/Resources/CSVData/CostData.csv");
 
             ParamData ParamTable = new ParamData();
@@ -139,7 +139,7 @@ public class LoadManager : MonoBehaviour
     {
         StreamReader sr = new StreamReader(Application.dataPath + path);
         string strStream = sr.ReadToEnd();
-
+        
         return strStream;
     }
 

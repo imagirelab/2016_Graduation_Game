@@ -1,2 +1,4 @@
-MaxCost,StateCost,CostParSecond,DemonCost,DemonCostRate,SoldierCost,HouseCost
-10000,10000,50,100,0.1,300,2000
+Round,MaxCost,StateCost,CostParSecond,DemonCost,SoldierCost,HouseCost,ReturnCost
+0,3000,500,25,100,150,400,50
+1,3000,1000,50,100,150,400,100
+2,3000,1500,50,100,150,400,150

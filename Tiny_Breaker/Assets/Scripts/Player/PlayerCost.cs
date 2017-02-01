@@ -44,7 +44,8 @@ public class PlayerCost : MonoBehaviour
     void Start()
     {
         currentCost = RoundDataBase.getInstance().PassesCost[GetComponent<Player>().playerID - 1];
-        AddCost(StateCost);
+        //AddCost(StateCost);
+
     }
 
     void Update()
