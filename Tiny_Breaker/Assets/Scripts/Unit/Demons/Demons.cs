@@ -8,8 +8,8 @@ public class Demons : Unit
     [SerializeField, TooltipAttribute("種類")]
     Enum.Demon_TYPE DemonType = Enum.Demon_TYPE.POPO;
     
-    [SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
-    GameObject statusUI;
+    //[SerializeField, TooltipAttribute("召喚中に消すステータスのUI")]
+    //GameObject statusUI;
 
     [SerializeField, TooltipAttribute("下ルートを通るときの速度")]
     float UnderSpeed = 20.0f;
@@ -42,8 +42,8 @@ public class Demons : Unit
     //初期化
     void Initialize()
     {
-        if (statusUI == null)
-            statusUI = new GameObject();
+        //if (statusUI == null)
+        //    statusUI = new GameObject();
 
         seach = GetComponent<UnitSeach>();
         attack = GetComponent<UnitAttack>();
@@ -59,9 +59,9 @@ public class Demons : Unit
 
         //攻撃に関する設定
         attack.AtkTime = status.CurrentAtackTime;
-        //下ルート時の加速
-        if (rootNum == Enum.Direction_TYPE.Bottom)
-            status.CurrentSPEED = UnderSpeed;
+        ////下ルート時の加速
+        //if (rootNum == Enum.Direction_TYPE.Bottom)
+        //    status.CurrentSPEED = UnderSpeed;
         //巡回速度
         loiteringSPEED = status.CurrentSPEED;
 
@@ -84,8 +84,8 @@ public class Demons : Unit
         //出撃
         spawn.enabled = true;
 
-        //ステータスUIを消す
-        statusUI.SetActive(false);
+        ////ステータスUIを消す
+        //statusUI.SetActive(false);
 
         //無敵起動
         StartCoroutine(Invincible());
@@ -96,8 +96,8 @@ public class Demons : Unit
 
         //出撃スクリプト停止
         spawn.enabled = false;
-        //ステータスUIを表示
-        statusUI.SetActive(true);
+        ////ステータスUIを表示
+        //statusUI.SetActive(true);
 
         //コライダーオン
         sCollider.enabled = true;

@@ -32,7 +32,7 @@ public class DebugControl : MonoBehaviour
             SetDebugActive(GameRule.getInstance().debugFlag);
         }
 
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             pause.pausing = !pause.pausing;
         }

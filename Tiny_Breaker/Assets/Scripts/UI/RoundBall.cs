@@ -23,6 +23,8 @@ public class RoundBall : MonoBehaviour
     [SerializeField]
     float speed = 100.0f;
 
+    public GameObject changeEffect;
+
     bool end = false;
     
     public IEnumerator BallMove()
@@ -100,12 +102,16 @@ public class RoundBall : MonoBehaviour
             GetComponent<Rigidbody>().velocity = moveVec * speed;
             yield return null;
         }
+        
+        yield return new WaitForSeconds(2.0f);
     }
 
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject == target)
         {
+            Instantiate(changeEffect, target.transform.position + new Vector3(0.0f, 0.0f, -30.0f), Quaternion.identity);
+
             if(target.GetComponent<MeshRenderer>())
                 target.GetComponent<MeshRenderer>().material = GetComponent<MeshRenderer>().material;
             end = true;

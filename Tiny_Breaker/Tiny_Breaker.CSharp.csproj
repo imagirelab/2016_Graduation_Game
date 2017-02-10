@@ -112,6 +112,7 @@
     <Compile Include="Assets\Scripts\Debug\DebugUnit.cs" />
     <Compile Include="Assets\Scripts\Debug\SpiritColor.cs" />
     <Compile Include="Assets\Scripts\DirectionChange.cs" />
+    <Compile Include="Assets\Scripts\Exit.cs" />
     <Compile Include="Assets\Scripts\GameRule.cs" />
     <Compile Include="Assets\Scripts\LoadData\CostData.cs" />
     <Compile Include="Assets\Scripts\LoadData\DataLode.cs" />

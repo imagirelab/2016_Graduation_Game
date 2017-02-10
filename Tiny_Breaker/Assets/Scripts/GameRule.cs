@@ -66,6 +66,8 @@ namespace StaticClass
 {
     public class GameRule
     {
+        public bool maltiOn = false;
+
         public bool debugFlag;
         public const int playerNum = 2;
         public const int roundCount = 3;

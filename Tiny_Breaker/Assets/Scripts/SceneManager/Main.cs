@@ -268,22 +268,12 @@ public class Main : MonoBehaviour
         StartCoroutine(sca.ScaleDown(rou.RoundResult.GetComponent<RectTransform>()));
         yield return null;
 
-        roundBall.SetActive(true);
-        //ラウンドボールを動かす
-        //ポットの上から出す方法
-        //switch (GameRule.getInstance().round[GameRule.getInstance().round.Count - 1])
-        //{
-        //    case Enum.ResultType.Player1Win:
-        //        roundBall.GetComponent<RoundBall>().StartPosition = Pot1.transform.position + new Vector3(0.0f, 20.0f, 0.0f);
-        //        break;
-        //    case Enum.ResultType.Player2Win:
-        //        roundBall.GetComponent<RoundBall>().StartPosition = Pot2.transform.position + new Vector3(0.0f, 20.0f, 0.0f);
-        //        break;
-        //    default:
-        //        break;
-        //}
-        yield return StartCoroutine(roundBall.GetComponent<RoundBall>().BallMove());
-        roundBall.SetActive(false);
+        if (GameRule.getInstance().round[GameRule.getInstance().round.Count - 1] != Enum.ResultType.Draw)
+        {
+            roundBall.SetActive(true);
+            yield return StartCoroutine(roundBall.GetComponent<RoundBall>().BallMove());
+            roundBall.SetActive(false);
+        }
 
         //フェードを始める、
         yield return StartCoroutine(fade.GetComponent<Fade>().FadeOutStart());
