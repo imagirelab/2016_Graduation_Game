@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Building\Spawner.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraStartMove.cs" />
     <Compile Include="Assets\Scripts\Camera\DeadlyCamera.cs" />
+    <Compile Include="Assets\Scripts\Camera\SubCamera.cs" />
     <Compile Include="Assets\Scripts\CustomProfiler.cs" />
     <Compile Include="Assets\Scripts\DataBase\BuildingDataBase.cs" />
     <Compile Include="Assets\Scripts\DataBase\DemonDataBase.cs" />

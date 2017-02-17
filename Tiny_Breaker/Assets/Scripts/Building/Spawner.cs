@@ -188,11 +188,12 @@ public class Spawner : MonoBehaviour
         solNum = rnd;
     }
 
-    public void SetDefault(int num, int max, float time)
+    public void SetDefault(int num, int max, float time, int level)
     {
         spawnNum = num;
         spawnMax = max;
         spawnTime = time;
+        houseLevel = level;
 
         timer = 0.0f;
     }

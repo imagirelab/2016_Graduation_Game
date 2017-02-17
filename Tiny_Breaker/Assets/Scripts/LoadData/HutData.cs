@@ -13,5 +13,6 @@
         public int HP { get; private set; }
         public int Regene { get; private set; }
         public float RegeneTime { get; private set; }
+        public int Level { get; private set; }
     }
 }
