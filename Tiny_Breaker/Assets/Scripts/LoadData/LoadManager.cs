@@ -177,10 +177,13 @@ public class LoadManager : MonoBehaviour
             //ラウンド数によってセットする値を変える
             if (hut.No == GameRule.getInstance().round.Count)
             {
-                if (huts[0].GetComponent<Spawner>())
-                    huts[0].GetComponent<Spawner>().SetDefault(hut.SpawnNum, hut.SpawnMax, hut.SpawnTime, hut.Level);
-                if (huts[0].GetComponent<House>())
-                    huts[0].GetComponent<House>().SetDefault(hut.HP, hut.Regene, hut.RegeneTime);
+                foreach (GameObject e in huts)
+                {
+                    if (e.GetComponent<Spawner>())
+                        e.GetComponent<Spawner>().SetDefault(hut.SpawnNum, hut.SpawnMax, hut.SpawnTime, hut.Level);
+                    if (e.GetComponent<House>())
+                        e.GetComponent<House>().SetDefault(hut.HP, hut.Regene, hut.RegeneTime);
+                }
             }
         }
     }

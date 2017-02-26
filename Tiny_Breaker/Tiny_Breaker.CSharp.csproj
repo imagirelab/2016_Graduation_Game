@@ -121,7 +121,8 @@
     <Compile Include="Assets\Scripts\LoadData\HutData.cs" />
     <Compile Include="Assets\Scripts\LoadData\LoadManager.cs" />
     <Compile Include="Assets\Scripts\LoadData\ParamData.cs" />
-    <Compile Include="Assets\Scripts\Movie_On_UI.cs" />
+    <Compile Include="Assets\Scripts\Movie\Movie.cs" />
+    <Compile Include="Assets\Scripts\Movie\Movie_On_UI.cs" />
     <Compile Include="Assets\Scripts\MultiCamera.cs" />
     <Compile Include="Assets\Scripts\MultiDisplayScript.cs" />
     <Compile Include="Assets\Scripts\Pausable.cs" />

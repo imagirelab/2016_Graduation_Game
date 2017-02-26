@@ -60,8 +60,8 @@ public class Demons : Unit
         //攻撃に関する設定
         attack.AtkTime = status.CurrentAtackTime;
         ////下ルート時の加速
-        //if (rootNum == Enum.Direction_TYPE.Bottom)
-        //    status.CurrentSPEED = UnderSpeed;
+        if (rootNum == Enum.Direction_TYPE.Bottom)
+            status.CurrentSPEED = UnderSpeed;
         //巡回速度
         loiteringSPEED = status.CurrentSPEED;
 

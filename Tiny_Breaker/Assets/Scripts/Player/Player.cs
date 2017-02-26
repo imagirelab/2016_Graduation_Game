@@ -289,11 +289,10 @@ public class Player : MonoBehaviour
             RoundDataBase.getInstance().AddPassesPopCount(gameObject.tag);
 
             if (!potAnimator.GetBool("DeathblowFlag"))
-            {
-                potAnimator.SetTrigger("StopSpawn");
                 potAnimator.SetTrigger("Spawn");
-            }
         }
+        //if (!potAnimator.GetBool("DeathblowFlag"))
+        //    potAnimator.SetTrigger("StopSpawn");
     }
 
     //魂リストの最初の種類

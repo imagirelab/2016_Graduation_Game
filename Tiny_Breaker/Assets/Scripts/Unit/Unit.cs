@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour
 
     [HideInInspector]
     public GameObject goalObject;       //ゴール
-    [HideInInspector]
+    //[HideInInspector]
     public GameObject targetObject;       //目標
     protected float targetDistance = 0.0f;
     protected float targetColliderRadius = 0.0f;
@@ -104,7 +104,7 @@ public class Unit : MonoBehaviour
         if (GetComponent<NavMeshAgent>())
         {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
-            agent.updateRotation = false;
+            agent.updateRotation = true;
             agent.speed = speed;
             agent.destination = target;
         }
@@ -144,7 +144,7 @@ public class Unit : MonoBehaviour
             targetColliderRadius = targetObject.GetComponent<SphereCollider>().radius * targetObject.transform.localScale.x;
         //小屋
         if (targetObject.GetComponent<BoxCollider>())
-            targetColliderRadius = targetObject.GetComponent<BoxCollider>().size.magnitude * 0.5f;
+            targetColliderRadius = targetObject.GetComponent<BoxCollider>().size.magnitude;
     }
 
     protected IEnumerator NearTarget()

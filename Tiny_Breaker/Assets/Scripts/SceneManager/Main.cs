@@ -304,6 +304,7 @@ public class Main : MonoBehaviour
         else
         {
             //ラウンド数が超えていなければもう一回
+            socket.Emit("RoundEndRequest");
             SceneManager.LoadScene("MainScene");
         }
         
